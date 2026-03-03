@@ -1,0 +1,149 @@
+---
+title: Line Wobble Loader
+description: A horizontal loading bar that wobbles back and forth on a track
+---
+
+The Line Wobble Loader displays a horizontal bar that smoothly wobbles back and forth along a track, creating a dynamic loading indicator. This loader is perfect for progress-like loading states and horizontal layouts.
+
+## Installation
+
+```bash
+npm install @craftdotui/loaders
+```
+
+## Usage
+
+<CodeGroup>
+```tsx Basic Usage
+import LineWobble from "@craftdotui/loaders/line-wobble";
+
+export default function App() {
+  return <LineWobble />;
+}
+```
+
+```tsx In a Container
+import LineWobble from "@craftdotui/loaders/line-wobble";
+
+export default function LoadingState() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <LineWobble />
+    </div>
+  );
+}
+```
+
+```tsx With Message
+import LineWobble from "@craftdotui/loaders/line-wobble";
+
+export default function ProcessingView() {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <p className="text-sm font-medium">Processing...</p>
+      <LineWobble />
+    </div>
+  );
+}
+```
+</CodeGroup>
+
+## Props
+
+The Line Wobble component does not accept any props. It displays a fixed-width horizontal wobble animation.
+
+## Animation Details
+
+- **Width**: 80px (20 in Tailwind)
+- **Height**: 4px (1 in Tailwind)
+- **Animation**: Horizontal translation from -95% to +95%
+- **Duration**: 1.75 seconds per cycle
+- **Easing**: Ease-in-out
+- **Track Color**: 10% opacity of text color
+- **Bar Color**: Black in light mode, white in dark mode
+
+## Examples
+
+### Loading Section
+
+```tsx
+import LineWobble from "@craftdotui/loaders/line-wobble";
+import { Card } from "@/components/ui/card";
+
+export default function LoadingSection() {
+  return (
+    <Card className="p-8">
+      <div className="flex flex-col items-center gap-4">
+        <h3 className="text-lg font-semibold">Loading Content</h3>
+        <LineWobble />
+      </div>
+    </Card>
+  );
+}
+```
+
+### Top of Page Loader
+
+```tsx
+import LineWobble from "@craftdotui/loaders/line-wobble";
+
+export default function PageTopLoader({ isLoading }) {
+  if (!isLoading) return null;
+  
+  return (
+    <div className="fixed top-0 left-0 right-0 flex items-center justify-center p-4 bg-background/95 backdrop-blur-sm border-b">
+      <LineWobble />
+    </div>
+  );
+}
+```
+
+### Form Submission
+
+```tsx
+import LineWobble from "@craftdotui/loaders/line-wobble";
+import { Button } from "@/components/ui/button";
+
+export default function SubmitForm({ onSubmit, isSubmitting }) {
+  return (
+    <form onSubmit={onSubmit} className="space-y-4">
+      {/* Form fields */}
+      
+      <div className="space-y-3">
+        <Button type="submit" disabled={isSubmitting} className="w-full">
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </Button>
+        
+        {isSubmitting && (
+          <div className="flex justify-center">
+            <LineWobble />
+          </div>
+        )}
+      </div>
+    </form>
+  );
+}
+```
+
+### Content Placeholder
+
+```tsx
+import LineWobble from "@craftdotui/loaders/line-wobble";
+
+export default function ContentLoader({ isLoading, content }) {
+  if (isLoading) {
+    return (
+      <div className="space-y-4 p-6">
+        <div className="h-6 w-3/4 bg-muted rounded animate-pulse" />
+        <div className="h-4 w-full bg-muted rounded animate-pulse" />
+        <div className="h-4 w-5/6 bg-muted rounded animate-pulse" />
+        <div className="flex justify-center mt-6">
+          <LineWobble />
+        </div>
+      </div>
+    );
+  }
+  
+  return <div>{content}</div>;
+}
+```

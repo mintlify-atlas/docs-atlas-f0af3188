@@ -1,0 +1,185 @@
+---
+title: Spiral Loader
+description: Eight dots arranged in a circle that pulse in a spiral sequence
+---
+
+The Spiral Loader features eight dots arranged in a circular pattern that pulse with scale and opacity changes in a spiral sequence, creating a mesmerizing rotating effect. This loader is perfect for adding visual interest to loading states.
+
+## Installation
+
+```bash
+npm install @craftdotui/loaders
+```
+
+## Usage
+
+<CodeGroup>
+```tsx Basic Usage
+import Spiral from "@craftdotui/loaders/spiral";
+
+export default function App() {
+  return <Spiral />;
+}
+```
+
+```tsx In a Container
+import Spiral from "@craftdotui/loaders/spiral";
+
+export default function LoadingState() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <Spiral />
+    </div>
+  );
+}
+```
+
+```tsx With Message
+import Spiral from "@craftdotui/loaders/spiral";
+
+export default function LoadingView() {
+  return (
+    <div className="flex flex-col items-center gap-6">
+      <Spiral />
+      <p className="text-sm text-muted-foreground">Processing...</p>
+    </div>
+  );
+}
+```
+</CodeGroup>
+
+## Props
+
+The Spiral component does not accept any props. It displays eight dots with a fixed spiral animation.
+
+## Animation Details
+
+- **Dots**: 8 dots arranged in a circle
+- **Size**: 40px × 40px container, dots are 20% of container size
+- **Rotation**: Each dot rotated by 45 degrees (360° / 8)
+- **Animation**: Scale from 0 to 1 with opacity fade
+- **Duration**: 0.9 seconds per cycle
+- **Delay**: Sequential spiral pattern (0.1125s per dot)
+- **Color**: Black in light mode, white in dark mode
+
+## Examples
+
+### Loading Card
+
+```tsx
+import Spiral from "@craftdotui/loaders/spiral";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+export default function LoadingCard({ title = "Loading" }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex items-center justify-center py-12">
+        <Spiral />
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### Full Screen Loader
+
+```tsx
+import Spiral from "@craftdotui/loaders/spiral";
+
+export default function FullScreenLoader() {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-background">
+      <div className="flex flex-col items-center gap-6">
+        <Spiral />
+        <div className="text-center space-y-2">
+          <h2 className="text-xl font-semibold">Loading</h2>
+          <p className="text-sm text-muted-foreground">
+            Please wait while we load your content
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Async Operation
+
+```tsx
+import Spiral from "@craftdotui/loaders/spiral";
+import { useEffect, useState } from "react";
+
+export default function AsyncLoader({ fetchData }) {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    fetchData().then((result) => {
+      setData(result);
+      setIsLoading(false);
+    });
+  }, []);
+  
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[300px]">
+        <Spiral />
+      </div>
+    );
+  }
+  
+  return <div>{data}</div>;
+}
+```
+
+### Modal Loading
+
+```tsx
+import Spiral from "@craftdotui/loaders/spiral";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+export default function LoadingModal({ open, title, description }) {
+  return (
+    <Dialog open={open}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        <div className="flex items-center justify-center py-12">
+          <Spiral />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+### Content Transition
+
+```tsx
+import Spiral from "@craftdotui/loaders/spiral";
+
+export default function ContentTransition({ isTransitioning, children }) {
+  if (isTransitioning) {
+    return (
+      <div className="relative min-h-[400px]">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Spiral />
+        </div>
+      </div>
+    );
+  }
+  
+  return children;
+}
+```

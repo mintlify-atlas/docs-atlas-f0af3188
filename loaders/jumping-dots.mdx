@@ -1,0 +1,127 @@
+---
+title: Jumping Dots Loader
+description: An animated loader featuring four dots that jump up and down in sequence
+---
+
+The Jumping Dots Loader displays four circular dots that bounce vertically in a staggered sequence, creating a playful and engaging loading animation. This loader is perfect for casual applications or when you want to add a touch of personality to loading states.
+
+## Installation
+
+```bash
+npm install @craftdotui/loaders
+```
+
+## Usage
+
+<CodeGroup>
+```tsx Basic Usage
+import JumpingDots from "@craftdotui/loaders/jumping-dots";
+
+export default function App() {
+  return <JumpingDots />;
+}
+```
+
+```tsx In a Container
+import JumpingDots from "@craftdotui/loaders/jumping-dots";
+
+export default function LoadingState() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <JumpingDots />
+    </div>
+  );
+}
+```
+
+```tsx With Message
+import JumpingDots from "@craftdotui/loaders/jumping-dots";
+
+export default function LoadingWithMessage() {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <JumpingDots />
+      <p className="text-sm text-muted-foreground">Loading your data...</p>
+    </div>
+  );
+}
+```
+</CodeGroup>
+
+## Props
+
+The Jumping Dots component does not accept any props. It displays four dots with a fixed animation sequence.
+
+## Animation Details
+
+- **Dots**: 4 circular dots
+- **Animation**: Each dot jumps 200% of its height vertically
+- **Duration**: 1 second per cycle
+- **Delay**: 0.15 seconds between each dot
+- **Color**: Black in light mode, white in dark mode
+
+## Examples
+
+### Loading Message
+
+```tsx
+import JumpingDots from "@craftdotui/loaders/jumping-dots";
+
+export default function ProcessingMessage() {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="text-sm font-medium">Processing</span>
+      <JumpingDots />
+    </div>
+  );
+}
+```
+
+### Card Loading State
+
+```tsx
+import JumpingDots from "@craftdotui/loaders/jumping-dots";
+import { Card, CardContent } from "@/components/ui/card";
+
+export default function LoadingCard() {
+  return (
+    <Card>
+      <CardContent className="flex items-center justify-center py-12">
+        <JumpingDots />
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### Inline Loading
+
+```tsx
+import JumpingDots from "@craftdotui/loaders/jumping-dots";
+
+export default function InlineLoader({ isLoading, children }) {
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-24">
+        <JumpingDots />
+      </div>
+    );
+  }
+  
+  return children;
+}
+```
+
+### Center Screen
+
+```tsx
+import JumpingDots from "@craftdotui/loaders/jumping-dots";
+
+export default function FullPageLoader() {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center">
+      <JumpingDots />
+    </div>
+  );
+}
+```

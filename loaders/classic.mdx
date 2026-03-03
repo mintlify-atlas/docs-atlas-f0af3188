@@ -1,0 +1,119 @@
+---
+title: Classic Loader
+description: A simple spinning circle loader with a transparent top border
+---
+
+The Classic Loader is a minimal, elegant spinning animation that displays a circular border with a transparent top section, creating a smooth rotation effect. Perfect for general loading states across your application.
+
+## Installation
+
+```bash
+npm install @craftdotui/loaders
+```
+
+## Usage
+
+<CodeGroup>
+```tsx Basic Usage
+import ClassicLoader from "@craftdotui/loaders/classic";
+
+export default function App() {
+  return <ClassicLoader />;
+}
+```
+
+```tsx In a Card
+import ClassicLoader from "@craftdotui/loaders/classic";
+import { Card } from "@/components/ui/card";
+
+export default function LoadingCard() {
+  return (
+    <Card className="flex items-center justify-center p-8">
+      <ClassicLoader />
+    </Card>
+  );
+}
+```
+
+```tsx Conditional Loading
+import ClassicLoader from "@craftdotui/loaders/classic";
+
+export default function DataDisplay({ isLoading, data }) {
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-48">
+        <ClassicLoader />
+      </div>
+    );
+  }
+  
+  return <div>{data}</div>;
+}
+```
+</CodeGroup>
+
+## Props
+
+The Classic Loader component does not accept any props. It uses the current text color from its parent container.
+
+## Styling
+
+The loader automatically adapts to the text color of its parent container:
+
+<CodeGroup>
+```tsx Custom Color
+<div className="text-blue-500">
+  <ClassicLoader />
+</div>
+```
+
+```tsx Custom Size
+<div className="text-4xl">
+  <ClassicLoader />
+</div>
+```
+
+```tsx With Custom Classes
+<div className="text-purple-600">
+  <ClassicLoader />
+</div>
+```
+</CodeGroup>
+
+## Examples
+
+### Button Loading State
+
+```tsx
+import ClassicLoader from "@craftdotui/loaders/classic";
+import { Button } from "@/components/ui/button";
+
+export default function SubmitButton({ isLoading }) {
+  return (
+    <Button disabled={isLoading}>
+      {isLoading ? (
+        <div className="flex items-center gap-2">
+          <ClassicLoader />
+          <span>Loading...</span>
+        </div>
+      ) : (
+        "Submit"
+      )}
+    </Button>
+  );
+}
+```
+
+### Full Page Loader
+
+```tsx
+import ClassicLoader from "@craftdotui/loaders/classic";
+
+export default function PageLoader() {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+      <ClassicLoader />
+    </div>
+  );
+}
+```

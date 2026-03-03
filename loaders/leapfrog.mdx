@@ -1,0 +1,142 @@
+---
+title: Leapfrog Loader
+description: Three dots that animate in a leapfrogging pattern, rotating and moving horizontally
+---
+
+The Leapfrog Loader features three dots that create a mesmerizing leapfrogging animation by rotating 180 degrees and moving horizontally in sequence. This loader provides a unique and engaging visual effect perfect for creative applications.
+
+## Installation
+
+```bash
+npm install @craftdotui/loaders
+```
+
+## Usage
+
+<CodeGroup>
+```tsx Basic Usage
+import LeapFrog from "@craftdotui/loaders/leapfrog";
+
+export default function App() {
+  return <LeapFrog />;
+}
+```
+
+```tsx In a Container
+import LeapFrog from "@craftdotui/loaders/leapfrog";
+
+export default function LoadingState() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <LeapFrog />
+    </div>
+  );
+}
+```
+
+```tsx With Message
+import LeapFrog from "@craftdotui/loaders/leapfrog";
+
+export default function ProcessingView() {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <LeapFrog />
+      <p className="text-sm text-muted-foreground">Processing request...</p>
+    </div>
+  );
+}
+```
+</CodeGroup>
+
+## Props
+
+The Leapfrog component does not accept any props. It displays a fixed animation with three dots.
+
+## Animation Details
+
+- **Dots**: 3 circular dots
+- **Animation**: Dots rotate 180 degrees while moving horizontally
+- **Duration**: 2.5 seconds per cycle
+- **Size**: 40px × 40px container
+- **Color**: Black in light mode, white in dark mode
+- **Pattern**: Each dot is offset by different animation delays (0s, -0.833s, -1.667s)
+
+## Examples
+
+### Loading Panel
+
+```tsx
+import LeapFrog from "@craftdotui/loaders/leapfrog";
+import { Card } from "@/components/ui/card";
+
+export default function LoadingPanel() {
+  return (
+    <Card className="flex items-center justify-center p-12">
+      <LeapFrog />
+    </Card>
+  );
+}
+```
+
+### Centered Loader
+
+```tsx
+import LeapFrog from "@craftdotui/loaders/leapfrog";
+
+export default function CenteredLoader() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <LeapFrog />
+    </div>
+  );
+}
+```
+
+### With Loading Text
+
+```tsx
+import LeapFrog from "@craftdotui/loaders/leapfrog";
+
+export default function LoadingWithText({ message = "Loading..." }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-6">
+      <LeapFrog />
+      <div className="text-center">
+        <h3 className="font-semibold">{message}</h3>
+        <p className="text-sm text-muted-foreground">Please wait a moment</p>
+      </div>
+    </div>
+  );
+}
+```
+
+### Modal Loading State
+
+```tsx
+import LeapFrog from "@craftdotui/loaders/leapfrog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+export default function LoadingModal({ open }) {
+  return (
+    <Dialog open={open}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Processing</DialogTitle>
+          <DialogDescription>
+            Your request is being processed
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex items-center justify-center py-8">
+          <LeapFrog />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```

@@ -1,0 +1,156 @@
+---
+title: Newton's Cradle Loader
+description: Five dots arranged in a row that swing like a Newton's cradle physics toy
+---
+
+The Newton's Cradle Loader mimics the classic physics demonstration toy with five dots where the outer dots swing back and forth in an alternating pattern. This loader provides a sophisticated, physics-inspired animation perfect for educational or professional applications.
+
+## Installation
+
+```bash
+npm install @craftdotui/loaders
+```
+
+## Usage
+
+<CodeGroup>
+```tsx Basic Usage
+import NewtonsCradle from "@craftdotui/loaders/newtons-cradle";
+
+export default function App() {
+  return <NewtonsCradle />;
+}
+```
+
+```tsx In a Container
+import NewtonsCradle from "@craftdotui/loaders/newtons-cradle";
+
+export default function LoadingState() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <NewtonsCradle />
+    </div>
+  );
+}
+```
+
+```tsx With Message
+import NewtonsCradle from "@craftdotui/loaders/newtons-cradle";
+
+export default function ProcessingView() {
+  return (
+    <div className="flex flex-col items-center gap-6">
+      <NewtonsCradle />
+      <p className="text-sm text-muted-foreground">Calculating results...</p>
+    </div>
+  );
+}
+```
+</CodeGroup>
+
+## Props
+
+The Newton's Cradle component does not accept any props. It displays five dots with a fixed swinging animation.
+
+## Animation Details
+
+- **Dots**: 5 circular dots in a row
+- **Animation**: First and last dots swing 70 degrees
+- **Duration**: 1.4 seconds per cycle
+- **Pattern**: Alternating swing between left and right dots
+- **Color**: Uses the `primary` color from your theme
+- **Physics**: Mimics the timing of a real Newton's cradle
+
+## Examples
+
+### Loading Screen
+
+```tsx
+import NewtonsCradle from "@craftdotui/loaders/newtons-cradle";
+
+export default function LoadingScreen() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center gap-6">
+        <NewtonsCradle />
+        <div className="text-center space-y-2">
+          <h2 className="text-xl font-semibold">Loading</h2>
+          <p className="text-sm text-muted-foreground">
+            Please wait while we prepare your content
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Card Loading State
+
+```tsx
+import NewtonsCradle from "@craftdotui/loaders/newtons-cradle";
+import { Card, CardContent } from "@/components/ui/card";
+
+export default function LoadingCard() {
+  return (
+    <Card>
+      <CardContent className="flex items-center justify-center py-16">
+        <NewtonsCradle />
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### Data Processing
+
+```tsx
+import NewtonsCradle from "@craftdotui/loaders/newtons-cradle";
+
+export default function DataProcessor({ isProcessing, results }) {
+  if (isProcessing) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 border rounded-lg">
+        <NewtonsCradle />
+        <p className="mt-6 text-sm font-medium">Processing data...</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          This may take a few moments
+        </p>
+      </div>
+    );
+  }
+  
+  return <div>{results}</div>;
+}
+```
+
+### Modal Loading
+
+```tsx
+import NewtonsCradle from "@craftdotui/loaders/newtons-cradle";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
+export default function ProcessingModal({ open, operation }) {
+  return (
+    <Dialog open={open}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Processing {operation}</DialogTitle>
+          <DialogDescription>
+            Your request is being processed. Please do not close this window.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex items-center justify-center py-12">
+          <NewtonsCradle />
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```

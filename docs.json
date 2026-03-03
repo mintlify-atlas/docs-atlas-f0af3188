@@ -86,6 +86,22 @@
             ]
           },
           {
+            "group": "Loaders",
+            "pages": [
+              "loaders/classic",
+              "loaders/jumping-dots",
+              "loaders/leapfrog",
+              "loaders/line-spinner",
+              "loaders/line-wobble",
+              "loaders/newtons-cradle",
+              "loaders/orbit",
+              "loaders/pulsating-dots",
+              "loaders/spinner",
+              "loaders/spiral",
+              "loaders/zoomies"
+            ]
+          },
+          {
             "group": "Hooks",
             "pages": [
               "hooks/use-callback",

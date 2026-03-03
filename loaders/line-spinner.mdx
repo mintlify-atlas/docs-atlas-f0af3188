@@ -1,0 +1,149 @@
+---
+title: Line Spinner Loader
+description: A circular spinner composed of 12 animated lines fading in and out
+---
+
+The Line Spinner Loader displays 12 lines arranged in a circle that fade in and out sequentially, creating a smooth rotating effect. This loader uses Framer Motion for fluid animations and is ideal for modern, sophisticated interfaces.
+
+## Installation
+
+```bash
+npm install @craftdotui/loaders
+```
+
+<Note>
+This component requires `motion` (Framer Motion) as a peer dependency:
+```bash
+npm install motion
+```
+</Note>
+
+## Usage
+
+<CodeGroup>
+```tsx Basic Usage
+import LineSpinner from "@craftdotui/loaders/line-spinner";
+
+export default function App() {
+  return <LineSpinner />;
+}
+```
+
+```tsx In a Container
+import LineSpinner from "@craftdotui/loaders/line-spinner";
+
+export default function LoadingState() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <LineSpinner />
+    </div>
+  );
+}
+```
+
+```tsx With Background
+import LineSpinner from "@craftdotui/loaders/line-spinner";
+
+export default function LoadingOverlay() {
+  return (
+    <div className="flex items-center justify-center bg-muted/50 rounded-lg p-12">
+      <LineSpinner />
+    </div>
+  );
+}
+```
+</CodeGroup>
+
+## Props
+
+The Line Spinner component does not accept any props. It displays a fixed 12-line spinner animation.
+
+## Animation Details
+
+- **Lines**: 12 lines arranged in a circle
+- **Rotation**: Each line rotated by 30 degrees (360° / 12)
+- **Animation**: Opacity fades from 0.1 to 1 and back
+- **Duration**: 1 second per cycle
+- **Delay**: 0.1 seconds between each line
+- **Size**: 48px × 48px (12 × 12 in Tailwind)
+- **Color**: Black in light mode, white in dark mode
+
+## Examples
+
+### Loading Screen
+
+```tsx
+import LineSpinner from "@craftdotui/loaders/line-spinner";
+
+export default function LoadingScreen() {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-background">
+      <div className="flex flex-col items-center gap-4">
+        <LineSpinner />
+        <p className="text-sm text-muted-foreground">Loading application...</p>
+      </div>
+    </div>
+  );
+}
+```
+
+### Card Loading
+
+```tsx
+import LineSpinner from "@craftdotui/loaders/line-spinner";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+export default function LoadingCard({ title }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex items-center justify-center py-12">
+        <LineSpinner />
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### Button Loading State
+
+```tsx
+import LineSpinner from "@craftdotui/loaders/line-spinner";
+import { Button } from "@/components/ui/button";
+
+export default function LoadingButton({ isLoading, children, ...props }) {
+  return (
+    <Button disabled={isLoading} {...props}>
+      {isLoading ? (
+        <div className="flex items-center gap-2">
+          <div className="scale-50">
+            <LineSpinner />
+          </div>
+          <span>Loading...</span>
+        </div>
+      ) : (
+        children
+      )}
+    </Button>
+  );
+}
+```
+
+### Data Table Loading
+
+```tsx
+import LineSpinner from "@craftdotui/loaders/line-spinner";
+
+export default function TableLoader() {
+  return (
+    <div className="flex items-center justify-center py-24 border rounded-md">
+      <div className="flex flex-col items-center gap-3">
+        <LineSpinner />
+        <p className="text-sm text-muted-foreground">Fetching data...</p>
+      </div>
+    </div>
+  );
+}
+```

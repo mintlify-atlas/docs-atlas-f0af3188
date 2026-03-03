@@ -1,0 +1,159 @@
+---
+title: Spinner Loader
+description: A minimal circular spinner with a bottom border that rotates
+---
+
+The Spinner Loader is a clean, minimal loading animation featuring a circular border with only the bottom section visible, creating a smooth rotating effect. This is a lightweight alternative to the Classic loader, perfect for simple loading states.
+
+## Installation
+
+```bash
+npm install @craftdotui/loaders
+```
+
+## Usage
+
+<CodeGroup>
+```tsx Basic Usage
+import Spinner from "@craftdotui/loaders/spinner";
+
+export default function App() {
+  return <Spinner />;
+}
+```
+
+```tsx In a Container
+import Spinner from "@craftdotui/loaders/spinner";
+
+export default function LoadingState() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <Spinner />
+    </div>
+  );
+}
+```
+
+```tsx Accessible Loading
+import Spinner from "@craftdotui/loaders/spinner";
+
+export default function AccessibleLoader() {
+  return (
+    <div className="flex items-center justify-center p-8" aria-live="polite">
+      <Spinner />
+      <span className="sr-only">Loading...</span>
+    </div>
+  );
+}
+```
+</CodeGroup>
+
+## Props
+
+The Spinner component does not accept any props. It includes built-in screen reader support with an `sr-only` loading message.
+
+## Animation Details
+
+- **Size**: 40px × 40px (10 × 10 in Tailwind)
+- **Border**: 2px bottom border only
+- **Animation**: Continuous 360-degree rotation using Tailwind's `animate-spin`
+- **Color**: Black in light mode, white in dark mode
+- **Accessibility**: Includes "Loading..." text for screen readers
+
+## Examples
+
+### Loading Button
+
+```tsx
+import Spinner from "@craftdotui/loaders/spinner";
+import { Button } from "@/components/ui/button";
+
+export default function LoadingButton({ isLoading, children, ...props }) {
+  return (
+    <Button disabled={isLoading} {...props}>
+      {isLoading ? (
+        <div className="flex items-center gap-2">
+          <div className="scale-50">
+            <Spinner />
+          </div>
+          <span>Loading...</span>
+        </div>
+      ) : (
+        children
+      )}
+    </Button>
+  );
+}
+```
+
+### Card Loading State
+
+```tsx
+import Spinner from "@craftdotui/loaders/spinner";
+import { Card, CardContent } from "@/components/ui/card";
+
+export default function LoadingCard() {
+  return (
+    <Card>
+      <CardContent className="flex items-center justify-center py-16">
+        <Spinner />
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### Conditional Content
+
+```tsx
+import Spinner from "@craftdotui/loaders/spinner";
+
+export default function ConditionalContent({ isLoading, content }) {
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px]">
+        <Spinner />
+      </div>
+    );
+  }
+  
+  return <div>{content}</div>;
+}
+```
+
+### Overlay Loader
+
+```tsx
+import Spinner from "@craftdotui/loaders/spinner";
+
+export default function OverlayLoader({ isLoading, children }) {
+  return (
+    <div className="relative">
+      {children}
+      
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <Spinner />
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Full Page Loading
+
+```tsx
+import Spinner from "@craftdotui/loaders/spinner";
+
+export default function PageLoader() {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-background">
+      <div className="flex flex-col items-center gap-4">
+        <Spinner />
+        <p className="text-sm text-muted-foreground">Loading page...</p>
+      </div>
+    </div>
+  );
+}
+```

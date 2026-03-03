@@ -1,0 +1,170 @@
+---
+title: Orbit Loader
+description: Two dots orbiting horizontally with smooth scale and opacity transitions
+---
+
+The Orbit Loader features two dots moving in a horizontal orbital pattern with dynamic scale and opacity changes, creating an elegant and sophisticated loading animation. The dots appear to orbit around an invisible center point with smooth transitions.
+
+## Installation
+
+```bash
+npm install @craftdotui/loaders
+```
+
+## Usage
+
+<CodeGroup>
+```tsx Basic Usage
+import Orbit from "@craftdotui/loaders/orbit";
+
+export default function App() {
+  return <Orbit />;
+}
+```
+
+```tsx With Custom Class
+import Orbit from "@craftdotui/loaders/orbit";
+
+export default function LoadingState() {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <Orbit className="w-16 h-16" />
+    </div>
+  );
+}
+```
+
+```tsx In a Card
+import Orbit from "@craftdotui/loaders/orbit";
+import { Card } from "@/components/ui/card";
+
+export default function LoadingCard() {
+  return (
+    <Card className="flex items-center justify-center p-12">
+      <Orbit />
+    </Card>
+  );
+}
+```
+</CodeGroup>
+
+## Props
+
+<ParamField path="className" type="string" optional>
+  Additional CSS classes to apply to the container. Useful for adjusting size or positioning.
+</ParamField>
+
+## Animation Details
+
+- **Dots**: 2 dots in orbital motion
+- **Size**: 35px default orbit size
+- **Duration**: 1.4 seconds per orbit
+- **Animation**: Complex horizontal movement with scale and opacity transitions
+- **Color**: Uses the `primary` color from your theme
+- **Pattern**: Dots are offset by half the animation duration (opposite sides)
+
+## Examples
+
+### Custom Size
+
+```tsx
+import Orbit from "@craftdotui/loaders/orbit";
+
+export default function CustomSizeLoader() {
+  return (
+    <div className="space-y-8 p-8">
+      <div>
+        <p className="text-sm mb-4">Small</p>
+        <Orbit className="w-8 h-8" />
+      </div>
+      
+      <div>
+        <p className="text-sm mb-4">Medium (Default)</p>
+        <Orbit />
+      </div>
+      
+      <div>
+        <p className="text-sm mb-4">Large</p>
+        <Orbit className="w-20 h-20" />
+      </div>
+    </div>
+  );
+}
+```
+
+### Loading Screen
+
+```tsx
+import Orbit from "@craftdotui/loaders/orbit";
+
+export default function LoadingScreen() {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-background">
+      <div className="flex flex-col items-center gap-6">
+        <Orbit className="w-16 h-16" />
+        <div className="text-center space-y-2">
+          <h2 className="text-lg font-semibold">Loading</h2>
+          <p className="text-sm text-muted-foreground">Please wait...</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Centered Container
+
+```tsx
+import Orbit from "@craftdotui/loaders/orbit";
+
+export default function CenteredLoader() {
+  return (
+    <div className="flex items-center justify-center min-h-[400px] border rounded-lg">
+      <Orbit />
+    </div>
+  );
+}
+```
+
+### With Loading Message
+
+```tsx
+import Orbit from "@craftdotui/loaders/orbit";
+
+export default function LoadingWithMessage({ message = "Loading..." }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 p-8">
+      <Orbit />
+      <p className="text-sm font-medium text-muted-foreground">{message}</p>
+    </div>
+  );
+}
+```
+
+### Modal Loading State
+
+```tsx
+import Orbit from "@craftdotui/loaders/orbit";
+import {
+  Dialog,
+  DialogContent,
+} from "@/components/ui/dialog";
+
+export default function LoadingModal({ open }) {
+  return (
+    <Dialog open={open}>
+      <DialogContent className="sm:max-w-md">
+        <div className="flex flex-col items-center justify-center py-12 gap-6">
+          <Orbit className="w-16 h-16" />
+          <div className="text-center space-y-2">
+            <p className="font-semibold">Processing</p>
+            <p className="text-sm text-muted-foreground">
+              This will only take a moment
+            </p>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
