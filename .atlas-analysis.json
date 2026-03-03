@@ -1,0 +1,125 @@
+{
+  "projectType": "frontend",
+  "projectName": "Craft UI",
+  "projectDescription": "A collection of beautiful, interactive UI components built with React.js, Tailwind CSS, and Framer Motion.",
+  "theme": "willow",
+  "primaryColor": "#8b5cf6",
+  "lightColor": "#a78bfa",
+  "darkColor": "#7c3aed",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Base UI Components",
+            "pages": [
+              "components/baseui/accordion",
+              "components/baseui/alert-dialog",
+              "components/baseui/autocomplete",
+              "components/baseui/avatar",
+              "components/baseui/button",
+              "components/baseui/checkbox",
+              "components/baseui/checkbox-group",
+              "components/baseui/collapsible",
+              "components/baseui/combobox",
+              "components/baseui/context-menu",
+              "components/baseui/dialog",
+              "components/baseui/field",
+              "components/baseui/fieldset",
+              "components/baseui/form",
+              "components/baseui/input",
+              "components/baseui/menu",
+              "components/baseui/menubar",
+              "components/baseui/meter",
+              "components/baseui/navigation-menu",
+              "components/baseui/number-field",
+              "components/baseui/popover",
+              "components/baseui/preview-card",
+              "components/baseui/progress",
+              "components/baseui/radio",
+              "components/baseui/scroll-area",
+              "components/baseui/select",
+              "components/baseui/separator",
+              "components/baseui/slider",
+              "components/baseui/switch",
+              "components/baseui/tabs",
+              "components/baseui/toast",
+              "components/baseui/toggle",
+              "components/baseui/toggle-group",
+              "components/baseui/toolbar",
+              "components/baseui/tooltip"
+            ]
+          },
+          {
+            "group": "Craft UI Components",
+            "pages": [
+              "components/craftui/animated-tooltip",
+              "components/craftui/cursor",
+              "components/craftui/dock",
+              "components/craftui/magnetic",
+              "components/craftui/marquee",
+              "components/craftui/stepper",
+              "components/craftui/text-scramble",
+              "components/craftui/text-typing",
+              "components/craftui/timeline"
+            ]
+          },
+          {
+            "group": "Hooks",
+            "pages": [
+              "hooks/use-callback",
+              "hooks/use-click-outside",
+              "hooks/use-confetti",
+              "hooks/use-debounce",
+              "hooks/use-hydrated",
+              "hooks/use-is-mobile",
+              "hooks/use-media-query",
+              "hooks/use-mounted",
+              "hooks/use-optimistic",
+              "hooks/use-query-string"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/theming",
+              "guides/customization",
+              "guides/accessibility"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "35+ accessible Base UI components with full keyboard navigation",
+    "9 animated Craft UI components with Framer Motion",
+    "10 production-ready React hooks",
+    "Built with TypeScript, Tailwind CSS, and modern React patterns",
+    "Registry-based component installation system"
+  ],
+  "publicApiSurface": [
+    "Button",
+    "Input",
+    "Select",
+    "Dialog",
+    "Tooltip",
+    "AnimatedTooltip",
+    "Dock",
+    "Marquee",
+    "Timeline",
+    "useClickOutside",
+    "useDebounce",
+    "useMediaQuery",
+    "useConfetti"
+  ]
+}
