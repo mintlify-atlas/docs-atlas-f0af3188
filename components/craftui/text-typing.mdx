@@ -1,0 +1,370 @@
+---
+title: Text Typing
+description: A typewriter-style text animation component with an animated cursor that progressively reveals text character by character.
+---
+
+# Text Typing
+
+The `TextTyping` component creates a classic typewriter effect that reveals text one character at a time, complete with an animated blinking cursor. Perfect for hero sections, introductions, and dynamic content reveals.
+
+## Installation
+
+```bash
+npm install @craftdotui/components
+```
+
+## Import
+
+```tsx
+import TextTyping from "@craftdotui/components";
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic Usage
+import TextTyping from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <TextTyping>
+      Hello, welcome to our website!
+    </TextTyping>
+  );
+}
+```
+
+```tsx Custom Speed
+import TextTyping from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <TextTyping typingSpeed={50}>
+      Fast typing effect
+    </TextTyping>
+  );
+}
+```
+
+```tsx As Heading
+import TextTyping from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <h1>
+      <TextTyping 
+        className="text-4xl font-bold text-blue-600"
+        typingSpeed={80}
+      >
+        Welcome to the Future
+      </TextTyping>
+    </h1>
+  );
+}
+```
+
+```tsx Slow Dramatic Reveal
+import TextTyping from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <TextTyping 
+      typingSpeed={200}
+      className="text-2xl"
+    >
+      Every character matters...
+    </TextTyping>
+  );
+}
+```
+
+</CodeGroup>
+
+## Props
+
+<ParamField path="children" type="string" required>
+  The text to display with the typing animation.
+</ParamField>
+
+<ParamField path="typingSpeed" type="number" default="100">
+  Speed of typing in milliseconds per character. Lower values = faster typing.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes. Component uses `font-mono` by default.
+</ParamField>
+
+## Animation Details
+
+### Character Reveal
+
+The text is revealed progressively using substring slicing:
+
+```tsx
+useEffect(() => {
+  let currentIndex = 0;
+  const intervalId = setInterval(() => {
+    if (currentIndex <= text.length) {
+      setDisplayedText(text.slice(0, currentIndex));
+      currentIndex++;
+    } else {
+      clearInterval(intervalId);
+    }
+  }, typingSpeed);
+
+  return () => clearInterval(intervalId);
+}, [text, typingSpeed]);
+```
+
+### Cursor Animation
+
+The cursor uses Framer Motion for smooth blinking:
+
+```tsx
+<motion.span
+  animate={{ opacity: [0, 1] }}
+  transition={{
+    duration: 0.5,
+    repeat: Infinity,
+    repeatType: "reverse",
+  }}
+>
+  |
+</motion.span>
+```
+
+<Note>
+  The cursor blinks continuously throughout the typing animation and after completion.
+</Note>
+
+## Examples
+
+### Hero Section
+
+```tsx
+import TextTyping from "@craftdotui/components";
+
+export default function Hero() {
+  return (
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-600 to-blue-600">
+      <div className="text-center">
+        <TextTyping 
+          className="text-5xl md:text-7xl font-bold text-white"
+          typingSpeed={100}
+        >
+          Build Something Amazing
+        </TextTyping>
+      </div>
+    </section>
+  );
+}
+```
+
+### Terminal Interface
+
+```tsx
+import TextTyping from "@craftdotui/components";
+
+export default function Terminal() {
+  return (
+    <div className="bg-black p-6 rounded-lg">
+      <div className="space-y-2">
+        <div className="text-green-400 font-mono">
+          <span className="text-green-500">user@system:~$</span>
+          <TextTyping typingSpeed={50}>
+            npm install @craftdotui/components
+          </TextTyping>
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+### Multi-Line Typing
+
+```tsx
+import { useState, useEffect } from "react";
+import TextTyping from "@craftdotui/components";
+
+export default function MultiLine() {
+  const [currentLine, setCurrentLine] = useState(0);
+  const lines = [
+    "Initializing application...",
+    "Loading dependencies...",
+    "Connecting to server...",
+    "Ready!",
+  ];
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (currentLine < lines.length - 1) {
+        setCurrentLine(currentLine + 1);
+      }
+    }, (lines[currentLine].length * 100) + 500);
+
+    return () => clearTimeout(timer);
+  }, [currentLine]);
+
+  return (
+    <div className="space-y-2 font-mono">
+      {lines.slice(0, currentLine + 1).map((line, i) => (
+        <div key={i}>
+          {i === currentLine ? (
+            <TextTyping typingSpeed={100}>{line}</TextTyping>
+          ) : (
+            <div>{line}</div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+### Code Editor Simulation
+
+```tsx
+import TextTyping from "@craftdotui/components";
+
+export default function CodeEditor() {
+  return (
+    <div className="bg-gray-900 rounded-lg p-4">
+      <div className="text-sm">
+        <span className="text-purple-400">function</span>
+        <span className="text-yellow-300"> greet</span>
+        <span className="text-gray-300">(</span>
+        <TextTyping 
+          className="text-orange-400"
+          typingSpeed={80}
+        >
+          name: string
+        </TextTyping>
+      </div>
+    </div>
+  );
+}
+```
+
+### Testimonial Reveal
+
+```tsx
+import TextTyping from "@craftdotui/components";
+import { Quote } from "lucide-react";
+
+export default function Testimonial() {
+  return (
+    <div className="max-w-2xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+      <Quote className="w-12 h-12 text-gray-300 mb-4" />
+      <TextTyping 
+        className="text-xl text-gray-700 italic"
+        typingSpeed={60}
+      >
+        This product changed the way we work. Highly recommended!
+      </TextTyping>
+      <p className="mt-4 text-gray-500">— Jane Doe, CEO</p>
+    </div>
+  );
+}
+```
+
+### Interactive Chat Bot
+
+```tsx
+import { useState } from "react";
+import TextTyping from "@craftdotui/components";
+
+export default function ChatBot() {
+  const [messages, setMessages] = useState([
+    "Hi! How can I help you today?"
+  ]);
+
+  return (
+    <div className="max-w-md mx-auto bg-gray-100 rounded-lg p-4">
+      {messages.map((msg, i) => (
+        <div key={i} className="mb-3 bg-white p-3 rounded-lg">
+          {i === messages.length - 1 ? (
+            <TextTyping typingSpeed={50}>{msg}</TextTyping>
+          ) : (
+            <div className="font-mono">{msg}</div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+```
+
+<Tip>
+  For the most authentic typewriter effect, use monospace fonts like `font-mono` or custom terminal fonts.
+</Tip>
+
+## Speed Guidelines
+
+```tsx
+// Very slow (dramatic)
+<TextTyping typingSpeed={200}>
+
+// Slow (natural reading pace)
+<TextTyping typingSpeed={150}>
+
+// Medium (default)
+<TextTyping typingSpeed={100}>
+
+// Fast (energetic)
+<TextTyping typingSpeed={50}>
+
+// Very fast (data stream)
+<TextTyping typingSpeed={20}>
+```
+
+## Cursor Customization
+
+While the component uses a pipe character `|` by default, you can customize the appearance:
+
+```tsx
+// Via CSS - target the cursor span
+.typing-cursor {
+  color: #00ff00;
+  font-weight: bold;
+}
+```
+
+## Performance
+
+- Uses efficient `setInterval` for character updates
+- Automatic cleanup on unmount
+- Minimal re-renders
+- Framer Motion optimizes cursor animation
+
+<Warning>
+  Very long text (1000+ characters) with fast typing speeds may impact performance. Consider breaking into multiple components.
+</Warning>
+
+## Use Cases
+
+- **Hero sections**: Eye-catching headlines
+- **Terminal interfaces**: Code editor simulations
+- **Chat bots**: Realistic conversation flows
+- **Loading states**: Progress messages
+- **Tutorials**: Step-by-step instructions
+- **Storytelling**: Narrative reveals
+- **Command prompts**: CLI demonstrations
+- **Notifications**: System messages
+
+## Accessibility
+
+- Screen readers will announce the complete text
+- Final text is fully selectable
+- Animation completes, leaving readable content
+- Works with keyboard navigation
+- Consider providing a skip option for users sensitive to motion
+
+## Best Practices
+
+- Keep text concise for better impact (< 100 characters)
+- Match typing speed to content tone (slower for dramatic, faster for technical)
+- Ensure sufficient contrast for the cursor
+- Don't overuse on a single page (1-2 instances maximum)
+- Provide static fallback for users with reduced motion preferences

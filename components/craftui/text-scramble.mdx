@@ -1,0 +1,339 @@
+---
+title: Text Scramble
+description: An animated text component that scrambles characters before revealing the final text, creating a hacker-style typing effect.
+---
+
+# Text Scramble
+
+The `TextScramble` component creates a captivating scramble animation effect where random characters rapidly cycle before resolving to the target text. Perfect for attention-grabbing headings, tech-themed interfaces, and dynamic content reveals.
+
+## Installation
+
+```bash
+npm install @craftdotui/components
+```
+
+## Import
+
+```tsx
+import TextScramble from "@craftdotui/components";
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic Usage
+import TextScramble from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <TextScramble>
+      Hello, World!
+    </TextScramble>
+  );
+}
+```
+
+```tsx Custom Speed and Duration
+import TextScramble from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <TextScramble 
+      speed={30} 
+      duration={2}
+    >
+      Welcome to the future
+    </TextScramble>
+  );
+}
+```
+
+```tsx Trigger on Demand
+import { useState } from "react";
+import TextScramble from "@craftdotui/components";
+
+export default function Example() {
+  const [trigger, setTrigger] = useState(false);
+  
+  return (
+    <div>
+      <TextScramble trigger={trigger}>
+        Click the button to animate
+      </TextScramble>
+      <button onClick={() => setTrigger(!trigger)}>Scramble</button>
+    </div>
+  );
+}
+```
+
+```tsx Custom Character Set
+import TextScramble from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <TextScramble 
+      characterSet="01" // Binary only
+      speed={20}
+      duration={3}
+    >
+      1010101010
+    </TextScramble>
+  );
+}
+```
+
+</CodeGroup>
+
+## Props
+
+<ParamField path="children" type="string" required>
+  The final text to display after the scramble animation completes.
+</ParamField>
+
+<ParamField path="speed" type="number" default="50">
+  Animation speed in milliseconds between character updates. Lower values = faster scrambling.
+</ParamField>
+
+<ParamField path="duration" type="number" default="3">
+  Total duration of the scramble animation in seconds.
+</ParamField>
+
+<ParamField path="trigger" type="boolean" default="true">
+  Whether to trigger the animation. Set to `false` to show final text without animation.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes. Component uses `font-mono` by default.
+</ParamField>
+
+<ParamField path="characterSet" type="string" default="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789">
+  Custom set of characters to use during scrambling.
+</ParamField>
+
+<ParamField path="as" type="React.ElementType" default="'span'">
+  HTML element type to render (span, div, h1, etc.).
+</ParamField>
+
+<ParamField path="onScrambleEnd" type="() => void">
+  Callback function fired when scramble animation completes.
+</ParamField>
+
+## Animation Details
+
+### Algorithm
+
+The component uses a progressive reveal algorithm:
+
+1. Starts with all characters scrambled
+2. Progressively reveals characters from left to right
+3. Characters to the left of `currentIndex` are finalized
+4. Characters to the right continue scrambling
+5. Spaces are preserved throughout
+
+```tsx
+const scrambled = children
+  .split("")
+  .map((char, index) => {
+    if (char === " ") return " ";
+    return index < currentIndex
+      ? char
+      : characterSet[Math.floor(Math.random() * characterSet.length)];
+  })
+  .join("");
+```
+
+### Timing
+
+The animation interval runs at the specified `speed`, incrementing the reveal index:
+
+```tsx
+setInterval(() => {
+  // Update scrambled text
+  currentIndex = Math.min(currentIndex + 1, children.length);
+}, speed);
+```
+
+<Note>
+  The animation automatically cleans up intervals on unmount to prevent memory leaks.
+</Note>
+
+## Examples
+
+### Hero Heading
+
+```tsx
+import TextScramble from "@craftdotui/components";
+
+export default function Hero() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-black">
+      <TextScramble 
+        as="h1"
+        className="text-6xl font-bold text-green-400"
+        speed={40}
+        duration={2.5}
+      >
+        SYSTEM ACCESS GRANTED
+      </TextScramble>
+    </div>
+  );
+}
+```
+
+### Matrix-Style Effect
+
+```tsx
+import TextScramble from "@craftdotui/components";
+
+export default function MatrixText() {
+  return (
+    <TextScramble
+      characterSet="ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝ01234567890"
+      className="text-green-400 text-2xl bg-black p-4"
+      speed={25}
+      duration={4}
+    >
+      Wake up, Neo
+    </TextScramble>
+  );
+}
+```
+
+### Sequential Reveals
+
+```tsx
+import { useState, useEffect } from "react";
+import TextScramble from "@craftdotui/components";
+
+export default function SequentialReveal() {
+  const [step, setStep] = useState(0);
+  const messages = [
+    "Initializing system...",
+    "Loading modules...",
+    "System ready.",
+  ];
+
+  return (
+    <div className="space-y-4">
+      {messages.map((msg, i) => (
+        <TextScramble
+          key={i}
+          trigger={step >= i}
+          speed={30}
+          duration={1.5}
+          onScrambleEnd={() => setStep(i + 1)}
+          className="text-xl text-cyan-400"
+        >
+          {msg}
+        </TextScramble>
+      ))}
+    </div>
+  );
+}
+```
+
+### Interactive Button
+
+```tsx
+import { useState } from "react";
+import TextScramble from "@craftdotui/components";
+
+export default function ScrambleButton() {
+  const [isHovered, setIsHovered] = useState(false);
+  
+  return (
+    <button
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="px-8 py-4 bg-purple-600 text-white rounded-lg font-mono"
+    >
+      <TextScramble 
+        trigger={isHovered}
+        speed={20}
+        duration={0.8}
+      >
+        LAUNCH MISSION
+      </TextScramble>
+    </button>
+  );
+}
+```
+
+### Loading State
+
+```tsx
+import TextScramble from "@craftdotui/components";
+
+export default function LoadingState({ isLoading }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+      <TextScramble
+        trigger={isLoading}
+        speed={50}
+        duration={2}
+        className="text-white"
+      >
+        Processing data
+      </TextScramble>
+    </div>
+  );
+}
+```
+
+<Tip>
+  Combine with monospace fonts (`font-mono`) for the most authentic terminal/hacker aesthetic.
+</Tip>
+
+## Character Set Examples
+
+```tsx
+// Default (alphanumeric)
+characterSet="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+// Binary only
+characterSet="01"
+
+// Hexadecimal
+characterSet="0123456789ABCDEF"
+
+// Symbols
+characterSet="!@#$%^&*()_+-=[]{}|;:,.<>?"
+
+// Unicode blocks
+characterSet="█▓▒░"
+
+// Katakana (Matrix style)
+characterSet="ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝ"
+```
+
+## Performance Considerations
+
+- Uses `setInterval` for character updates
+- Automatically cleans up on unmount
+- Minimal re-renders (only when scrambled text changes)
+- Lightweight algorithm with O(n) complexity
+
+<Warning>
+  Using very low `speed` values (< 10ms) may cause performance issues on slower devices.
+</Warning>
+
+## Use Cases
+
+- Tech/cyberpunk themed websites
+- Loading states with personality
+- Hero section headings
+- Terminal/CLI interfaces
+- Gaming UIs
+- Data visualization reveals
+- Countdown timers
+- Easter eggs and hidden messages
+
+## Accessibility
+
+- Final text is always readable
+- Screen readers will announce the final text
+- Animation can be disabled with `trigger={false}`
+- Consider reduced motion preferences for sensitive users

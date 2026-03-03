@@ -1,0 +1,413 @@
+---
+title: Stepper
+description: A flexible, multi-step form component with progress indicators, smooth animations, and comprehensive navigation controls.
+---
+
+# Stepper
+
+The `Stepper` component provides a complete solution for multi-step forms and wizards. Features smooth Framer Motion animations, multiple indicator variants, and flexible navigation controls.
+
+## Installation
+
+```bash
+npm install @craftdotui/components
+```
+
+## Import
+
+```tsx
+import {
+  Stepper,
+  StepperContent,
+  Step,
+  StepTitle,
+  StepDescription,
+  StepIndicator,
+  StepperNavigation,
+} from "@craftdotui/components";
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic Stepper
+import {
+  Stepper,
+  StepperContent,
+  Step,
+  StepTitle,
+  StepDescription,
+  StepIndicator,
+  StepperNavigation,
+} from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <Stepper totalSteps={3}>
+      <StepIndicator variant="dots" />
+      
+      <StepperContent>
+        <Step step={1}>
+          <StepTitle>Personal Information</StepTitle>
+          <StepDescription>Enter your basic details</StepDescription>
+          {/* Form fields */}
+        </Step>
+        
+        <Step step={2}>
+          <StepTitle>Contact Details</StepTitle>
+          <StepDescription>How can we reach you?</StepDescription>
+          {/* Form fields */}
+        </Step>
+        
+        <Step step={3}>
+          <StepTitle>Review</StepTitle>
+          <StepDescription>Confirm your information</StepDescription>
+          {/* Summary */}
+        </Step>
+      </StepperContent>
+      
+      <StepperNavigation onFinish={() => console.log("Completed!")} />
+    </Stepper>
+  );
+}
+```
+
+```tsx Progress Bar Indicator
+import { Stepper, Step, StepIndicator, StepperNavigation } from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <Stepper totalSteps={4}>
+      <StepIndicator variant="progress" />
+      
+      <StepperContent>
+        <Step step={1}>
+          <h3>Step 1 Content</h3>
+        </Step>
+        <Step step={2}>
+          <h3>Step 2 Content</h3>
+        </Step>
+        <Step step={3}>
+          <h3>Step 3 Content</h3>
+        </Step>
+        <Step step={4}>
+          <h3>Step 4 Content</h3>
+        </Step>
+      </StepperContent>
+      
+      <StepperNavigation onFinish={() => alert("Done!")} />
+    </Stepper>
+  );
+}
+```
+
+```tsx Custom Styling
+import { Stepper, Step, StepIndicator, PrevStep, NextStep } from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <Stepper totalSteps={3} className="max-w-2xl">
+      <StepIndicator variant="numbers" className="mb-8" />
+      
+      <StepperContent className="min-h-[400px]">
+        <Step step={1} className="bg-blue-50 p-6 rounded-lg">
+          <StepTitle>Getting Started</StepTitle>
+          <StepDescription>Welcome to the setup wizard</StepDescription>
+        </Step>
+        {/* More steps */}
+      </StepperContent>
+      
+      <div className="flex gap-4 mt-8">
+        <PrevStep className="bg-gray-200 hover:bg-gray-300" />
+        <NextStep 
+          onFinish={() => console.log("Complete")} 
+          className="bg-blue-600 text-white hover:bg-blue-700"
+        />
+      </div>
+    </Stepper>
+  );
+}
+```
+
+</CodeGroup>
+
+## Components
+
+### Stepper (Root)
+
+<ParamField path="children" type="React.ReactNode" required>
+  The stepper content including steps and navigation.
+</ParamField>
+
+<ParamField path="totalSteps" type="number" required>
+  Total number of steps in the stepper.
+</ParamField>
+
+<ParamField path="activeStep" type="number" default="0">
+  Initial active step (0-indexed).
+</ParamField>
+
+<ParamField path="onStepChange" type="(step: number) => void">
+  Callback fired when the step changes.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+### Step
+
+<ParamField path="children" type="React.ReactNode" required>
+  Content for this step.
+</ParamField>
+
+<ParamField path="step" type="number" required>
+  Step number (1-indexed).
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+### StepIndicator
+
+<ParamField path="variant" type="'dots' | 'fraction' | 'progress' | 'numbers' | 'text'" default="'dots'">
+  Visual style of the step indicator.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+### StepperNavigation
+
+<ParamField path="onFinish" type="() => void" required>
+  Callback fired when the last step's "Finish" button is clicked.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+## Animation Details
+
+### Step Transition
+
+```tsx
+initial={{ opacity: 0, y: 10 }}
+animate={{ opacity: 1, y: 0 }}
+exit={{ opacity: 0, y: -10 }}
+```
+
+### Progress Bar Animation
+
+```tsx
+<motion.div
+  className="bg-black dark:bg-zinc-700 h-2 rounded-full"
+  initial={{ width: 0 }}
+  animate={{ width: `${progress}%` }}
+/>
+```
+
+### Indicator Dot Animation
+
+```tsx
+initial={{ scale: 1 }}
+animate={{ scale: index === currentStep ? 1.5 : 1 }}
+```
+
+<Note>
+  All step transitions use `AnimatePresence` with `mode="wait"` for smooth enter/exit animations.
+</Note>
+
+## Hook: useStepper
+
+Access stepper state and controls from any child component:
+
+```tsx
+import { useStepper } from "@craftdotui/components";
+
+function CustomStepContent() {
+  const { currentStep, totalSteps, goToNextStep, goToPreviousStep, isLastStep } = useStepper();
+  
+  return (
+    <div>
+      <p>Step {currentStep + 1} of {totalSteps}</p>
+      <button onClick={goToNextStep}>Next</button>
+    </div>
+  );
+}
+```
+
+## Examples
+
+### Onboarding Flow
+
+```tsx
+import { Stepper, Step, StepTitle, StepDescription, StepIndicator, StepperNavigation } from "@craftdotui/components";
+import { User, Mail, Shield, Check } from "lucide-react";
+
+export default function OnboardingFlow() {
+  const handleComplete = () => {
+    // Save user data and redirect
+    window.location.href = "/dashboard";
+  };
+
+  return (
+    <Stepper totalSteps={4} className="max-w-3xl mx-auto">
+      <StepIndicator variant="progress" className="mb-12" />
+      
+      <StepperContent>
+        <Step step={1}>
+          <div className="text-center">
+            <User className="w-16 h-16 mx-auto mb-4 text-blue-500" />
+            <StepTitle>Create Your Profile</StepTitle>
+            <StepDescription>Tell us about yourself</StepDescription>
+            <input className="mt-4 w-full p-3 border rounded" placeholder="Full Name" />
+            <input className="mt-3 w-full p-3 border rounded" placeholder="Username" />
+          </div>
+        </Step>
+        
+        <Step step={2}>
+          <div className="text-center">
+            <Mail className="w-16 h-16 mx-auto mb-4 text-green-500" />
+            <StepTitle>Verify Email</StepTitle>
+            <StepDescription>We've sent a code to your email</StepDescription>
+            <input className="mt-4 w-full p-3 border rounded text-center text-2xl tracking-widest" placeholder="000000" maxLength={6} />
+          </div>
+        </Step>
+        
+        <Step step={3}>
+          <div className="text-center">
+            <Shield className="w-16 h-16 mx-auto mb-4 text-purple-500" />
+            <StepTitle>Set Preferences</StepTitle>
+            <StepDescription>Customize your experience</StepDescription>
+            {/* Preference checkboxes */}
+          </div>
+        </Step>
+        
+        <Step step={4}>
+          <div className="text-center">
+            <Check className="w-16 h-16 mx-auto mb-4 text-green-500" />
+            <StepTitle>All Set!</StepTitle>
+            <StepDescription>You're ready to get started</StepDescription>
+          </div>
+        </Step>
+      </StepperContent>
+      
+      <StepperNavigation onFinish={handleComplete} className="mt-12" />
+    </Stepper>
+  );
+}
+```
+
+### Multi-Step Form with Validation
+
+```tsx
+import { useState } from "react";
+import { Stepper, Step, StepIndicator, PrevStep, NextStep, useStepper } from "@craftdotui/components";
+
+function StepOne() {
+  const { goToNextStep } = useStepper();
+  const [valid, setValid] = useState(false);
+  
+  return (
+    <div>
+      <h3>Personal Info</h3>
+      <input onChange={(e) => setValid(e.target.value.length > 0)} />
+      <button onClick={goToNextStep} disabled={!valid}>Continue</button>
+    </div>
+  );
+}
+
+export default function MultiStepForm() {
+  return (
+    <Stepper totalSteps={3}>
+      <StepIndicator variant="numbers" />
+      <StepperContent>
+        <Step step={1}><StepOne /></Step>
+        <Step step={2}>{/* Step 2 content */}</Step>
+        <Step step={3}>{/* Step 3 content */}</Step>
+      </StepperContent>
+    </Stepper>
+  );
+}
+```
+
+### E-commerce Checkout
+
+```tsx
+import { Stepper, Step, StepTitle, StepIndicator, StepperNavigation } from "@craftdotui/components";
+
+export default function CheckoutFlow() {
+  return (
+    <Stepper totalSteps={3}>
+      <StepIndicator variant="text" />
+      
+      <StepperContent>
+        <Step step={1}>
+          <StepTitle>Shipping Information</StepTitle>
+          {/* Address form */}
+        </Step>
+        
+        <Step step={2}>
+          <StepTitle>Payment Method</StepTitle>
+          {/* Payment form */}
+        </Step>
+        
+        <Step step={3}>
+          <StepTitle>Order Review</StepTitle>
+          {/* Order summary */}
+        </Step>
+      </StepperContent>
+      
+      <StepperNavigation 
+        onFinish={() => {
+          // Process order
+          submitOrder();
+        }} 
+      />
+    </Stepper>
+  );
+}
+```
+
+<Tip>
+  Use the `onStepChange` callback to track analytics or save progress as users navigate through steps.
+</Tip>
+
+## Indicator Variants
+
+### Dots (Default)
+Simple, animated dots indicating progress.
+
+### Fraction
+Displays "Step X of Y" text.
+
+### Progress
+Linear progress bar filling from 0-100%.
+
+### Numbers
+Clickable numbered buttons for each step.
+
+### Text
+Text labels showing "Step 1", "Step 2", etc.
+
+## Best Practices
+
+- Keep steps between 3-7 for optimal user experience
+- Provide clear titles and descriptions for each step
+- Validate data before allowing navigation to next step
+- Show progress clearly with appropriate indicator variant
+- Allow users to go back to edit previous steps
+- Persist data across steps
+- Provide helpful error messages
+
+## Accessibility
+
+- Uses semantic `<fieldset>` and `<legend>` elements
+- Proper ARIA labels for navigation buttons
+- Keyboard navigation support
+- Screen reader announcements for step changes
+- Disabled state for navigation when appropriate

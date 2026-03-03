@@ -1,0 +1,74 @@
+---
+title: Autocomplete
+description: An autocomplete input component with dropdown suggestions, built on @base-ui/react.
+---
+
+The Autocomplete component provides a text input with a dropdown list of suggestions that filters as the user types.
+
+## Installation
+
+```tsx
+import { Autocomplete } from "@craftdotui/baseui/components/autocomplete";
+```
+
+## Usage
+
+<Note>
+  This component is built on @base-ui/react's Autocomplete primitive. Refer to the source code for the complete API and implementation details.
+</Note>
+
+```tsx
+<Autocomplete
+  options={[
+    { value: 'apple', label: 'Apple' },
+    { value: 'banana', label: 'Banana' },
+    { value: 'orange', label: 'Orange' },
+  ]}
+  placeholder="Search fruits..."
+/>
+```
+
+## Features
+
+- Type-ahead filtering
+- Keyboard navigation
+- Custom rendering of options
+- Async data loading support
+- Multiple selection mode
+- Accessible by default
+
+## Examples
+
+### Basic Autocomplete
+
+```tsx
+const fruits = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'orange', label: 'Orange' },
+];
+
+<Autocomplete
+  options={fruits}
+  placeholder="Select a fruit"
+/>
+```
+
+### Controlled
+
+```tsx
+const [value, setValue] = useState('');
+
+<Autocomplete
+  value={value}
+  onValueChange={setValue}
+  options={options}
+/>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for accessibility
+- ARIA combobox pattern
+- Keyboard navigation support
+- Screen reader announcements

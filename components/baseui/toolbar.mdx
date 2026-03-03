@@ -1,0 +1,124 @@
+---
+title: Toolbar
+description: A toolbar component for grouping action buttons, built on @base-ui/react.
+---
+
+The Toolbar component provides a container for grouping related action buttons and controls.
+
+## Installation
+
+```tsx
+import { Toolbar } from "@craftdotui/baseui/components/toolbar";
+```
+
+## Usage
+
+<Note>
+  This component is built on @base-ui/react's Toolbar primitive. It provides an accessible container for toolbar controls.
+</Note>
+
+```tsx
+<Toolbar>
+  <Button size="icon" variant="ghost">
+    <Bold />
+  </Button>
+  <Button size="icon" variant="ghost">
+    <Italic />
+  </Button>
+  <Button size="icon" variant="ghost">
+    <Underline />
+  </Button>
+</Toolbar>
+```
+
+## Features
+
+- Horizontal button grouping
+- Keyboard navigation
+- Separators for logical groups
+- Toggle button support
+- Accessible toolbar pattern
+
+## Examples
+
+### Text Editor Toolbar
+
+```tsx
+import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight } from "lucide-react";
+
+<Toolbar className="flex gap-1 border rounded-md p-1">
+  <div className="flex gap-0.5">
+    <Toggle size="icon">
+      <Bold />
+    </Toggle>
+    <Toggle size="icon">
+      <Italic />
+    </Toggle>
+    <Toggle size="icon">
+      <Underline />
+    </Toggle>
+  </div>
+  
+  <Separator orientation="vertical" />
+  
+  <div className="flex gap-0.5">
+    <Toggle size="icon">
+      <AlignLeft />
+    </Toggle>
+    <Toggle size="icon">
+      <AlignCenter />
+    </Toggle>
+    <Toggle size="icon">
+      <AlignRight />
+    </Toggle>
+  </div>
+</Toolbar>
+```
+
+### With Toggle Groups
+
+```tsx
+<Toolbar>
+  <ToggleGroup type="single">
+    <ToggleGroupItem value="bold" size="icon">
+      <Bold />
+    </ToggleGroupItem>
+    <ToggleGroupItem value="italic" size="icon">
+      <Italic />
+    </ToggleGroupItem>
+    <ToggleGroupItem value="underline" size="icon">
+      <Underline />
+    </ToggleGroupItem>
+  </ToggleGroup>
+</Toolbar>
+```
+
+### With Dropdowns
+
+```tsx
+<Toolbar>
+  <Button size="sm" variant="ghost">File</Button>
+  <Button size="sm" variant="ghost">Edit</Button>
+  <Button size="sm" variant="ghost">View</Button>
+  
+  <Separator orientation="vertical" />
+  
+  <Button size="icon" variant="ghost">
+    <Save />
+  </Button>
+  <Button size="icon" variant="ghost">
+    <Undo />
+  </Button>
+  <Button size="icon" variant="ghost">
+    <Redo />
+  </Button>
+</Toolbar>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA compliance
+- ARIA toolbar role
+- Keyboard navigation (Arrow keys, Home, End)
+- Focus management
+- Screen reader support

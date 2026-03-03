@@ -1,0 +1,120 @@
+---
+title: Accordion
+description: A collapsible content component built on @base-ui/react for accessible, expandable sections.
+---
+
+The Accordion component allows users to expand and collapse content sections. It supports both single and multiple expanded items.
+
+## Installation
+
+```tsx
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionPanel,
+} from "@craftdotui/baseui/components/accordion";
+```
+
+## Usage
+
+```tsx
+<Accordion>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Is it accessible?</AccordionTrigger>
+    <AccordionPanel>
+      Yes. It adheres to the WAI-ARIA design pattern.
+    </AccordionPanel>
+  </AccordionItem>
+  
+  <AccordionItem value="item-2">
+    <AccordionTrigger>Is it styled?</AccordionTrigger>
+    <AccordionPanel>
+      Yes. It comes with default styles that can be customized.
+    </AccordionPanel>
+  </AccordionItem>
+</Accordion>
+```
+
+## Components
+
+### Accordion (Root)
+
+<ParamField path="defaultValue" type="string | string[]">
+  Default opened item(s) in uncontrolled mode.
+</ParamField>
+
+<ParamField path="value" type="string | string[]">
+  Controlled open state value.
+</ParamField>
+
+<ParamField path="onValueChange" type="function">
+  Callback fired when the open state changes.
+</ParamField>
+
+<ParamField path="openMultiple" type="boolean" default="false">
+  Allow multiple items to be open simultaneously.
+</ParamField>
+
+### AccordionItem
+
+<ParamField path="value" type="string" required>
+  Unique identifier for the accordion item.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Prevents the item from being toggled.
+</ParamField>
+
+### AccordionTrigger
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+<Note>
+  The trigger automatically includes a chevron icon that rotates when expanded.
+</Note>
+
+### AccordionPanel
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+## Examples
+
+### Multiple Items Open
+
+```tsx
+<Accordion openMultiple>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Section 1</AccordionTrigger>
+    <AccordionPanel>Content 1</AccordionPanel>
+  </AccordionItem>
+  <AccordionItem value="item-2">
+    <AccordionTrigger>Section 2</AccordionTrigger>
+    <AccordionPanel>Content 2</AccordionPanel>
+  </AccordionItem>
+</Accordion>
+```
+
+### Controlled
+
+```tsx
+const [value, setValue] = useState('item-1');
+
+<Accordion value={value} onValueChange={setValue}>
+  <AccordionItem value="item-1">
+    <AccordionTrigger>Controlled Section</AccordionTrigger>
+    <AccordionPanel>This is controlled</AccordionPanel>
+  </AccordionItem>
+</Accordion>
+```
+
+## Accessibility
+
+- Uses proper ARIA attributes for accordion pattern
+- Keyboard navigation with Enter/Space to toggle
+- Focus management
+- Animated expansion with height transitions

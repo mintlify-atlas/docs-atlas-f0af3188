@@ -1,0 +1,111 @@
+---
+title: Preview Card
+description: A preview card component that shows content on hover, built on @base-ui/react.
+---
+
+The PreviewCard component displays a preview or additional information when hovering over a trigger element.
+
+## Installation
+
+```tsx
+import { PreviewCard } from "@craftdotui/baseui/components/preview-card";
+```
+
+## Usage
+
+<Note>
+  This component is built on @base-ui/react's PreviewCard/HoverCard primitive. It shows rich previews on hover.
+</Note>
+
+```tsx
+<PreviewCard>
+  <PreviewCardTrigger>
+    <a href="#">@username</a>
+  </PreviewCardTrigger>
+  
+  <PreviewCardPortal>
+    <PreviewCardPositioner>
+      <PreviewCardPopup>
+        <div className="space-y-2">
+          <h4 className="font-semibold">User Name</h4>
+          <p className="text-sm">Bio information goes here.</p>
+        </div>
+      </PreviewCardPopup>
+    </PreviewCardPositioner>
+  </PreviewCardPortal>
+</PreviewCard>
+```
+
+## Features
+
+- Hover-triggered preview
+- Delay before showing
+- Rich content support
+- Positioning control
+- Mouse-safe area (doesn't close when moving to card)
+
+## Examples
+
+### User Profile Preview
+
+```tsx
+<PreviewCard>
+  <PreviewCardTrigger>
+    <Avatar>
+      <AvatarImage src="/avatar.jpg" />
+      <AvatarFallback>JD</AvatarFallback>
+    </Avatar>
+  </PreviewCardTrigger>
+  
+  <PreviewCardPortal>
+    <PreviewCardPositioner>
+      <PreviewCardPopup className="w-80">
+        <div className="flex gap-4">
+          <Avatar>
+            <AvatarImage src="/avatar.jpg" />
+            <AvatarFallback>JD</AvatarFallback>
+          </Avatar>
+          <div>
+            <h4 className="font-semibold">John Doe</h4>
+            <p className="text-sm text-muted-foreground">@johndoe</p>
+            <p className="mt-2 text-sm">Software developer and designer.</p>
+          </div>
+        </div>
+      </PreviewCardPopup>
+    </PreviewCardPositioner>
+  </PreviewCardPortal>
+</PreviewCard>
+```
+
+### Link Preview
+
+```tsx
+<PreviewCard>
+  <PreviewCardTrigger>
+    <a href="https://example.com" className="underline">
+      example.com
+    </a>
+  </PreviewCardTrigger>
+  
+  <PreviewCardPortal>
+    <PreviewCardPositioner>
+      <PreviewCardPopup>
+        <div className="space-y-2">
+          <h4 className="font-semibold">Example Website</h4>
+          <p className="text-sm text-muted-foreground">
+            A description of the linked content.
+          </p>
+        </div>
+      </PreviewCardPopup>
+    </PreviewCardPositioner>
+  </PreviewCardPortal>
+</PreviewCard>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for accessibility
+- Keyboard accessible (focus to show)
+- ARIA attributes
+- Screen reader support
+- Respects prefers-reduced-motion

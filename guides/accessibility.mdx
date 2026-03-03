@@ -1,0 +1,535 @@
+---
+title: Accessibility
+description: Learn about the accessibility features built into Craft UI and best practices for creating inclusive user interfaces.
+---
+
+Craft UI is built on top of Base UI from React, which provides comprehensive accessibility features out of the box. All components follow WAI-ARIA guidelines and include full keyboard navigation support.
+
+## Foundation: Base UI
+
+Craft UI leverages `@base-ui/react` as its foundation, which means every component comes with:
+
+- Full keyboard navigation
+- Proper ARIA attributes
+- Screen reader support
+- Focus management
+- Semantic HTML structure
+
+You don't need to add accessibility features manually - they're built in from the start.
+
+## Keyboard Navigation
+
+All interactive components support standard keyboard navigation patterns:
+
+### Buttons and Links
+
+```tsx
+import { Button } from "@craftdotui/baseui/components/button";
+
+<Button>Click Me</Button>
+// ✓ Focusable with Tab
+// ✓ Activates with Enter or Space
+// ✓ Shows focus indicator
+```
+
+### Dialogs
+
+```tsx
+import {
+  Dialog,
+  DialogTrigger,
+  DialogPortal,
+  DialogBackdrop,
+  DialogViewport,
+  DialogPopup,
+} from "@craftdotui/baseui/components/dialog";
+
+<Dialog>
+  <DialogTrigger render={(props) => <Button {...props}>Open</Button>} />
+  <DialogPortal>
+    <DialogBackdrop />
+    <DialogViewport>
+      <DialogPopup>{/* Content */}</DialogPopup>
+    </DialogViewport>
+  </DialogPortal>
+</Dialog>
+// ✓ Opens with Enter/Space on trigger
+// ✓ Closes with Escape key
+// ✓ Traps focus inside dialog
+// ✓ Returns focus to trigger on close
+```
+
+### Tooltips
+
+```tsx
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipPortal,
+  TooltipPositioner,
+  TooltipPopup,
+} from "@craftdotui/baseui/components/tooltip";
+
+<Tooltip>
+  <TooltipTrigger>Hover or Focus</TooltipTrigger>
+  <TooltipPortal>
+    <TooltipPositioner>
+      <TooltipPopup>Helpful information</TooltipPopup>
+    </TooltipPositioner>
+  </TooltipPortal>
+</Tooltip>
+// ✓ Shows on hover and focus
+// ✓ Dismisses with Escape
+// ✓ Properly announced by screen readers
+```
+
+### Form Controls
+
+<CodeGroup>
+```tsx Checkbox
+import { Checkbox, CheckboxIndicator } from "@craftdotui/baseui/components/checkbox";
+
+<Checkbox>
+  <CheckboxIndicator />
+</Checkbox>
+// ✓ Toggles with Space
+// ✓ Proper checked/unchecked states
+// ✓ Supports indeterminate state
+```
+
+```tsx Switch
+import { Switch, SwitchThumb } from "@craftdotui/baseui/components/switch";
+
+<Switch>
+  <SwitchThumb />
+</Switch>
+// ✓ Toggles with Space
+// ✓ Announces on/off state
+```
+
+```tsx Input
+import { Input } from "@craftdotui/baseui/components/input";
+
+<Input type="text" />
+// ✓ Standard text input navigation
+// ✓ Proper type attribute for different inputs
+```
+</CodeGroup>
+
+## ARIA Attributes
+
+Craft UI components automatically include appropriate ARIA attributes:
+
+### Dialog Component
+
+The Dialog component uses proper ARIA roles and attributes:
+
+```tsx
+// Automatically applied attributes:
+// role="dialog"
+// aria-labelledby="dialog-title"
+// aria-describedby="dialog-description"
+// aria-modal="true"
+
+<Dialog>
+  <DialogTrigger render={(props) => <Button {...props}>Open</Button>} />
+  <DialogPortal>
+    <DialogBackdrop />
+    <DialogViewport>
+      <DialogPopup>
+        <DialogTitle>Title</DialogTitle> {/* Linked via aria-labelledby */}
+        <DialogDescription>Description</DialogDescription> {/* Linked via aria-describedby */}
+      </DialogPopup>
+    </DialogViewport>
+  </DialogPortal>
+</Dialog>
+```
+
+### Checkbox Component
+
+```tsx
+// Automatically applied:
+// role="checkbox"
+// aria-checked="true" | "false" | "mixed"
+// tabindex="0"
+
+<Checkbox checked={true}>
+  <CheckboxIndicator />
+</Checkbox>
+```
+
+### Button States
+
+Buttons automatically handle loading and disabled states:
+
+```tsx
+<Button loading={true}>
+  Submit
+</Button>
+// Sets: aria-busy="true"
+// Sets: disabled={true}
+
+<Button disabled={true}>
+  Disabled
+</Button>
+// Sets: aria-disabled="true"
+// Prevents interaction
+```
+
+## Focus Management
+
+Craft UI components handle focus properly in all scenarios:
+
+### Focus Indicators
+
+All interactive components have visible focus indicators:
+
+```tsx
+// Button focus styles (from button/index.tsx:18)
+<Button className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+  Visible Focus Ring
+</Button>
+```
+
+### Focus Trapping
+
+Modal components like Dialog automatically trap focus:
+
+<Steps>
+  <Step title="Dialog Opens">
+    Focus moves to the first focusable element inside the dialog.
+  </Step>
+  
+  <Step title="Tab Navigation">
+    Tab cycles through focusable elements within the dialog only.
+  </Step>
+  
+  <Step title="Dialog Closes">
+    Focus returns to the trigger element that opened the dialog.
+  </Step>
+</Steps>
+
+### Programmatic Focus
+
+You can manually manage focus when needed:
+
+```tsx
+import { useRef } from "react";
+import { Input } from "@craftdotui/baseui/components/input";
+import { Button } from "@craftdotui/baseui/components/button";
+
+function SearchForm() {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  return (
+    <div>
+      <Input ref={inputRef} type="search" />
+      <Button onClick={() => inputRef.current?.focus()}>
+        Focus Search
+      </Button>
+    </div>
+  );
+}
+```
+
+## Screen Reader Support
+
+Components provide meaningful information to screen readers:
+
+### Semantic HTML
+
+All components use semantic HTML elements:
+
+```tsx
+// Button uses <button> element
+<Button>Click</Button>
+
+// Input uses <input> element with proper type
+<Input type="email" />
+
+// Checkbox uses proper checkbox role
+<Checkbox>
+  <CheckboxIndicator />
+</Checkbox>
+```
+
+### Labels and Descriptions
+
+Always provide labels for form controls:
+
+```tsx
+import { Field } from "@craftdotui/baseui/components/field";
+import { Input } from "@craftdotui/baseui/components/input";
+
+<Field>
+  <label htmlFor="email">Email Address</label>
+  <Input id="email" type="email" />
+  <p className="text-sm text-muted-foreground">We'll never share your email.</p>
+</Field>
+```
+
+### Accessible Icon Buttons
+
+When using icon-only buttons, provide accessible labels:
+
+```tsx
+<Button size="icon" aria-label="Close dialog">
+  <svg>...</svg>
+</Button>
+
+// Or use visually hidden text
+<Button size="icon">
+  <svg aria-hidden="true">...</svg>
+  <span className="sr-only">Close dialog</span>
+</Button>
+```
+
+## Best Practices
+
+### Color Contrast
+
+<Tip>
+  Craft UI's default theme meets WCAG AA standards for color contrast. When customizing colors, ensure you maintain at least a 4.5:1 contrast ratio for text.
+</Tip>
+
+```tsx
+// Good: Uses semantic color tokens with proper contrast
+<Button variant="default">Submit</Button>
+
+// Check contrast when using custom colors
+<Button className="bg-[oklch(0.5_0.2_280)] text-white">
+  Custom Color
+</Button>
+```
+
+### Text Alternatives
+
+Always provide text alternatives for non-text content:
+
+```tsx
+// Images
+<img src="/logo.png" alt="Company Logo" />
+
+// Decorative images (empty alt)
+<img src="/decoration.png" alt="" aria-hidden="true" />
+
+// SVG icons
+<svg aria-labelledby="icon-title">
+  <title id="icon-title">Settings Icon</title>
+  <path d="..." />
+</svg>
+```
+
+### Form Validation
+
+Provide clear, accessible error messages:
+
+```tsx
+import { Field } from "@craftdotui/baseui/components/field";
+import { Input } from "@craftdotui/baseui/components/input";
+import { useState } from "react";
+
+function EmailField() {
+  const [error, setError] = useState("");
+
+  return (
+    <Field>
+      <label htmlFor="email">Email</label>
+      <Input
+        id="email"
+        type="email"
+        aria-invalid={!!error}
+        aria-describedby={error ? "email-error" : undefined}
+      />
+      {error && (
+        <span id="email-error" className="text-destructive text-sm" role="alert">
+          {error}
+        </span>
+      )}
+    </Field>
+  );
+}
+```
+
+### Loading States
+
+Indicate loading states clearly:
+
+```tsx
+<Button loading={true}>
+  Saving...
+</Button>
+// Automatically sets aria-busy="true"
+// Shows loading spinner
+// Disables interaction
+```
+
+### Responsive Design
+
+Ensure components work at different zoom levels and viewport sizes:
+
+```tsx
+// Use relative units
+<Button className="text-base px-4 py-2">
+  Scales with user preferences
+</Button>
+
+// Avoid fixed pixel heights for text containers
+<div className="min-h-[3rem]" /* instead of h-12 */>
+  Content
+</div>
+```
+
+## Testing Accessibility
+
+### Keyboard Testing
+
+<Steps>
+  <Step title="Tab Through Interface">
+    Press Tab to navigate through all interactive elements. Ensure:
+    - All interactive elements are reachable
+    - Focus order is logical
+    - Focus indicators are visible
+  </Step>
+  
+  <Step title="Test Keyboard Actions">
+    - Buttons activate with Enter or Space
+    - Dialogs close with Escape
+    - Dropdowns open with Arrow keys
+    - Forms submit with Enter
+  </Step>
+  
+  <Step title="Check Focus Trapping">
+    In dialogs and modals:
+    - Focus stays within the modal
+    - Tab cycles through modal elements
+    - Focus returns to trigger on close
+  </Step>
+</Steps>
+
+### Screen Reader Testing
+
+Test with popular screen readers:
+
+- **NVDA** (Windows, free)
+- **JAWS** (Windows, commercial)
+- **VoiceOver** (macOS/iOS, built-in)
+- **TalkBack** (Android, built-in)
+
+<Note>
+  Each component in Craft UI is built on Base UI's accessible primitives, which are thoroughly tested with screen readers.
+</Note>
+
+### Automated Testing
+
+Use tools to catch common accessibility issues:
+
+```bash
+# Install axe-core for accessibility testing
+npm install --save-dev @axe-core/react
+```
+
+```tsx
+import React from 'react';
+
+if (process.env.NODE_ENV !== 'production') {
+  import('@axe-core/react').then((axe) => {
+    axe.default(React, ReactDOM, 1000);
+  });
+}
+```
+
+## Common Patterns
+
+### Accessible Form
+
+```tsx
+import { Field, Fieldset } from "@craftdotui/baseui/components/field";
+import { Input } from "@craftdotui/baseui/components/input";
+import { Button } from "@craftdotui/baseui/components/button";
+import { Checkbox, CheckboxIndicator } from "@craftdotui/baseui/components/checkbox";
+
+function AccessibleForm() {
+  return (
+    <form onSubmit={(e) => e.preventDefault()}>
+      <Fieldset>
+        <legend className="text-lg font-semibold mb-4">Contact Information</legend>
+        
+        <Field className="mb-4">
+          <label htmlFor="name">Full Name</label>
+          <Input id="name" type="text" required />
+        </Field>
+
+        <Field className="mb-4">
+          <label htmlFor="email">Email Address</label>
+          <Input id="email" type="email" required />
+          <p className="text-sm text-muted-foreground">We'll never share your email.</p>
+        </Field>
+
+        <Field className="mb-4">
+          <label className="flex items-center gap-2">
+            <Checkbox>
+              <CheckboxIndicator />
+            </Checkbox>
+            I agree to the terms and conditions
+          </label>
+        </Field>
+
+        <Button type="submit">Submit</Button>
+      </Fieldset>
+    </form>
+  );
+}
+```
+
+### Accessible Navigation
+
+```tsx
+import { Button } from "@craftdotui/baseui/components/button";
+
+function Navigation() {
+  return (
+    <nav aria-label="Main navigation">
+      <ul className="flex gap-4">
+        <li>
+          <Button
+            variant="ghost"
+            render={(props) => <a href="/" {...props} />}
+          >
+            Home
+          </Button>
+        </li>
+        <li>
+          <Button
+            variant="ghost"
+            render={(props) => <a href="/about" {...props} />}
+          >
+            About
+          </Button>
+        </li>
+        <li>
+          <Button
+            variant="ghost"
+            render={(props) => <a href="/contact" {...props} />}
+            aria-current="page"
+          >
+            Contact
+          </Button>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+```
+
+## Resources
+
+- [WAI-ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
+- [Base UI Documentation](https://base-ui.com/)
+- [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
+- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
+
+## Next Steps
+
+- [Theming](/guides/theming) - Ensure your custom theme maintains accessibility
+- [Customization](/guides/customization) - Preserve accessibility when customizing components

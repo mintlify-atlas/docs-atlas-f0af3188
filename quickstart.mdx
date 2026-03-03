@@ -1,80 +1,290 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quickstart
+description: Build your first Craft UI component in under 5 minutes
 ---
 
-## Get started in three steps
+# Quickstart
 
-Get your documentation site running locally and make your first customization.
+This guide will help you create your first component with Craft UI in just a few minutes.
 
-### Step 1: Set up your local environment
+## Your first component
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+Let's start by adding a Button component to your project.
 
-### Step 2: Deploy your changes
+<Steps>
+  <Step title="Install the Button component">
+    Use the CLI to install the Button component:
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    <CodeGroup>
+    ```bash npm
+    npx craftui-cli add button
+    ```
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+    ```bash yarn
+    yarn dlx craftui-cli add button
+    ```
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+    ```bash pnpm
+    pnpm dlx craftui-cli add button
+    ```
 
-### Step 3: Go live
+    ```bash bun
+    bunx craftui-cli add button
+    ```
+    </CodeGroup>
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+    This creates a `Button` component in your project with all necessary dependencies.
+  </Step>
+
+  <Step title="Import and use the Button">
+    Import the Button component in your page or component:
+
+    ```tsx app/page.tsx
+    import { Button } from '@/components/ui/button'
+
+    export default function Home() {
+      return (
+        <div className="flex items-center justify-center min-h-screen gap-4">
+          <Button>Click me</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="outline">Outline</Button>
+        </div>
+      )
+    }
+    ```
+  </Step>
+
+  <Step title="Run your development server">
+    Start your development server:
+
+    <CodeGroup>
+    ```bash npm
+    npm run dev
+    ```
+
+    ```bash yarn
+    yarn dev
+    ```
+
+    ```bash pnpm
+    pnpm dev
+    ```
+
+    ```bash bun
+    bun dev
+    ```
+    </CodeGroup>
+
+    Open your browser to see your buttons in action!
+  </Step>
+</Steps>
+
+## Button variants and sizes
+
+The Button component comes with multiple variants and sizes:
+
+```tsx
+import { Button } from '@/components/ui/button'
+
+export default function ButtonDemo() {
+  return (
+    <div className="space-y-4">
+      {/* Variants */}
+      <div className="flex gap-2">
+        <Button variant="default">Default</Button>
+        <Button variant="secondary">Secondary</Button>
+        <Button variant="destructive">Destructive</Button>
+        <Button variant="outline">Outline</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="link">Link</Button>
+      </div>
+
+      {/* Sizes */}
+      <div className="flex items-center gap-2">
+        <Button size="xs">Extra Small</Button>
+        <Button size="sm">Small</Button>
+        <Button size="md">Medium</Button>
+        <Button size="lg">Large</Button>
+        <Button size="xl">Extra Large</Button>
+      </div>
+
+      {/* Loading state */}
+      <div className="flex gap-2">
+        <Button loading>Loading...</Button>
+        <Button variant="outline" loading>Processing</Button>
+      </div>
+
+      {/* Disabled state */}
+      <div className="flex gap-2">
+        <Button disabled>Disabled</Button>
+      </div>
+    </div>
+  )
+}
+```
+
+## Try an animated component
+
+Now let's add some magic with an animated component. We'll use the AnimatedTooltip component:
+
+<Steps>
+  <Step title="Install AnimatedTooltip">
+    <CodeGroup>
+    ```bash npm
+    npx craftui-cli add animated-tooltip
+    ```
+
+    ```bash yarn
+    yarn dlx craftui-cli add animated-tooltip
+    ```
+
+    ```bash pnpm
+    pnpm dlx craftui-cli add animated-tooltip
+    ```
+
+    ```bash bun
+    bunx craftui-cli add animated-tooltip
+    ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Create an interactive demo">
+    ```tsx app/page.tsx
+    import { AnimatedTooltip } from '@/components/ui/animated-tooltip'
+    import { Heart, Star, MessageCircle, Share2 } from 'lucide-react'
+
+    export default function Home() {
+      return (
+        <div className="flex items-center justify-center min-h-screen gap-8">
+          <AnimatedTooltip label="Like">
+            <Heart className="size-5" />
+          </AnimatedTooltip>
+
+          <AnimatedTooltip label="Favorite">
+            <Star className="size-5" />
+          </AnimatedTooltip>
+
+          <AnimatedTooltip label="Comment">
+            <MessageCircle className="size-5" />
+          </AnimatedTooltip>
+
+          <AnimatedTooltip label="Share">
+            <Share2 className="size-5" />
+          </AnimatedTooltip>
+        </div>
+      )
+    }
+    ```
+  </Step>
+
+  <Step title="See the magic">
+    Hover over each icon to see the smooth animated tooltip with rotation and translation effects!
+  </Step>
+</Steps>
+
+## How AnimatedTooltip works
+
+The AnimatedTooltip component uses Framer Motion to create smooth animations:
+
+- **Hover detection** - Shows tooltip on mouse enter with configurable delay
+- **Mouse tracking** - Follows cursor position for dynamic rotation
+- **Spring animations** - Smooth physics-based motion
+- **Customizable** - Control delay, styling, and content
+
+Here's the component API:
+
+```tsx
+interface AnimatedTooltipProps {
+  children: React.ReactNode    // The trigger element
+  label: string                // Tooltip text
+  onClick?: () => void         // Optional click handler
+  className?: string           // Custom styling
+  delay?: number              // Hover delay in ms (default: 100)
+}
+```
+
+## Building a complete example
+
+Let's combine multiple components to build a card with interactive elements:
+
+```tsx app/page.tsx
+import { Button } from '@/components/ui/button'
+import { AnimatedTooltip } from '@/components/ui/animated-tooltip'
+import { Heart, Share2, Bookmark } from 'lucide-react'
+
+export default function Home() {
+  return (
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <div className="w-full max-w-md rounded-lg border bg-card p-6 space-y-4">
+        <h2 className="text-2xl font-bold">Getting Started with Craft UI</h2>
+        <p className="text-muted-foreground">
+          Build beautiful interfaces with accessible components and smooth animations.
+        </p>
+
+        <div className="flex items-center justify-between pt-4">
+          <div className="flex gap-2">
+            <AnimatedTooltip label="Like this post">
+              <Heart className="size-4" />
+            </AnimatedTooltip>
+            <AnimatedTooltip label="Share">
+              <Share2 className="size-4" />
+            </AnimatedTooltip>
+            <AnimatedTooltip label="Save for later">
+              <Bookmark className="size-4" />
+            </AnimatedTooltip>
+          </div>
+
+          <Button size="sm">Read More</Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+```
+
+## Using hooks
+
+Craft UI also provides useful React hooks. Here's an example using `useMediaQuery`:
+
+```tsx
+import { useMediaQuery } from '@/hooks/use-media-query'
+import { Button } from '@/components/ui/button'
+
+export default function ResponsiveDemo() {
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">
+        You are on {isMobile ? 'mobile' : 'desktop'}
+      </h1>
+      <Button size={isMobile ? 'sm' : 'lg'}>
+        {isMobile ? 'Tap' : 'Click'} me
+      </Button>
+    </div>
+  )
+}
+```
 
 ## Next steps
 
-Now that you have your docs running, explore these key features:
+Now that you've built your first components, explore more:
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Base components" icon="cube" href="/components/baseui/button">
+    Explore 35+ foundational components
+  </Card>
+  <Card title="Craft components" icon="wand-magic-sparkles" href="/components/craftui/animated-tooltip">
+    Discover advanced animated components
+  </Card>
+  <Card title="Hooks" icon="code" href="/hooks/use-click-outside">
+    Learn about utility hooks
+  </Card>
+  <Card title="Theming" icon="palette" href="/guides/theming">
+    Customize colors and styles
+  </Card>
 </CardGroup>
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+All components are fully customizable. You own the code after copying it into your project, so feel free to modify it to match your needs.
 </Note>

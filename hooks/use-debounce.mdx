@@ -1,0 +1,307 @@
+---
+title: useDebounce
+description: A hook that debounces a value, delaying updates until after a specified delay period
+---
+
+# useDebounce
+
+The `useDebounce` hook delays updating a value until after a specified amount of time has passed since the last change. This is useful for optimizing performance in scenarios like search inputs, where you want to wait for the user to stop typing before making an API call.
+
+## Installation
+
+```bash
+npm install @craft-ui/hooks
+```
+
+## Import
+
+```tsx
+import { useDebounce } from "@craft-ui/hooks";
+```
+
+## Usage
+
+```tsx
+import { useDebounce } from "@craft-ui/hooks";
+import { useState } from "react";
+
+function SearchInput() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  // This effect will only run when the user stops typing for 500ms
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      // Make API call
+      searchAPI(debouncedSearchTerm);
+    }
+  }, [debouncedSearchTerm]);
+
+  return (
+    <input
+      type="text"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      placeholder="Search..."
+    />
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="value" type="T" required>
+  The value to debounce. Can be of any type.
+</ParamField>
+
+<ParamField path="delay" type="number" default={500}>
+  The delay in milliseconds before the value is updated.
+</ParamField>
+
+## Returns
+
+<ResponseField name="debouncedValue" type="T">
+  The debounced value that updates only after the specified delay has passed since the last change to the input value.
+</ResponseField>
+
+## Type Definition
+
+```typescript
+function useDebounce<T>(value: T, delay?: number): T;
+```
+
+## Examples
+
+### Search with API Calls
+
+```tsx
+import { useDebounce } from "@craft-ui/hooks";
+import { useState, useEffect } from "react";
+
+function UserSearch() {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const debouncedQuery = useDebounce(query, 300);
+
+  useEffect(() => {
+    if (debouncedQuery) {
+      setLoading(true);
+      fetch(`/api/users?q=${debouncedQuery}`)
+        .then(res => res.json())
+        .then(data => {
+          setResults(data);
+          setLoading(false);
+        });
+    } else {
+      setResults([]);
+    }
+  }, [debouncedQuery]);
+
+  return (
+    <div>
+      <input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search users..."
+      />
+      {loading && <div>Loading...</div>}
+      <ul>
+        {results.map(user => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+### Form Validation
+
+```tsx
+import { useDebounce } from "@craft-ui/hooks";
+import { useState, useEffect } from "react";
+
+function UsernameInput() {
+  const [username, setUsername] = useState("");
+  const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
+  const [checking, setChecking] = useState(false);
+  const debouncedUsername = useDebounce(username, 500);
+
+  useEffect(() => {
+    if (debouncedUsername.length >= 3) {
+      setChecking(true);
+      fetch(`/api/check-username?username=${debouncedUsername}`)
+        .then(res => res.json())
+        .then(data => {
+          setIsAvailable(data.available);
+          setChecking(false);
+        });
+    } else {
+      setIsAvailable(null);
+    }
+  }, [debouncedUsername]);
+
+  return (
+    <div>
+      <input
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Choose username"
+      />
+      {checking && <span>Checking...</span>}
+      {isAvailable === true && <span>✓ Available</span>}
+      {isAvailable === false && <span>✗ Not available</span>}
+    </div>
+  );
+}
+```
+
+### Auto-save Feature
+
+```tsx
+import { useDebounce } from "@craft-ui/hooks";
+import { useState, useEffect } from "react";
+
+function NoteEditor() {
+  const [content, setContent] = useState("");
+  const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "unsaved">("saved");
+  const debouncedContent = useDebounce(content, 1000);
+
+  useEffect(() => {
+    if (debouncedContent && saveStatus === "unsaved") {
+      setSaveStatus("saving");
+      fetch("/api/save-note", {
+        method: "POST",
+        body: JSON.stringify({ content: debouncedContent }),
+      })
+        .then(() => setSaveStatus("saved"));
+    }
+  }, [debouncedContent]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+    setSaveStatus("unsaved");
+  };
+
+  return (
+    <div>
+      <textarea
+        value={content}
+        onChange={handleChange}
+        placeholder="Start typing..."
+      />
+      <div>Status: {saveStatus}</div>
+    </div>
+  );
+}
+```
+
+### Window Resize Handler
+
+```tsx
+import { useDebounce } from "@craft-ui/hooks";
+import { useState, useEffect } from "react";
+
+function ResponsiveComponent() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const debouncedWidth = useDebounce(windowWidth, 200);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    // This only runs after resize stops for 200ms
+    console.log("Window resized to:", debouncedWidth);
+    // Perform expensive calculations here
+  }, [debouncedWidth]);
+
+  return <div>Window width: {debouncedWidth}px</div>;
+}
+```
+
+### Filter with Multiple Criteria
+
+```tsx
+import { useDebounce } from "@craft-ui/hooks";
+import { useState, useEffect } from "react";
+
+function ProductFilter() {
+  const [filters, setFilters] = useState({
+    name: "",
+    minPrice: 0,
+    maxPrice: 1000,
+  });
+  const debouncedFilters = useDebounce(filters, 500);
+
+  useEffect(() => {
+    // Fetch filtered products
+    fetch(`/api/products?${new URLSearchParams(debouncedFilters)}`)
+      .then(res => res.json())
+      .then(data => console.log(data));
+  }, [debouncedFilters]);
+
+  return (
+    <div>
+      <input
+        value={filters.name}
+        onChange={(e) => setFilters(f => ({ ...f, name: e.target.value }))}
+        placeholder="Product name"
+      />
+      <input
+        type="number"
+        value={filters.minPrice}
+        onChange={(e) => setFilters(f => ({ ...f, minPrice: Number(e.target.value) }))}
+      />
+      <input
+        type="number"
+        value={filters.maxPrice}
+        onChange={(e) => setFilters(f => ({ ...f, maxPrice: Number(e.target.value) }))}
+      />
+    </div>
+  );
+}
+```
+
+## Common Patterns
+
+### Custom Delay Based on Input Length
+
+```tsx
+function SmartSearch() {
+  const [query, setQuery] = useState("");
+  const delay = query.length < 3 ? 1000 : 300; // Longer delay for short queries
+  const debouncedQuery = useDebounce(query, delay);
+
+  // ...
+}
+```
+
+### Combining with Loading State
+
+```tsx
+function SearchWithLoader() {
+  const [term, setTerm] = useState("");
+  const debouncedTerm = useDebounce(term, 500);
+  const isSearching = term !== debouncedTerm;
+
+  return (
+    <div>
+      <input value={term} onChange={e => setTerm(e.target.value)} />
+      {isSearching && <Spinner />}
+    </div>
+  );
+}
+```
+
+## Notes
+
+- The debounced value will be the same as the input value on the initial render
+- The timer is reset every time the input value changes
+- The cleanup function ensures the timeout is cleared when the component unmounts or when the value changes
+- This hook is useful for reducing API calls, optimizing re-renders, and improving performance
+- Consider using a shorter delay (200-300ms) for better user experience in search interfaces
+- For very expensive operations, a longer delay (500-1000ms) may be appropriate

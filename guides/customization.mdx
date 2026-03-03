@@ -1,0 +1,521 @@
+---
+title: Component Customization
+description: Learn how to extend and customize Craft UI components with custom variants, props, and composition patterns.
+---
+
+Craft UI components are built to be flexible and extensible. This guide covers various approaches to customizing components for your specific needs.
+
+## Using the `cn()` Utility
+
+All components support className customization through the `cn()` utility, which intelligently merges Tailwind classes:
+
+```tsx
+import { Button } from "@craftdotui/baseui/components/button";
+import { cn } from "@craftdotui/lib/utils";
+
+// Override default styles
+<Button className="rounded-full px-8 shadow-lg">
+  Custom Button
+</Button>
+```
+
+The `cn()` function is a combination of `clsx` and `tailwind-merge`, ensuring proper class precedence:
+
+```ts title="lib/utils/index.ts"
+import { twMerge } from "tailwind-merge";
+import { clsx, type ClassValue } from "clsx";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+## Understanding CVA Variants
+
+Craft UI uses `class-variance-authority` (CVA) to define component variants. Here's how the Button component defines its variants:
+
+```tsx title="components/button/index.tsx"
+import { cva, type VariantProps } from "class-variance-authority";
+
+const buttonVariants = cva(
+  // Base styles applied to all variants
+  [
+    "relative inline-flex items-center justify-center shrink-0 gap-2",
+    "border rounded-md text-sm whitespace-nowrap outline-none transition cursor-pointer",
+    "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+    "disabled:pointer-events-none disabled:opacity-60",
+  ].join(" "),
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground border-primary hover:bg-primary/90",
+        secondary: "bg-secondary text-secondary-foreground border-transparent hover:bg-secondary/90",
+        destructive: "bg-destructive text-destructive-foreground border-destructive hover:bg-destructive/90",
+        outline: "bg-background text-foreground border-border hover:bg-accent",
+        ghost: "border-transparent bg-transparent hover:bg-muted",
+        link: "border-transparent bg-transparent underline-offset-4 hover:underline",
+      },
+      size: {
+        xs: "h-7 px-2 text-xs",
+        sm: "h-8 px-3 text-sm",
+        md: "h-8.5 px-3",
+        lg: "h-9 px-4",
+        xl: "h-9.5 px-6",
+        icon: "size-8 p-0",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "md",
+    },
+  },
+);
+```
+
+## Adding Custom Variants
+
+<Steps>
+  <Step title="Create Extended Variants">
+    Extend the existing variant definition with your custom variants:
+
+    ```tsx title="components/custom-button.tsx"
+    import { cva } from "class-variance-authority";
+    import { cn } from "@craftdotui/lib/utils";
+    import { useRender } from "@base-ui/react/use-render";
+    import { mergeProps } from "@base-ui/react/merge-props";
+
+    const customButtonVariants = cva(
+      "relative inline-flex items-center justify-center gap-2 border rounded-md text-sm outline-none transition cursor-pointer",
+      {
+        variants: {
+          variant: {
+            default: "bg-primary text-primary-foreground hover:bg-primary/90",
+            gradient: "bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0",
+            glass: "bg-white/10 backdrop-blur-lg border-white/20 text-white",
+          },
+          size: {
+            sm: "h-8 px-3 text-sm",
+            md: "h-10 px-4",
+            lg: "h-12 px-6 text-lg",
+          },
+        },
+        defaultVariants: {
+          variant: "default",
+          size: "md",
+        },
+      },
+    );
+    ```
+  </Step>
+
+  <Step title="Create Component Interface">
+    Define props using CVA's `VariantProps`:
+
+    ```tsx
+    import type { VariantProps } from "class-variance-authority";
+
+    interface CustomButtonProps
+      extends useRender.ComponentProps<"button">,
+        VariantProps<typeof customButtonVariants> {
+      loading?: boolean;
+    }
+    ```
+  </Step>
+
+  <Step title="Build the Component">
+    Implement the component using the variants:
+
+    ```tsx
+    function CustomButton({
+      className,
+      variant,
+      size,
+      render,
+      loading,
+      children,
+      ...props
+    }: CustomButtonProps) {
+      return useRender({
+        defaultTagName: "button",
+        props: mergeProps(
+          {
+            className: cn(customButtonVariants({ variant, size }), className),
+            type: render ? undefined : "button",
+            disabled: props.disabled || loading,
+            children: (
+              <>
+                {loading && <span className="animate-spin">⚪</span>}
+                {children}
+              </>
+            ),
+          },
+          props
+        ),
+        render,
+      });
+    }
+
+    export { CustomButton, customButtonVariants };
+    ```
+  </Step>
+
+  <Step title="Use Your Custom Variants">
+    ```tsx
+    <CustomButton variant="gradient" size="lg">
+      Gradient Button
+    </CustomButton>
+
+    <CustomButton variant="glass" size="md">
+      Glass Morphism
+    </CustomButton>
+    ```
+  </Step>
+</Steps>
+
+## Wrapping Components
+
+Create wrapper components to add custom functionality:
+
+```tsx title="components/loading-button.tsx"
+import { Button, type ButtonProps } from "@craftdotui/baseui/components/button";
+import { useState } from "react";
+
+interface LoadingButtonProps extends ButtonProps {
+  onClick?: () => Promise<void>;
+}
+
+export function LoadingButton({ onClick, children, ...props }: LoadingButtonProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = async () => {
+    if (!onClick) return;
+    
+    setIsLoading(true);
+    try {
+      await onClick();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Button loading={isLoading} onClick={handleClick} {...props}>
+      {children}
+    </Button>
+  );
+}
+```
+
+Usage:
+
+```tsx
+<LoadingButton 
+  onClick={async () => {
+    await fetch('/api/submit');
+  }}
+>
+  Submit Form
+</LoadingButton>
+```
+
+## Compound Components
+
+Build complex UIs by composing multiple Craft UI components:
+
+```tsx title="components/feature-card.tsx"
+import { cn } from "@craftdotui/lib/utils";
+import { Button } from "@craftdotui/baseui/components/button";
+
+interface FeatureCardProps {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  action?: () => void;
+  actionLabel?: string;
+  className?: string;
+}
+
+export function FeatureCard({
+  title,
+  description,
+  icon,
+  action,
+  actionLabel = "Learn More",
+  className,
+}: FeatureCardProps) {
+  return (
+    <div
+      className={cn(
+        "p-6 rounded-lg border border-border bg-card text-card-foreground",
+        "hover:shadow-lg transition-shadow",
+        className
+      )}
+    >
+      <div className="mb-4 text-primary">{icon}</div>
+      <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      <p className="text-muted-foreground mb-4">{description}</p>
+      {action && (
+        <Button variant="outline" size="sm" onClick={action}>
+          {actionLabel}
+        </Button>
+      )}
+    </div>
+  );
+}
+```
+
+## Extending Input Components
+
+Create specialized input components with additional features:
+
+```tsx title="components/search-input.tsx"
+import { Input, type InputProps } from "@craftdotui/baseui/components/input";
+import { cn } from "@craftdotui/lib/utils";
+
+interface SearchInputProps extends Omit<InputProps, 'type'> {
+  onClear?: () => void;
+  showClearButton?: boolean;
+}
+
+export function SearchInput({
+  onClear,
+  showClearButton = true,
+  className,
+  ...props
+}: SearchInputProps) {
+  return (
+    <div className="relative">
+      <Input
+        type="search"
+        className={cn("pl-10", className)}
+        {...props}
+      />
+      <svg
+        className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        />
+      </svg>
+      {showClearButton && props.value && (
+        <button
+          type="button"
+          onClick={onClear}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+        >
+          ✕
+        </button>
+      )}
+    </div>
+  );
+}
+```
+
+## Using Base UI's `render` Prop
+
+Craft UI components support Base UI's `render` prop for complete control over rendering:
+
+```tsx
+import { Button } from "@craftdotui/baseui/components/button";
+import Link from "next/link";
+
+// Render as a Next.js Link
+<Button
+  render={(props) => <Link href="/about" {...props} />}
+  variant="outline"
+>
+  About Us
+</Button>
+
+// Render as a custom element
+<Button
+  render={(props) => (
+    <a href="https://example.com" target="_blank" rel="noopener" {...props} />
+  )}
+>
+  External Link
+</Button>
+```
+
+## Customizing Composite Components
+
+For components like Dialog or Tooltip that have multiple parts, customize each subcomponent:
+
+```tsx title="components/custom-dialog.tsx"
+import {
+  Dialog,
+  DialogTrigger,
+  DialogPortal,
+  DialogBackdrop,
+  DialogViewport,
+  DialogPopup,
+  DialogTitle,
+  DialogDescription,
+} from "@craftdotui/baseui/components/dialog";
+import { Button } from "@craftdotui/baseui/components/button";
+
+export function CustomDialog() {
+  return (
+    <Dialog>
+      <DialogTrigger render={(props) => (
+        <Button {...props} variant="outline">
+          Open Custom Dialog
+        </Button>
+      )} />
+      <DialogPortal>
+        <DialogBackdrop className="bg-black/60" />
+        <DialogViewport>
+          <DialogPopup className="max-w-2xl border-2 border-primary rounded-xl">
+            <DialogTitle className="text-2xl text-primary">
+              Custom Styled Dialog
+            </DialogTitle>
+            <DialogDescription className="mt-4 text-base">
+              This dialog has custom styling applied to all its parts.
+            </DialogDescription>
+          </DialogPopup>
+        </DialogViewport>
+      </DialogPortal>
+    </Dialog>
+  );
+}
+```
+
+## Real-World Example
+
+Here's a complete example combining multiple customization techniques:
+
+<CodeGroup>
+```tsx components/pricing-card.tsx
+import { Button } from "@craftdotui/baseui/components/button";
+import { Checkbox, CheckboxIndicator } from "@craftdotui/baseui/components/checkbox";
+import { cn } from "@craftdotui/lib/utils";
+
+interface PricingCardProps {
+  name: string;
+  price: number;
+  period?: string;
+  features: string[];
+  highlighted?: boolean;
+  onSelect?: () => void;
+}
+
+export function PricingCard({
+  name,
+  price,
+  period = "month",
+  features,
+  highlighted = false,
+  onSelect,
+}: PricingCardProps) {
+  return (
+    <div
+      className={cn(
+        "relative p-8 rounded-2xl border bg-card",
+        highlighted && "border-primary shadow-xl scale-105"
+      )}
+    >
+      {highlighted && (
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-primary-foreground text-sm font-medium rounded-full">
+          Most Popular
+        </div>
+      )}
+      
+      <h3 className="text-2xl font-bold">{name}</h3>
+      
+      <div className="mt-4 mb-6">
+        <span className="text-5xl font-bold">${price}</span>
+        <span className="text-muted-foreground">/{period}</span>
+      </div>
+
+      <ul className="space-y-3 mb-8">
+        {features.map((feature) => (
+          <li key={feature} className="flex items-start gap-2">
+            <Checkbox checked disabled className="mt-0.5">
+              <CheckboxIndicator />
+            </Checkbox>
+            <span className="text-sm">{feature}</span>
+          </li>
+        ))}
+      </ul>
+
+      <Button
+        variant={highlighted ? "default" : "outline"}
+        size="lg"
+        className="w-full"
+        onClick={onSelect}
+      >
+        Get Started
+      </Button>
+    </div>
+  );
+}
+```
+
+```tsx app/pricing.tsx
+import { PricingCard } from "@/components/pricing-card";
+
+export default function PricingPage() {
+  return (
+    <div className="container mx-auto px-4 py-16">
+      <div className="grid md:grid-cols-3 gap-8">
+        <PricingCard
+          name="Starter"
+          price={9}
+          features={[
+            "Up to 10 projects",
+            "Basic support",
+            "1 GB storage",
+          ]}
+        />
+        <PricingCard
+          name="Pro"
+          price={29}
+          highlighted
+          features={[
+            "Unlimited projects",
+            "Priority support",
+            "10 GB storage",
+            "Advanced analytics",
+          ]}
+        />
+        <PricingCard
+          name="Enterprise"
+          price={99}
+          features={[
+            "Everything in Pro",
+            "24/7 phone support",
+            "Unlimited storage",
+            "Custom integrations",
+          ]}
+        />
+      </div>
+    </div>
+  );
+}
+```
+</CodeGroup>
+
+## Best Practices
+
+<Tip>
+  **Keep it semantic**: When creating custom variants, use semantic names like `"gradient"` or `"glass"` rather than specific style descriptions.
+</Tip>
+
+<Tip>
+  **Export variants**: Always export your CVA variant definitions so they can be reused in other components.
+</Tip>
+
+<Note>
+  When wrapping components, preserve the original component's props by extending its type interface.
+</Note>
+
+## Next Steps
+
+- [Theming](/guides/theming) - Customize colors and design tokens
+- [Accessibility](/guides/accessibility) - Ensure your custom components are accessible

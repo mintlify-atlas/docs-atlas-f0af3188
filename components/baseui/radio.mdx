@@ -1,0 +1,127 @@
+---
+title: Radio
+description: Radio button component for mutually exclusive selections, built on @base-ui/react.
+---
+
+The Radio component provides radio buttons for selecting a single option from a group.
+
+## Installation
+
+```tsx
+import { RadioGroup, Radio } from "@craftdotui/baseui/components/radio";
+```
+
+## Usage
+
+```tsx
+<RadioGroup>
+  <div className="flex items-center gap-2">
+    <Radio value="option1" />
+    <label>Option 1</label>
+  </div>
+  <div className="flex items-center gap-2">
+    <Radio value="option2" />
+    <label>Option 2</label>
+  </div>
+  <div className="flex items-center gap-2">
+    <Radio value="option3" />
+    <label>Option 3</label>
+  </div>
+</RadioGroup>
+```
+
+## Components
+
+### RadioGroup
+
+<ParamField path="value" type="string">
+  Controlled selected value.
+</ParamField>
+
+<ParamField path="defaultValue" type="string">
+  Default selected value.
+</ParamField>
+
+<ParamField path="onValueChange" type="function">
+  Callback when selection changes.
+</ParamField>
+
+<ParamField path="name" type="string">
+  Name for form submission.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable all radio buttons.
+</ParamField>
+
+### Radio
+
+<ParamField path="value" type="string" required>
+  Value of this radio option.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable this radio button.
+</ParamField>
+
+<Note>
+  The Radio component automatically includes a RadioIndicator that shows a dot when selected.
+</Note>
+
+## Examples
+
+### Basic Radio Group
+
+```tsx
+<RadioGroup defaultValue="option1">
+  <div className="flex items-center gap-2">
+    <Radio id="opt1" value="option1" />
+    <label htmlFor="opt1">Option 1</label>
+  </div>
+  <div className="flex items-center gap-2">
+    <Radio id="opt2" value="option2" />
+    <label htmlFor="opt2">Option 2</label>
+  </div>
+</RadioGroup>
+```
+
+### Controlled Radio Group
+
+```tsx
+const [value, setValue] = useState('option1');
+
+<RadioGroup value={value} onValueChange={setValue}>
+  <div className="flex items-center gap-2">
+    <Radio value="option1" />
+    <label>Option 1</label>
+  </div>
+  <div className="flex items-center gap-2">
+    <Radio value="option2" />
+    <label>Option 2</label>
+  </div>
+</RadioGroup>
+```
+
+### Disabled Options
+
+```tsx
+<RadioGroup>
+  <div className="flex items-center gap-2">
+    <Radio value="option1" />
+    <label>Enabled</label>
+  </div>
+  <div className="flex items-center gap-2">
+    <Radio value="option2" disabled />
+    <label>Disabled</label>
+  </div>
+</RadioGroup>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA support
+- Keyboard navigation (Arrow keys to move between options)
+- Proper radio role and attributes
+- Focus visible ring
+- Works with label elements via htmlFor
+- Group-level and item-level disabled states

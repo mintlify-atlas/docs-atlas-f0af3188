@@ -1,0 +1,120 @@
+---
+title: Field
+description: A form field component with label, control, description, and error messaging, built on @base-ui/react.
+---
+
+The Field component provides a complete form field structure with label, input control, description, validation, and error messaging.
+
+## Installation
+
+```tsx
+import {
+  Field,
+  FieldLabel,
+  FieldControl,
+  FieldDescription,
+  FieldError,
+  FieldValidity,
+} from "@craftdotui/baseui/components/field";
+```
+
+## Usage
+
+```tsx
+<Field>
+  <FieldLabel>Email</FieldLabel>
+  <FieldControl type="email" placeholder="you@example.com" />
+  <FieldDescription>We'll never share your email.</FieldDescription>
+  <FieldError />
+</Field>
+```
+
+## Components
+
+### Field (Root)
+
+<ParamField path="name" type="string">
+  Field name for form submission.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable the entire field.
+</ParamField>
+
+<ParamField path="validate" type="function">
+  Custom validation function.
+</ParamField>
+
+### FieldLabel
+
+Labels the field control.
+
+### FieldControl
+
+<ParamField path="size" type="string" default="md">
+  Size variant from Input component.
+</ParamField>
+
+<ParamField path="variant" type="string" default="default">
+  Visual variant from Input component.
+</ParamField>
+
+The input control styled with Input variants.
+
+### FieldDescription
+
+Help text for the field.
+
+### FieldError
+
+Displays validation error messages.
+
+### FieldValidity
+
+Provides programmatic access to validation state.
+
+## Examples
+
+### Complete Field
+
+```tsx
+<Field>
+  <FieldLabel>Username</FieldLabel>
+  <FieldControl placeholder="Enter username" />
+  <FieldDescription>Choose a unique username.</FieldDescription>
+  <FieldError />
+</Field>
+```
+
+### With Validation
+
+```tsx
+<Field
+  validate={(value) => {
+    if (!value) return 'Email is required';
+    if (!value.includes('@')) return 'Invalid email';
+    return null;
+  }}
+>
+  <FieldLabel>Email</FieldLabel>
+  <FieldControl type="email" />
+  <FieldError />
+</Field>
+```
+
+### Disabled Field
+
+```tsx
+<Field disabled>
+  <FieldLabel>Disabled Field</FieldLabel>
+  <FieldControl value="Cannot edit" />
+</Field>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA support
+- Automatic label association
+- Error announcements to screen readers
+- Proper disabled states
+- Validation feedback

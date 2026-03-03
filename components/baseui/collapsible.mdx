@@ -1,0 +1,110 @@
+---
+title: Collapsible
+description: A collapsible content component with smooth animations, built on @base-ui/react.
+---
+
+The Collapsible component allows content to be expanded and collapsed with smooth animations.
+
+## Installation
+
+```tsx
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsiblePanel,
+} from "@craftdotui/baseui/components/collapsible";
+```
+
+## Usage
+
+```tsx
+<Collapsible>
+  <CollapsibleTrigger>Toggle Content</CollapsibleTrigger>
+  <CollapsiblePanel>
+    This content can be collapsed and expanded.
+  </CollapsiblePanel>
+</Collapsible>
+```
+
+## Components
+
+### Collapsible (Root)
+
+<ParamField path="open" type="boolean">
+  Controlled open state.
+</ParamField>
+
+<ParamField path="defaultOpen" type="boolean">
+  Default open state.
+</ParamField>
+
+<ParamField path="onOpenChange" type="function">
+  Callback when state changes.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable the collapsible.
+</ParamField>
+
+### CollapsibleTrigger
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+The trigger button to toggle the panel. Includes a chevron icon that rotates when open.
+
+### CollapsiblePanel
+
+<ParamField path="keepMounted" type="boolean" default="false">
+  Keep panel mounted when closed.
+</ParamField>
+
+<ParamField path="hiddenUntilFound" type="boolean" default="false">
+  Use hidden=until-found attribute.
+</ParamField>
+
+## Examples
+
+### Basic Collapsible
+
+```tsx
+<Collapsible>
+  <CollapsibleTrigger>Show more</CollapsibleTrigger>
+  <CollapsiblePanel>
+    <p>Additional content that can be toggled.</p>
+  </CollapsiblePanel>
+</Collapsible>
+```
+
+### Controlled
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Collapsible open={open} onOpenChange={setOpen}>
+  <CollapsibleTrigger>Toggle</CollapsibleTrigger>
+  <CollapsiblePanel>
+    Content
+  </CollapsiblePanel>
+</Collapsible>
+```
+
+### Default Open
+
+```tsx
+<Collapsible defaultOpen>
+  <CollapsibleTrigger>Details</CollapsibleTrigger>
+  <CollapsiblePanel>
+    This content is open by default.
+  </CollapsiblePanel>
+</Collapsible>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for accessibility
+- Keyboard accessible (Enter/Space to toggle)
+- Proper ARIA attributes
+- Smooth height transitions
+- Focus management

@@ -1,0 +1,101 @@
+---
+title: Checkbox
+description: An accessible checkbox component with indicator, built on @base-ui/react.
+---
+
+The Checkbox component provides a customizable checkbox with support for checked, unchecked, and indeterminate states.
+
+## Installation
+
+```tsx
+import { Checkbox, CheckboxIndicator } from "@craftdotui/baseui/components/checkbox";
+```
+
+## Usage
+
+```tsx
+<Checkbox>
+  <CheckboxIndicator />
+</Checkbox>
+```
+
+## Components
+
+### Checkbox (Root)
+
+<ParamField path="checked" type="boolean">
+  Controlled checked state.
+</ParamField>
+
+<ParamField path="defaultChecked" type="boolean">
+  Default checked state for uncontrolled usage.
+</ParamField>
+
+<ParamField path="onCheckedChange" type="function">
+  Callback when checked state changes.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disables the checkbox.
+</ParamField>
+
+<ParamField path="indeterminate" type="boolean">
+  Sets the checkbox to indeterminate state.
+</ParamField>
+
+### CheckboxIndicator
+
+<ParamField path="keepMounted" type="boolean">
+  Keep the indicator mounted when unchecked.
+</ParamField>
+
+<Note>
+  The indicator automatically shows a check icon when checked and a minus icon when indeterminate.
+</Note>
+
+## Examples
+
+### Basic Usage
+
+```tsx
+<Checkbox>
+  <CheckboxIndicator />
+</Checkbox>
+```
+
+### With Label
+
+```tsx
+<div className="flex items-center gap-2">
+  <Checkbox id="terms">
+    <CheckboxIndicator />
+  </Checkbox>
+  <label htmlFor="terms">Accept terms and conditions</label>
+</div>
+```
+
+### Controlled
+
+```tsx
+const [checked, setChecked] = useState(false);
+
+<Checkbox checked={checked} onCheckedChange={setChecked}>
+  <CheckboxIndicator />
+</Checkbox>
+```
+
+### Indeterminate State
+
+```tsx
+<Checkbox indeterminate>
+  <CheckboxIndicator />
+</Checkbox>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for full ARIA support
+- Keyboard accessible (Space to toggle)
+- Focus visible ring
+- Proper checked/unchecked/indeterminate states
+- Works with labels via htmlFor

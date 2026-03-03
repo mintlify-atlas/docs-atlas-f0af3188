@@ -1,0 +1,508 @@
+---
+title: Timeline
+description: A flexible vertical and horizontal timeline component for displaying chronological events, processes, or milestones with customizable markers and content.
+---
+
+# Timeline
+
+The `Timeline` component provides a clean, accessible way to display events in chronological order. Supports both vertical and horizontal layouts with customizable markers, titles, and descriptions.
+
+## Installation
+
+```bash
+npm install @craftdotui/components
+```
+
+## Import
+
+```tsx
+import {
+  Timeline,
+  TimelineItem,
+  TimelineMarker,
+  TimelineContent,
+  TimelineTitle,
+  TimelineDescription,
+} from "@craftdotui/components";
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic Vertical Timeline
+import {
+  Timeline,
+  TimelineItem,
+  TimelineMarker,
+  TimelineContent,
+  TimelineTitle,
+  TimelineDescription,
+} from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <Timeline>
+      <TimelineItem>
+        <TimelineMarker variant="fill" />
+        <TimelineContent>
+          <TimelineTitle>Project Started</TimelineTitle>
+          <TimelineDescription>
+            Initial planning and requirements gathering
+          </TimelineDescription>
+        </TimelineContent>
+      </TimelineItem>
+      
+      <TimelineItem>
+        <TimelineMarker variant="fill" />
+        <TimelineContent>
+          <TimelineTitle>Development Phase</TimelineTitle>
+          <TimelineDescription>
+            Building core features and functionality
+          </TimelineDescription>
+        </TimelineContent>
+      </TimelineItem>
+      
+      <TimelineItem>
+        <TimelineMarker variant="empty" />
+        <TimelineContent>
+          <TimelineTitle>Launch</TimelineTitle>
+          <TimelineDescription>
+            Public release scheduled
+          </TimelineDescription>
+        </TimelineContent>
+      </TimelineItem>
+    </Timeline>
+  );
+}
+```
+
+```tsx Horizontal Timeline
+import {
+  Timeline,
+  TimelineItem,
+  TimelineMarker,
+  TimelineContent,
+  TimelineTitle,
+} from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <Timeline variant="horizontal">
+      <TimelineItem>
+        <TimelineMarker variant="fill" />
+        <TimelineContent>
+          <TimelineTitle>Q1</TimelineTitle>
+        </TimelineContent>
+      </TimelineItem>
+      
+      <TimelineItem>
+        <TimelineMarker variant="fill" />
+        <TimelineContent>
+          <TimelineTitle>Q2</TimelineTitle>
+        </TimelineContent>
+      </TimelineItem>
+      
+      <TimelineItem>
+        <TimelineMarker variant="empty" />
+        <TimelineContent>
+          <TimelineTitle>Q3</TimelineTitle>
+        </TimelineContent>
+      </TimelineItem>
+    </Timeline>
+  );
+}
+```
+
+```tsx Custom Markers
+import {
+  Timeline,
+  TimelineItem,
+  TimelineMarker,
+  TimelineContent,
+  TimelineTitle,
+  TimelineDescription,
+} from "@craftdotui/components";
+import { Check, Clock, AlertCircle } from "lucide-react";
+
+export default function Example() {
+  return (
+    <Timeline>
+      <TimelineItem>
+        <TimelineMarker className="bg-green-500 border-green-600">
+          <Check className="w-2 h-2 text-white" />
+        </TimelineMarker>
+        <TimelineContent>
+          <TimelineTitle>Completed</TimelineTitle>
+          <TimelineDescription>Task finished successfully</TimelineDescription>
+        </TimelineContent>
+      </TimelineItem>
+      
+      <TimelineItem>
+        <TimelineMarker className="bg-yellow-500 border-yellow-600">
+          <Clock className="w-2 h-2 text-white" />
+        </TimelineMarker>
+        <TimelineContent>
+          <TimelineTitle>In Progress</TimelineTitle>
+          <TimelineDescription>Currently working on this</TimelineDescription>
+        </TimelineContent>
+      </TimelineItem>
+    </Timeline>
+  );
+}
+```
+
+</CodeGroup>
+
+## Components
+
+### Timeline (Root)
+
+<ParamField path="children" type="React.ReactNode" required>
+  Timeline items to display.
+</ParamField>
+
+<ParamField path="variant" type="'vertical' | 'horizontal'" default="'vertical'">
+  Layout orientation of the timeline.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes for the timeline container.
+</ParamField>
+
+<ParamField path="aria-label" type="string" default="'Timeline'">
+  Accessible label for screen readers.
+</ParamField>
+
+### TimelineItem
+
+<ParamField path="children" type="React.ReactNode" required>
+  Timeline item content (marker and content components).
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes for the item.
+</ParamField>
+
+### TimelineMarker
+
+<ParamField path="variant" type="'empty' | 'fill'" default="'empty'">
+  Visual style of the marker.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes for custom marker styling.
+</ParamField>
+
+### TimelineContent
+
+<ParamField path="children" type="React.ReactNode" required>
+  Content to display for this timeline item.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+### TimelineTitle
+
+<ParamField path="children" type="React.ReactNode" required>
+  Title text for the timeline item.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+### TimelineDescription
+
+<ParamField path="children" type="React.ReactNode" required>
+  Description text for the timeline item.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+## Styling Details
+
+### Connecting Line
+
+The timeline automatically renders a connecting line:
+
+- **Vertical**: Left-aligned, full height (`left-1.5 top-0 w-px h-full`)
+- **Horizontal**: Top-aligned, full width (`top-1.5 left-0 h-px w-full`)
+
+### Marker Variants
+
+```tsx
+// Empty (outline only)
+variant="empty" // bg-white dark:bg-neutral-900
+
+// Filled
+variant="fill" // bg-neutral-300 dark:bg-neutral-600
+```
+
+<Note>
+  Markers use `relative z-10` to appear above the connecting line.
+</Note>
+
+## Examples
+
+### Product Roadmap
+
+```tsx
+import {
+  Timeline,
+  TimelineItem,
+  TimelineMarker,
+  TimelineContent,
+  TimelineTitle,
+  TimelineDescription,
+} from "@craftdotui/components";
+
+export default function ProductRoadmap() {
+  const milestones = [
+    {
+      title: "Q1 2024 - Launch",
+      description: "Initial product release with core features",
+      completed: true,
+    },
+    {
+      title: "Q2 2024 - Mobile App",
+      description: "iOS and Android applications",
+      completed: true,
+    },
+    {
+      title: "Q3 2024 - AI Features",
+      description: "Machine learning powered recommendations",
+      completed: false,
+    },
+    {
+      title: "Q4 2024 - Enterprise",
+      description: "Advanced team collaboration tools",
+      completed: false,
+    },
+  ];
+
+  return (
+    <div className="max-w-2xl mx-auto p-8">
+      <h2 className="text-3xl font-bold mb-8">Product Roadmap</h2>
+      <Timeline>
+        {milestones.map((milestone, i) => (
+          <TimelineItem key={i}>
+            <TimelineMarker 
+              variant={milestone.completed ? "fill" : "empty"}
+              className={milestone.completed ? "bg-blue-500 border-blue-600" : ""}
+            />
+            <TimelineContent>
+              <TimelineTitle className={milestone.completed ? "text-blue-600" : ""}>
+                {milestone.title}
+              </TimelineTitle>
+              <TimelineDescription>
+                {milestone.description}
+              </TimelineDescription>
+            </TimelineContent>
+          </TimelineItem>
+        ))}
+      </Timeline>
+    </div>
+  );
+}
+```
+
+### Order Tracking
+
+```tsx
+import {
+  Timeline,
+  TimelineItem,
+  TimelineMarker,
+  TimelineContent,
+  TimelineTitle,
+  TimelineDescription,
+} from "@craftdotui/components";
+import { Package, Truck, Check } from "lucide-react";
+
+export default function OrderTracking() {
+  return (
+    <Timeline>
+      <TimelineItem>
+        <TimelineMarker className="bg-green-500 border-green-600">
+          <Check className="w-2 h-2 text-white" />
+        </TimelineMarker>
+        <TimelineContent>
+          <TimelineTitle>Order Placed</TimelineTitle>
+          <TimelineDescription>
+            Dec 15, 2024 at 10:30 AM
+          </TimelineDescription>
+        </TimelineContent>
+      </TimelineItem>
+      
+      <TimelineItem>
+        <TimelineMarker className="bg-green-500 border-green-600">
+          <Package className="w-2 h-2 text-white" />
+        </TimelineMarker>
+        <TimelineContent>
+          <TimelineTitle>Processing</TimelineTitle>
+          <TimelineDescription>
+            Dec 15, 2024 at 2:00 PM
+          </TimelineDescription>
+        </TimelineContent>
+      </TimelineItem>
+      
+      <TimelineItem>
+        <TimelineMarker className="bg-blue-500 border-blue-600 animate-pulse">
+          <Truck className="w-2 h-2 text-white" />
+        </TimelineMarker>
+        <TimelineContent>
+          <TimelineTitle>In Transit</TimelineTitle>
+          <TimelineDescription>
+            Expected delivery: Dec 18, 2024
+          </TimelineDescription>
+        </TimelineContent>
+      </TimelineItem>
+      
+      <TimelineItem>
+        <TimelineMarker variant="empty" />
+        <TimelineContent>
+          <TimelineTitle className="text-gray-400">Delivered</TimelineTitle>
+          <TimelineDescription className="text-gray-400">
+            Pending
+          </TimelineDescription>
+        </TimelineContent>
+      </TimelineItem>
+    </Timeline>
+  );
+}
+```
+
+### Career History
+
+```tsx
+import {
+  Timeline,
+  TimelineItem,
+  TimelineMarker,
+  TimelineContent,
+  TimelineTitle,
+  TimelineDescription,
+} from "@craftdotui/components";
+
+export default function CareerHistory() {
+  const jobs = [
+    {
+      title: "Senior Developer",
+      company: "Tech Corp",
+      period: "2022 - Present",
+      description: "Leading frontend team, architecting scalable solutions",
+    },
+    {
+      title: "Full Stack Developer",
+      company: "StartupXYZ",
+      period: "2020 - 2022",
+      description: "Built core product features, grew user base to 100k",
+    },
+    {
+      title: "Junior Developer",
+      company: "Web Agency",
+      period: "2018 - 2020",
+      description: "Developed client websites and web applications",
+    },
+  ];
+
+  return (
+    <Timeline className="max-w-3xl">
+      {jobs.map((job, i) => (
+        <TimelineItem key={i}>
+          <TimelineMarker variant={i === 0 ? "fill" : "empty"} />
+          <TimelineContent>
+            <div className="flex justify-between items-start mb-1">
+              <TimelineTitle>{job.title}</TimelineTitle>
+              <span className="text-sm text-gray-500">{job.period}</span>
+            </div>
+            <p className="text-sm font-medium text-gray-600 mb-1">{job.company}</p>
+            <TimelineDescription>{job.description}</TimelineDescription>
+          </TimelineContent>
+        </TimelineItem>
+      ))}
+    </Timeline>
+  );
+}
+```
+
+### Project Phases (Horizontal)
+
+```tsx
+import {
+  Timeline,
+  TimelineItem,
+  TimelineMarker,
+  TimelineContent,
+  TimelineTitle,
+} from "@craftdotui/components";
+
+export default function ProjectPhases() {
+  const phases = ["Discovery", "Design", "Development", "Testing", "Launch"];
+  const currentPhase = 2;
+
+  return (
+    <div className="w-full">
+      <Timeline variant="horizontal" className="py-12">
+        {phases.map((phase, i) => (
+          <TimelineItem key={i}>
+            <TimelineMarker 
+              variant={i <= currentPhase ? "fill" : "empty"}
+              className={i === currentPhase ? "bg-blue-500 border-blue-600 scale-125" : ""}
+            />
+            <TimelineContent>
+              <TimelineTitle className={i <= currentPhase ? "text-blue-600 font-bold" : "text-gray-400"}>
+                {phase}
+              </TimelineTitle>
+            </TimelineContent>
+          </TimelineItem>
+        ))}
+      </Timeline>
+    </div>
+  );
+}
+```
+
+<Tip>
+  Use different marker colors to represent status (green for complete, blue for current, gray for pending).
+</Tip>
+
+## Hook: useTimeline
+
+Access timeline context from child components:
+
+```tsx
+import { useTimeline } from "@craftdotui/components";
+
+function CustomTimelineItem() {
+  const { variant } = useTimeline();
+  
+  return (
+    <div>
+      Layout: {variant}
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+- Use filled markers for completed items, empty for upcoming
+- Keep descriptions concise (1-2 lines)
+- Include timestamps or dates for clarity
+- Use consistent marker styling for similar states
+- Limit vertical timelines to 6-8 items for readability
+- For horizontal layouts, ensure responsive behavior on mobile
+
+## Accessibility
+
+- Uses semantic `<ul>` and `<li>` elements
+- Includes `aria-label` for screen readers
+- Markers use `aria-hidden="true"` as they're decorative
+- Proper heading hierarchy with `<h3>` for titles
+- High contrast text colors for readability

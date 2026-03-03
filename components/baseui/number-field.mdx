@@ -1,0 +1,154 @@
+---
+title: Number Field
+description: A number input with increment/decrement buttons and scrub functionality, built on @base-ui/react.
+---
+
+The NumberField component provides a specialized input for numeric values with built-in increment/decrement controls and mouse scrubbing.
+
+## Installation
+
+```tsx
+import {
+  NumberFieldRoot,
+  NumberFieldGroup,
+  NumberFieldInput,
+  NumberFieldIncrement,
+  NumberFieldDecrement,
+  NumberFieldScrubArea,
+  NumberFieldScrubAreaCursor,
+} from "@craftdotui/baseui/components/number-field";
+```
+
+## Usage
+
+```tsx
+<NumberFieldRoot>
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberFieldRoot>
+```
+
+## Components
+
+### NumberFieldRoot
+
+<ParamField path="value" type="number">
+  Controlled value.
+</ParamField>
+
+<ParamField path="defaultValue" type="number">
+  Default value.
+</ParamField>
+
+<ParamField path="onValueChange" type="function">
+  Callback when value changes.
+</ParamField>
+
+<ParamField path="min" type="number">
+  Minimum value.
+</ParamField>
+
+<ParamField path="max" type="number">
+  Maximum value.
+</ParamField>
+
+<ParamField path="step" type="number" default="1">
+  Step increment.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable the field.
+</ParamField>
+
+### NumberFieldInput
+
+<ParamField path="size" type="string" default="md">
+  Size variant. Options: `xs`, `sm`, `md`, `lg`, `xl`
+</ParamField>
+
+<ParamField path="variant" type="string" default="default">
+  Visual variant.
+</ParamField>
+
+### NumberFieldIncrement
+
+Button to increment the value.
+
+### NumberFieldDecrement
+
+Button to decrement the value.
+
+### NumberFieldScrubArea
+
+Interactive area for mouse scrubbing to change values.
+
+### NumberFieldScrubAreaCursor
+
+Cursor icon shown during scrubbing.
+
+## Examples
+
+### Basic Number Field
+
+```tsx
+<NumberFieldRoot defaultValue={5}>
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberFieldRoot>
+```
+
+### With Range and Step
+
+```tsx
+<NumberFieldRoot min={0} max={100} step={5} defaultValue={50}>
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberFieldRoot>
+```
+
+### With Scrub Area
+
+```tsx
+<NumberFieldRoot>
+  <NumberFieldScrubArea>
+    <NumberFieldScrubAreaCursor />
+    Value:
+  </NumberFieldScrubArea>
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberFieldRoot>
+```
+
+### Controlled
+
+```tsx
+const [value, setValue] = useState(10);
+
+<NumberFieldRoot value={value} onValueChange={setValue}>
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberFieldRoot>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA support
+- Keyboard navigation (Arrow Up/Down, Page Up/Down)
+- Screen reader announcements
+- Increment/decrement buttons are keyboard accessible
+- Proper min/max constraints

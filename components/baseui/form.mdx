@@ -1,0 +1,93 @@
+---
+title: Form
+description: A form container component with validation support, built on @base-ui/react.
+---
+
+The Form component provides a semantic form container with built-in validation support.
+
+## Installation
+
+```tsx
+import { Form } from "@craftdotui/baseui/components/form";
+```
+
+## Usage
+
+```tsx
+<Form onSubmit={(e) => {
+  e.preventDefault();
+  // Handle form submission
+}}>
+  <Field>
+    <FieldLabel>Name</FieldLabel>
+    <FieldControl name="name" />
+  </Field>
+  
+  <Button type="submit">Submit</Button>
+</Form>
+```
+
+## Props
+
+<ParamField path="onSubmit" type="function">
+  Form submission handler.
+</ParamField>
+
+<ParamField path="validate" type="function">
+  Form-level validation function.
+</ParamField>
+
+<ParamField path="errors" type="object">
+  Error messages by field name.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+## Examples
+
+### Basic Form
+
+```tsx
+<Form onSubmit={handleSubmit}>
+  <Field>
+    <FieldLabel>Email</FieldLabel>
+    <FieldControl type="email" name="email" />
+  </Field>
+  
+  <Field>
+    <FieldLabel>Password</FieldLabel>
+    <FieldControl type="password" name="password" />
+  </Field>
+  
+  <Button type="submit">Sign In</Button>
+</Form>
+```
+
+### With Validation
+
+```tsx
+const handleSubmit = (event: React.FormEvent) => {
+  event.preventDefault();
+  const formData = new FormData(event.currentTarget);
+  // Process form data
+};
+
+<Form onSubmit={handleSubmit}>
+  <Field validate={(value) => !value && 'Required'}>
+    <FieldLabel>Username</FieldLabel>
+    <FieldControl name="username" />
+    <FieldError />
+  </Field>
+  
+  <Button type="submit">Submit</Button>
+</Form>
+```
+
+## Accessibility
+
+- Built on @base-ui/react Form primitive
+- Semantic HTML form element
+- Validation error announcements
+- Keyboard submission (Enter key)

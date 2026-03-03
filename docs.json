@@ -1,122 +1,115 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Craft UI",
+  "theme": "willow",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
-  },
-  "favicon": "/favicon.svg",
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
-          }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "primary": "#8b5cf6",
+    "light": "#a78bfa",
+    "dark": "#7c3aed"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
     "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "type": "github",
+      "href": "https://github.com/yogendrarana/craftdotui"
     }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/yogendrarana/craftdotui"
     }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Base UI Components",
+            "pages": [
+              "components/baseui/accordion",
+              "components/baseui/alert-dialog",
+              "components/baseui/autocomplete",
+              "components/baseui/avatar",
+              "components/baseui/button",
+              "components/baseui/checkbox",
+              "components/baseui/checkbox-group",
+              "components/baseui/collapsible",
+              "components/baseui/combobox",
+              "components/baseui/context-menu",
+              "components/baseui/dialog",
+              "components/baseui/field",
+              "components/baseui/fieldset",
+              "components/baseui/form",
+              "components/baseui/input",
+              "components/baseui/menu",
+              "components/baseui/menubar",
+              "components/baseui/meter",
+              "components/baseui/navigation-menu",
+              "components/baseui/number-field",
+              "components/baseui/popover",
+              "components/baseui/preview-card",
+              "components/baseui/progress",
+              "components/baseui/radio",
+              "components/baseui/scroll-area",
+              "components/baseui/select",
+              "components/baseui/separator",
+              "components/baseui/slider",
+              "components/baseui/switch",
+              "components/baseui/tabs",
+              "components/baseui/toast",
+              "components/baseui/toggle",
+              "components/baseui/toggle-group",
+              "components/baseui/toolbar",
+              "components/baseui/tooltip"
+            ]
+          },
+          {
+            "group": "Craft UI Components",
+            "pages": [
+              "components/craftui/animated-tooltip",
+              "components/craftui/cursor",
+              "components/craftui/dock",
+              "components/craftui/magnetic",
+              "components/craftui/marquee",
+              "components/craftui/stepper",
+              "components/craftui/text-scramble",
+              "components/craftui/text-typing",
+              "components/craftui/timeline"
+            ]
+          },
+          {
+            "group": "Hooks",
+            "pages": [
+              "hooks/use-callback",
+              "hooks/use-click-outside",
+              "hooks/use-confetti",
+              "hooks/use-debounce",
+              "hooks/use-hydrated",
+              "hooks/use-is-mobile",
+              "hooks/use-media-query",
+              "hooks/use-mounted",
+              "hooks/use-optimistic",
+              "hooks/use-query-string"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/theming",
+              "guides/customization",
+              "guides/accessibility"
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

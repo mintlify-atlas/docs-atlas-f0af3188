@@ -1,0 +1,213 @@
+---
+title: Menu
+description: A dropdown menu component with items, groups, and submenus, built on @base-ui/react.
+---
+
+The Menu component provides a dropdown menu with support for items, groups, checkboxes, radio buttons, and nested submenus.
+
+## Installation
+
+```tsx
+import {
+  MenuRoot,
+  MenuTrigger,
+  MenuPortal,
+  MenuPositioner,
+  MenuPopup,
+  MenuItem,
+  MenuSeparator,
+  MenuGroup,
+  MenuGroupLabel,
+} from "@craftdotui/baseui/components/menu";
+```
+
+## Usage
+
+```tsx
+<MenuRoot>
+  <MenuTrigger>
+    <Button>Open Menu</Button>
+  </MenuTrigger>
+  
+  <MenuPortal>
+    <MenuPositioner>
+      <MenuPopup>
+        <MenuItem>New File</MenuItem>
+        <MenuItem>Open</MenuItem>
+        <MenuSeparator />
+        <MenuItem>Save</MenuItem>
+      </MenuPopup>
+    </MenuPositioner>
+  </MenuPortal>
+</MenuRoot>
+```
+
+## Components
+
+### MenuRoot
+
+<ParamField path="open" type="boolean">
+  Controlled open state.
+</ParamField>
+
+<ParamField path="onOpenChange" type="function">
+  Callback when state changes.
+</ParamField>
+
+### MenuTrigger
+
+Element that triggers the menu.
+
+### MenuItem
+
+<ParamField path="disabled" type="boolean">
+  Disable the menu item.
+</ParamField>
+
+<ParamField path="inset" type="boolean">
+  Add left padding for alignment with checkbox/radio items.
+</ParamField>
+
+### MenuCheckboxItem
+
+<ParamField path="checked" type="boolean">
+  Checked state.
+</ParamField>
+
+<ParamField path="onCheckedChange" type="function">
+  Callback when checked state changes.
+</ParamField>
+
+Menu item with checkbox.
+
+### MenuRadioItem
+
+<ParamField path="value" type="string">
+  Radio value.
+</ParamField>
+
+Menu item with radio button.
+
+### MenuRadioGroup
+
+<ParamField path="value" type="string">
+  Selected radio value.
+</ParamField>
+
+<ParamField path="onValueChange" type="function">
+  Callback when selection changes.
+</ParamField>
+
+Container for radio items.
+
+## Examples
+
+### Basic Menu
+
+```tsx
+<MenuRoot>
+  <MenuTrigger>
+    <Button>File</Button>
+  </MenuTrigger>
+  <MenuPortal>
+    <MenuPositioner>
+      <MenuPopup>
+        <MenuItem>New</MenuItem>
+        <MenuItem>Open</MenuItem>
+        <MenuItem>Save</MenuItem>
+        <MenuSeparator />
+        <MenuItem>Exit</MenuItem>
+      </MenuPopup>
+    </MenuPositioner>
+  </MenuPortal>
+</MenuRoot>
+```
+
+### With Groups
+
+```tsx
+import { MenuGroup, MenuGroupLabel } from "@craftdotui/baseui/components/menu";
+
+<MenuPopup>
+  <MenuGroup>
+    <MenuGroupLabel>File</MenuGroupLabel>
+    <MenuItem>New</MenuItem>
+    <MenuItem>Open</MenuItem>
+  </MenuGroup>
+  <MenuSeparator />
+  <MenuGroup>
+    <MenuGroupLabel>Edit</MenuGroupLabel>
+    <MenuItem>Cut</MenuItem>
+    <MenuItem>Copy</MenuItem>
+  </MenuGroup>
+</MenuPopup>
+```
+
+### With Checkboxes
+
+```tsx
+import { MenuCheckboxItem } from "@craftdotui/baseui/components/menu";
+
+<MenuPopup>
+  <MenuCheckboxItem checked onCheckedChange={() => {}}>
+    Show Toolbar
+  </MenuCheckboxItem>
+  <MenuCheckboxItem>
+    Show Sidebar
+  </MenuCheckboxItem>
+</MenuPopup>
+```
+
+### With Radio Group
+
+```tsx
+import { MenuRadioGroup, MenuRadioItem } from "@craftdotui/baseui/components/menu";
+
+<MenuPopup>
+  <MenuRadioGroup value="light">
+    <MenuRadioItem value="light">Light</MenuRadioItem>
+    <MenuRadioItem value="dark">Dark</MenuRadioItem>
+    <MenuRadioItem value="system">System</MenuRadioItem>
+  </MenuRadioGroup>
+</MenuPopup>
+```
+
+### With Submenu
+
+```tsx
+import { MenuSubmenuRoot, MenuSubmenuTrigger } from "@craftdotui/baseui/components/menu";
+
+<MenuPopup>
+  <MenuItem>New File</MenuItem>
+  <MenuSubmenuRoot>
+    <MenuSubmenuTrigger>Open Recent</MenuSubmenuTrigger>
+    <MenuPortal>
+      <MenuPositioner>
+        <MenuPopup>
+          <MenuItem>file1.txt</MenuItem>
+          <MenuItem>file2.txt</MenuItem>
+        </MenuPopup>
+      </MenuPositioner>
+    </MenuPortal>
+  </MenuSubmenuRoot>
+</MenuPopup>
+```
+
+### With Shortcuts
+
+```tsx
+import { MenuShortcut } from "@craftdotui/baseui/components/menu";
+
+<MenuItem>
+  Save
+  <MenuShortcut>⌘S</MenuShortcut>
+</MenuItem>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA compliance
+- Keyboard navigation (Arrow keys, Home, End)
+- Type-ahead search
+- Focus management
+- Escape key to close

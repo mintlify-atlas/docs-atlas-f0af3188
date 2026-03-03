@@ -1,0 +1,121 @@
+---
+title: Checkbox Group
+description: A group container for managing multiple related checkboxes, built on @base-ui/react.
+---
+
+The CheckboxGroup component provides a container for grouping related checkboxes with shared state management.
+
+## Installation
+
+```tsx
+import { CheckboxGroup } from "@craftdotui/baseui/components/checkbox-group";
+import { Checkbox, CheckboxIndicator } from "@craftdotui/baseui/components/checkbox";
+```
+
+## Usage
+
+```tsx
+<CheckboxGroup>
+  <div className="flex items-center gap-2">
+    <Checkbox value="option1">
+      <CheckboxIndicator />
+    </Checkbox>
+    <label>Option 1</label>
+  </div>
+  
+  <div className="flex items-center gap-2">
+    <Checkbox value="option2">
+      <CheckboxIndicator />
+    </Checkbox>
+    <label>Option 2</label>
+  </div>
+</CheckboxGroup>
+```
+
+## Props
+
+<ParamField path="value" type="string[]">
+  Controlled selected values.
+</ParamField>
+
+<ParamField path="defaultValue" type="string[]">
+  Default selected values.
+</ParamField>
+
+<ParamField path="onValueChange" type="function">
+  Callback when selection changes.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable all checkboxes in the group.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+## Examples
+
+### Basic Group
+
+```tsx
+<CheckboxGroup>
+  <div className="flex items-center gap-2">
+    <Checkbox value="react">
+      <CheckboxIndicator />
+    </Checkbox>
+    <label>React</label>
+  </div>
+  
+  <div className="flex items-center gap-2">
+    <Checkbox value="vue">
+      <CheckboxIndicator />
+    </Checkbox>
+    <label>Vue</label>
+  </div>
+  
+  <div className="flex items-center gap-2">
+    <Checkbox value="angular">
+      <CheckboxIndicator />
+    </Checkbox>
+    <label>Angular</label>
+  </div>
+</CheckboxGroup>
+```
+
+### Controlled Group
+
+```tsx
+const [selected, setSelected] = useState(['react', 'vue']);
+
+<CheckboxGroup value={selected} onValueChange={setSelected}>
+  <div className="flex items-center gap-2">
+    <Checkbox value="react">
+      <CheckboxIndicator />
+    </Checkbox>
+    <label>React</label>
+  </div>
+  
+  <div className="flex items-center gap-2">
+    <Checkbox value="vue">
+      <CheckboxIndicator />
+    </Checkbox>
+    <label>Vue</label>
+  </div>
+</CheckboxGroup>
+```
+
+### With Default Selection
+
+```tsx
+<CheckboxGroup defaultValue={['option1']}>
+  {/* Checkboxes */}
+</CheckboxGroup>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for accessibility
+- Manages group state automatically
+- Works with keyboard navigation
+- Proper ARIA attributes

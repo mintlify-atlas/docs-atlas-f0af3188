@@ -1,0 +1,160 @@
+---
+title: Toast
+description: Toast notification component with stacking and positioning support, built on @base-ui/react.
+---
+
+The Toast component displays temporary notification messages to users with support for different types, positions, and stacking behavior.
+
+## Installation
+
+```tsx
+import { ToastProvider, toastManager } from "@craftdotui/baseui/components/toast";
+```
+
+## Usage
+
+```tsx
+// Wrap your app with ToastProvider
+function App() {
+  return (
+    <ToastProvider position="bottom-right">
+      {/* Your app */}
+    </ToastProvider>
+  );
+}
+
+// Show toasts anywhere
+toastManager.add({
+  title: "Success!",
+  description: "Your changes have been saved.",
+  type: "success",
+});
+```
+
+## Toast Manager
+
+### toastManager.add()
+
+<ParamField path="title" type="string">
+  Toast title text.
+</ParamField>
+
+<ParamField path="description" type="string">
+  Toast description/body text.
+</ParamField>
+
+<ParamField path="type" type="string">
+  Toast type. Options: `default`, `success`, `info`, `warning`, `error`, `loading`
+</ParamField>
+
+<ParamField path="duration" type="number" default="5000">
+  Duration in milliseconds before auto-dismiss.
+</ParamField>
+
+<ParamField path="actionProps" type="object">
+  Action button configuration: `{ children: ReactNode, onClick: () => void }`
+</ParamField>
+
+## ToastProvider Props
+
+<ParamField path="position" type="string" default="bottom-right">
+  Toast position on screen.
+  
+  Options: `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`
+</ParamField>
+
+<ParamField path="duration" type="number" default="5000">
+  Default duration for all toasts.
+</ParamField>
+
+<ParamField path="limit" type="number">
+  Maximum number of visible toasts.
+</ParamField>
+
+## Toast Types
+
+- **default**: Standard toast
+- **success**: Success message with check icon
+- **info**: Information message with info icon
+- **warning**: Warning message with alert icon
+- **error**: Error message with error icon
+- **loading**: Loading state with spinner
+
+## Examples
+
+### Success Toast
+
+```tsx
+toastManager.add({
+  title: "Success",
+  description: "Operation completed successfully.",
+  type: "success",
+});
+```
+
+### Error Toast
+
+```tsx
+toastManager.add({
+  title: "Error",
+  description: "Something went wrong. Please try again.",
+  type: "error",
+});
+```
+
+### With Action Button
+
+```tsx
+toastManager.add({
+  title: "Update Available",
+  description: "A new version is ready to install.",
+  type: "info",
+  actionProps: {
+    children: "Update",
+    onClick: () => window.location.reload(),
+  },
+});
+```
+
+### Loading Toast
+
+```tsx
+const toastId = toastManager.add({
+  title: "Uploading...",
+  type: "loading",
+  duration: Infinity, // Don't auto-dismiss
+});
+
+// Later, update or remove
+toastManager.remove(toastId);
+```
+
+### Custom Duration
+
+```tsx
+toastManager.add({
+  title: "Quick message",
+  duration: 2000, // 2 seconds
+});
+```
+
+### Different Positions
+
+```tsx
+<ToastProvider position="top-center">
+  {/* Toasts appear at top-center */}
+</ToastProvider>
+
+<ToastProvider position="bottom-left">
+  {/* Toasts appear at bottom-left */}
+</ToastProvider>
+```
+
+## Accessibility
+
+- Built on @base-ui/react Toast primitive
+- ARIA live region announcements
+- Keyboard dismissible (Escape or swipe)
+- Focus management
+- Swipe to dismiss support
+- Screen reader compatible

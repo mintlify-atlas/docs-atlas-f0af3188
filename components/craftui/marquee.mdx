@@ -1,0 +1,325 @@
+---
+title: Marquee
+description: A smooth, infinite scrolling marquee component with customizable speed, direction, and pause-on-hover functionality.
+---
+
+# Marquee
+
+The `Marquee` component creates an infinite scrolling effect perfect for displaying logos, testimonials, or any content that needs continuous horizontal movement. Features smooth CSS animations with pause-on-hover support.
+
+## Installation
+
+```bash
+npm install @craftdotui/components
+```
+
+## Import
+
+```tsx
+import Marquee from "@craftdotui/components";
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic Marquee
+import Marquee from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <Marquee>
+      <div className="flex gap-8">
+        <span className="text-2xl font-bold">Item 1</span>
+        <span className="text-2xl font-bold">Item 2</span>
+        <span className="text-2xl font-bold">Item 3</span>
+        <span className="text-2xl font-bold">Item 4</span>
+      </div>
+    </Marquee>
+  );
+}
+```
+
+```tsx Logo Showcase
+import Marquee from "@craftdotui/components";
+
+export default function Example() {
+  const logos = [
+    "/logo1.svg",
+    "/logo2.svg",
+    "/logo3.svg",
+    "/logo4.svg",
+    "/logo5.svg",
+  ];
+
+  return (
+    <Marquee duration={30} gap={48}>
+      {logos.map((logo, index) => (
+        <img 
+          key={index}
+          src={logo} 
+          alt="Company logo" 
+          className="h-12 w-auto grayscale hover:grayscale-0 transition-all"
+        />
+      ))}
+    </Marquee>
+  );
+}
+```
+
+```tsx Reverse Direction
+import Marquee from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <Marquee direction="right" duration={25}>
+      <div className="flex gap-6">
+        {["🚀", "⭐", "🎨", "🔥", "💎", "✨"].map((emoji, i) => (
+          <span key={i} className="text-4xl">{emoji}</span>
+        ))}
+      </div>
+    </Marquee>
+  );
+}
+```
+
+</CodeGroup>
+
+## Props
+
+<ParamField path="children" type="React.ReactNode" required>
+  The content to scroll. Typically a flex container with items.
+</ParamField>
+
+<ParamField path="duration" type="number" default="20">
+  Animation duration in seconds. Lower values = faster scrolling.
+</ParamField>
+
+<ParamField path="repeat" type="number" default="2">
+  Number of times to repeat the content. Minimum 2 recommended for seamless loops.
+</ParamField>
+
+<ParamField path="direction" type="'left' | 'right'" default="'left'">
+  Scroll direction.
+</ParamField>
+
+<ParamField path="pauseOnHover" type="boolean" default="true">
+  Whether to pause animation when hovering.
+</ParamField>
+
+<ParamField path="gap" type="number" default="0">
+  Gap between repeated content instances in pixels.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes for the container.
+</ParamField>
+
+## Animation Details
+
+### CSS Keyframes
+
+The component uses pure CSS animations for optimal performance:
+
+```css
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
+}
+```
+
+### Animation Properties
+
+```tsx
+animation: `marquee-${direction} ${duration}s linear infinite`
+```
+
+- **Timing**: `linear` for constant speed
+- **Iteration**: `infinite` for continuous scrolling
+- **Duration**: Configurable via props
+
+<Note>
+  The `repeat` prop duplicates the content to ensure seamless infinite scrolling without gaps.
+</Note>
+
+## Examples
+
+### Partner Logos
+
+```tsx
+import Marquee from "@craftdotui/components";
+
+export default function PartnerLogos() {
+  const partners = [
+    { name: "Google", logo: "/partners/google.svg" },
+    { name: "Microsoft", logo: "/partners/microsoft.svg" },
+    { name: "Apple", logo: "/partners/apple.svg" },
+    { name: "Amazon", logo: "/partners/amazon.svg" },
+    { name: "Meta", logo: "/partners/meta.svg" },
+  ];
+
+  return (
+    <div className="py-12 bg-gray-50">
+      <h2 className="text-center text-2xl font-bold mb-8">Trusted by industry leaders</h2>
+      <Marquee duration={40} gap={64} className="py-4">
+        {partners.map((partner, i) => (
+          <img
+            key={i}
+            src={partner.logo}
+            alt={partner.name}
+            className="h-16 w-auto opacity-60 hover:opacity-100 transition-opacity"
+          />
+        ))}
+      </Marquee>
+    </div>
+  );
+}
+```
+
+### Testimonials Scroll
+
+```tsx
+import Marquee from "@craftdotui/components";
+import { Star } from "lucide-react";
+
+export default function Testimonials() {
+  const testimonials = [
+    { text: "Amazing product!", author: "John Doe" },
+    { text: "Best service ever!", author: "Jane Smith" },
+    { text: "Highly recommended!", author: "Bob Johnson" },
+  ];
+
+  return (
+    <Marquee duration={50} gap={32}>
+      {testimonials.map((testimonial, i) => (
+        <div key={i} className="bg-white p-6 rounded-lg shadow-md min-w-[300px]">
+          <div className="flex gap-1 mb-3">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+            ))}
+          </div>
+          <p className="text-gray-700 mb-2">"{testimonial.text}"</p>
+          <p className="text-sm text-gray-500">- {testimonial.author}</p>
+        </div>
+      ))}
+    </Marquee>
+  );
+}
+```
+
+### Dual Direction Marquees
+
+```tsx
+import Marquee from "@craftdotui/components";
+
+export default function DualMarquee() {
+  const skills = [
+    "React", "TypeScript", "Next.js", "Tailwind CSS", 
+    "Node.js", "GraphQL", "PostgreSQL", "Docker"
+  ];
+
+  return (
+    <div className="space-y-4">
+      <Marquee direction="left" duration={30}>
+        {skills.map((skill, i) => (
+          <div key={i} className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full font-semibold">
+            {skill}
+          </div>
+        ))}
+      </Marquee>
+      
+      <Marquee direction="right" duration={35}>
+        {skills.reverse().map((skill, i) => (
+          <div key={i} className="px-6 py-3 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-full font-semibold">
+            {skill}
+          </div>
+        ))}
+      </Marquee>
+    </div>
+  );
+}
+```
+
+### News Ticker
+
+```tsx
+import Marquee from "@craftdotui/components";
+
+export default function NewsTicker() {
+  const news = [
+    "Breaking: New feature released!",
+    "Update: Server maintenance scheduled for tonight",
+    "Announcement: Join our webinar next week",
+  ];
+
+  return (
+    <div className="bg-black text-white py-2">
+      <Marquee duration={25} pauseOnHover={true}>
+        {news.map((item, i) => (
+          <span key={i} className="mx-8">
+            <span className="text-red-500 mr-2">•</span>
+            {item}
+          </span>
+        ))}
+      </Marquee>
+    </div>
+  );
+}
+```
+
+<Tip>
+  For seamless scrolling, ensure your content width is sufficient. Use `repeat={2}` or higher to avoid visible gaps.
+</Tip>
+
+## Best Practices
+
+### Performance
+
+- Uses CSS animations (GPU-accelerated)
+- No JavaScript required for animation loop
+- Minimal re-renders
+
+### Content Guidelines
+
+- Keep individual items similar in size for visual consistency
+- Use fixed widths for items when possible
+- Include enough items to fill the viewport width
+- Set appropriate `gap` values to prevent crowding
+
+### Speed Configuration
+
+```tsx
+// Slow, elegant scroll
+<Marquee duration={60}>
+
+// Medium speed (default)
+<Marquee duration={20}>
+
+// Fast ticker
+<Marquee duration={10}>
+```
+
+## Accessibility
+
+<Warning>
+  Continuous motion can be problematic for users with vestibular disorders. Consider:
+  - Setting `pauseOnHover={true}` (default)
+  - Providing a pause/play control
+  - Respecting `prefers-reduced-motion` media query
+</Warning>
+
+## Use Cases
+
+- Logo showcases
+- Partner/sponsor displays
+- Testimonial carousels
+- News tickers
+- Social media feeds
+- Product highlights
+- Award badges
+- Technology stack displays

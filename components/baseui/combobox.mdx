@@ -1,0 +1,70 @@
+---
+title: Combobox
+description: A combobox component combining input with selectable options, built on @base-ui/react.
+---
+
+The Combobox component combines a text input with a listbox of options, allowing users to filter and select from a list.
+
+## Installation
+
+```tsx
+import { Combobox } from "@craftdotui/baseui/components/combobox";
+```
+
+## Usage
+
+<Note>
+  This component is built on @base-ui/react's Combobox primitive. Refer to the source code for the complete API and implementation details.
+</Note>
+
+```tsx
+<Combobox
+  options={[
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+  ]}
+/>
+```
+
+## Features
+
+- Searchable dropdown
+- Keyboard navigation
+- Single or multiple selection
+- Custom option rendering
+- Async option loading
+- Filtering and sorting
+
+## Examples
+
+### Basic Combobox
+
+```tsx
+<Combobox
+  placeholder="Select an option"
+  options={[
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' },
+    { value: 'angular', label: 'Angular' },
+  ]}
+/>
+```
+
+### With Search
+
+```tsx
+<Combobox
+  searchable
+  placeholder="Search frameworks..."
+  options={frameworks}
+/>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA compliance
+- Combobox ARIA pattern
+- Keyboard accessible
+- Screen reader support
+- Focus management

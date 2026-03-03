@@ -1,0 +1,140 @@
+---
+title: Tabs
+description: A tabbed interface component with multiple variants and orientations, built on @base-ui/react.
+---
+
+The Tabs component provides an accessible tabbed interface for organizing content into separate panels.
+
+## Installation
+
+```tsx
+import {
+  Tabs,
+  TabsList,
+  TabsTab,
+  TabsPanel,
+} from "@craftdotui/baseui/components/tabs";
+```
+
+## Usage
+
+```tsx
+<Tabs defaultValue="tab1">
+  <TabsList>
+    <TabsTab value="tab1">Tab 1</TabsTab>
+    <TabsTab value="tab2">Tab 2</TabsTab>
+    <TabsTab value="tab3">Tab 3</TabsTab>
+  </TabsList>
+  
+  <TabsPanel value="tab1">Content 1</TabsPanel>
+  <TabsPanel value="tab2">Content 2</TabsPanel>
+  <TabsPanel value="tab3">Content 3</TabsPanel>
+</Tabs>
+```
+
+## Components
+
+### Tabs (Root)
+
+<ParamField path="value" type="string">
+  Controlled active tab value.
+</ParamField>
+
+<ParamField path="defaultValue" type="string">
+  Default active tab for uncontrolled usage.
+</ParamField>
+
+<ParamField path="onValueChange" type="function">
+  Callback when active tab changes.
+</ParamField>
+
+<ParamField path="orientation" type="string" default="horizontal">
+  Layout orientation. Options: `horizontal`, `vertical`
+</ParamField>
+
+### TabsList
+
+<ParamField path="variant" type="string" default="default">
+  Visual style. Options: `default`, `outlined`, `ghost`
+</ParamField>
+
+<ParamField path="tabsListFullWidth" type="boolean" default="false">
+  Make tabs fill the full width.
+</ParamField>
+
+<ParamField path="hideIndicator" type="boolean" default="false">
+  Hide the active tab indicator.
+</ParamField>
+
+<ParamField path="tabShape" type="string" default="default">
+  Tab shape. Options: `default`, `pill`
+</ParamField>
+
+<ParamField path="tabSize" type="string" default="md">
+  Tab size. Options: `sm`, `md`, `lg`
+</ParamField>
+
+### TabsTab
+
+<ParamField path="value" type="string" required>
+  Unique value identifying this tab.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable the tab.
+</ParamField>
+
+### TabsPanel
+
+<ParamField path="value" type="string" required>
+  Value matching the associated tab.
+</ParamField>
+
+## Examples
+
+### Variants
+
+```tsx
+<TabsList variant="default">...</TabsList>
+<TabsList variant="outlined">...</TabsList>
+<TabsList variant="ghost">...</TabsList>
+```
+
+### Pill Shape
+
+```tsx
+<TabsList tabShape="pill">
+  <TabsTab value="tab1">Tab 1</TabsTab>
+  <TabsTab value="tab2">Tab 2</TabsTab>
+</TabsList>
+```
+
+### Vertical Orientation
+
+```tsx
+<Tabs orientation="vertical">
+  <TabsList>
+    <TabsTab value="tab1">Tab 1</TabsTab>
+    <TabsTab value="tab2">Tab 2</TabsTab>
+  </TabsList>
+  <TabsPanel value="tab1">Content 1</TabsPanel>
+  <TabsPanel value="tab2">Content 2</TabsPanel>
+</Tabs>
+```
+
+### Full Width
+
+```tsx
+<TabsList tabsListFullWidth>
+  <TabsTab value="tab1">Tab 1</TabsTab>
+  <TabsTab value="tab2">Tab 2</TabsTab>
+</TabsList>
+```
+
+## Accessibility
+
+- Built on @base-ui/react Tabs primitive
+- Keyboard navigation (Arrow keys, Home, End)
+- Automatic tab focus management
+- ARIA attributes for roles and states
+- Active indicator for visual feedback

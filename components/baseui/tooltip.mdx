@@ -1,0 +1,137 @@
+---
+title: Tooltip
+description: A tooltip component that displays contextual information on hover or focus, built on @base-ui/react.
+---
+
+The Tooltip component shows helpful information when users hover over or focus on an element.
+
+## Installation
+
+```tsx
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipPortal,
+  TooltipPositioner,
+  TooltipPopup,
+} from "@craftdotui/baseui/components/tooltip";
+```
+
+## Usage
+
+```tsx
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger>Hover me</TooltipTrigger>
+    <TooltipPortal>
+      <TooltipPositioner>
+        <TooltipPopup>
+          Tooltip content
+        </TooltipPopup>
+      </TooltipPositioner>
+    </TooltipPortal>
+  </Tooltip>
+</TooltipProvider>
+```
+
+## Components
+
+### TooltipProvider
+
+<ParamField path="delay" type="number" default="600">
+  Delay before showing tooltip (ms).
+</ParamField>
+
+<ParamField path="closeDelay" type="number" default="300">
+  Delay before hiding tooltip (ms).
+</ParamField>
+
+Wrap your app or component tree to share tooltip settings.
+
+### Tooltip (Root)
+
+<ParamField path="open" type="boolean">
+  Controlled open state.
+</ParamField>
+
+<ParamField path="defaultOpen" type="boolean">
+  Default open state.
+</ParamField>
+
+<ParamField path="onOpenChange" type="function">
+  Callback when state changes.
+</ParamField>
+
+### TooltipPositioner
+
+<ParamField path="side" type="string" default="top">
+  Preferred side. Options: `top`, `right`, `bottom`, `left`
+</ParamField>
+
+<ParamField path="align" type="string" default="center">
+  Alignment. Options: `start`, `center`, `end`
+</ParamField>
+
+### TooltipPopup
+
+<ParamField path="hideTooltipArrow" type="boolean" default="false">
+  Hide the arrow.
+</ParamField>
+
+The tooltip content with arrow and animations.
+
+## Examples
+
+### Basic Tooltip
+
+```tsx
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger>
+      <Button>Hover me</Button>
+    </TooltipTrigger>
+    <TooltipPortal>
+      <TooltipPositioner>
+        <TooltipPopup>
+          This is a helpful tooltip
+        </TooltipPopup>
+      </TooltipPositioner>
+    </TooltipPortal>
+  </Tooltip>
+</TooltipProvider>
+```
+
+### Different Positions
+
+```tsx
+<TooltipPositioner side="top">Top tooltip</TooltipPositioner>
+<TooltipPositioner side="right">Right tooltip</TooltipPositioner>
+<TooltipPositioner side="bottom">Bottom tooltip</TooltipPositioner>
+<TooltipPositioner side="left">Left tooltip</TooltipPositioner>
+```
+
+### Without Arrow
+
+```tsx
+<TooltipPopup hideTooltipArrow>
+  Tooltip without arrow
+</TooltipPopup>
+```
+
+### Custom Delay
+
+```tsx
+<TooltipProvider delay={1000} closeDelay={500}>
+  {/* Tooltips with custom timing */}
+</TooltipProvider>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for accessibility
+- Appears on hover and focus
+- Keyboard accessible
+- Proper ARIA attributes
+- Does not trap focus
+- Collision detection for viewport edges

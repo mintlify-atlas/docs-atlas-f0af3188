@@ -1,0 +1,77 @@
+---
+title: Separator
+description: A visual separator component for dividing content, built on @base-ui/react.
+---
+
+The Separator component provides a visual divider between content sections.
+
+## Installation
+
+```tsx
+import { Separator } from "@craftdotui/baseui/components/separator";
+```
+
+## Usage
+
+```tsx
+<Separator />
+```
+
+## Props
+
+<ParamField path="orientation" type="string" default="horizontal">
+  Orientation of the separator.
+  
+  Options: `horizontal`, `vertical`
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+## Examples
+
+### Horizontal Separator
+
+```tsx
+<div>
+  <p>Content above</p>
+  <Separator />
+  <p>Content below</p>
+</div>
+```
+
+### Vertical Separator
+
+```tsx
+<div className="flex items-center">
+  <span>Left</span>
+  <Separator orientation="vertical" />
+  <span>Right</span>
+</div>
+```
+
+### In a Menu
+
+```tsx
+<div className="space-y-1">
+  <div>Menu Item 1</div>
+  <div>Menu Item 2</div>
+  <Separator />
+  <div>Menu Item 3</div>
+  <div>Menu Item 4</div>
+</div>
+```
+
+### Custom Styling
+
+```tsx
+<Separator className="bg-primary" />
+```
+
+## Accessibility
+
+- Built on @base-ui/react Separator primitive
+- Proper semantic role="separator"
+- Orientation communicated to screen readers
+- Default margins for spacing

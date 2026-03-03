@@ -1,0 +1,154 @@
+---
+title: Slider
+description: A slider component for selecting values from a range, built on @base-ui/react.
+---
+
+The Slider component allows users to select a value or range of values by dragging a thumb along a track.
+
+## Installation
+
+```tsx
+import {
+  Slider,
+  SliderValue,
+  SliderControl,
+  SliderTrack,
+  SliderIndicator,
+  SliderThumb,
+} from "@craftdotui/baseui/components/slider";
+```
+
+## Usage
+
+```tsx
+<Slider defaultValue={50}>
+  <SliderControl>
+    <SliderTrack>
+      <SliderIndicator />
+    </SliderTrack>
+    <SliderThumb />
+  </SliderControl>
+</Slider>
+```
+
+## Components
+
+### Slider (Root)
+
+<ParamField path="value" type="number | number[]">
+  Controlled value(s).
+</ParamField>
+
+<ParamField path="defaultValue" type="number | number[]">
+  Default value(s).
+</ParamField>
+
+<ParamField path="onValueChange" type="function">
+  Callback when value changes.
+</ParamField>
+
+<ParamField path="min" type="number" default="0">
+  Minimum value.
+</ParamField>
+
+<ParamField path="max" type="number" default="100">
+  Maximum value.
+</ParamField>
+
+<ParamField path="step" type="number" default="1">
+  Step increment.
+</ParamField>
+
+<ParamField path="orientation" type="string" default="horizontal">
+  Orientation. Options: `horizontal`, `vertical`
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable the slider.
+</ParamField>
+
+### SliderValue
+
+Displays the current value(s).
+
+### SliderControl
+
+Container for the track and thumbs.
+
+### SliderTrack
+
+The track background.
+
+### SliderIndicator
+
+The filled portion of the track.
+
+### SliderThumb
+
+Draggable thumb control. Add multiple for range sliders.
+
+## Examples
+
+### Basic Slider
+
+```tsx
+<Slider defaultValue={50}>
+  <SliderValue />
+  <SliderControl>
+    <SliderTrack>
+      <SliderIndicator />
+    </SliderTrack>
+    <SliderThumb />
+  </SliderControl>
+</Slider>
+```
+
+### Range Slider
+
+```tsx
+<Slider defaultValue={[25, 75]}>
+  <SliderControl>
+    <SliderTrack>
+      <SliderIndicator />
+    </SliderTrack>
+    <SliderThumb />
+    <SliderThumb />
+  </SliderControl>
+</Slider>
+```
+
+### With Custom Range
+
+```tsx
+<Slider min={0} max={200} step={10} defaultValue={50}>
+  <SliderValue />
+  <SliderControl>
+    <SliderTrack>
+      <SliderIndicator />
+    </SliderTrack>
+    <SliderThumb />
+  </SliderControl>
+</Slider>
+```
+
+### Vertical Slider
+
+```tsx
+<Slider orientation="vertical" defaultValue={50}>
+  <SliderValue />
+  <SliderControl>
+    <SliderTrack>
+      <SliderIndicator />
+    </SliderTrack>
+    <SliderThumb />
+  </SliderControl>
+</Slider>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA support
+- Keyboard navigation (Arrow keys, Page Up/Down, Home, End)
+- Focus visible ring on thumb
+- Proper ARIA labels and values
+- Screen reader announcements for value changes

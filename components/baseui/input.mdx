@@ -1,0 +1,93 @@
+---
+title: Input
+description: A text input component with variants and sizes, built on @base-ui/react.
+---
+
+The Input component is a styled text input field that supports various sizes and visual variants.
+
+## Installation
+
+```tsx
+import { Input } from "@craftdotui/baseui/components/input";
+```
+
+## Usage
+
+```tsx
+<Input placeholder="Enter text..." />
+```
+
+## Props
+
+<ParamField path="variant" type="string" default="default">
+  Visual variant of the input.
+  
+  Options: `default`, `ghost`
+</ParamField>
+
+<ParamField path="size" type="string" default="md">
+  Size of the input field.
+  
+  Options: `xs`, `sm`, `md`, `lg`, `xl`
+</ParamField>
+
+<ParamField path="type" type="string">
+  HTML input type (text, email, password, search, file, etc.)
+</ParamField>
+
+<ParamField path="placeholder" type="string">
+  Placeholder text.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disables the input.
+</ParamField>
+
+## Variants
+
+- **default**: Standard input with border and focus ring
+- **ghost**: Borderless input with transparent background
+
+## Sizes
+
+- `xs`: h-7, text-xs
+- `sm`: h-8, text-xs
+- `md`: h-8.5, text-sm (default)
+- `lg`: h-9, text-sm
+- `xl`: h-9.5, text-base
+
+## Examples
+
+### Sizes
+
+```tsx
+<Input size="xs" placeholder="Extra small" />
+<Input size="sm" placeholder="Small" />
+<Input size="md" placeholder="Medium" />
+<Input size="lg" placeholder="Large" />
+<Input size="xl" placeholder="Extra large" />
+```
+
+### Variants
+
+```tsx
+<Input variant="default" placeholder="Default" />
+<Input variant="ghost" placeholder="Ghost" />
+```
+
+### Input Types
+
+```tsx
+<Input type="email" placeholder="Email" />
+<Input type="password" placeholder="Password" />
+<Input type="search" placeholder="Search..." />
+<Input type="file" />
+```
+
+## Accessibility
+
+- Built on @base-ui/react Input primitive
+- Proper focus management with visible focus rings
+- Disabled state prevents interaction
+- Search input removes webkit decorations
+- File input includes proper styling for file button

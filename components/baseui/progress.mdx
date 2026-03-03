@@ -1,0 +1,120 @@
+---
+title: Progress
+description: A progress indicator component for showing task completion, built on @base-ui/react.
+---
+
+The Progress component displays the progress of a task or operation.
+
+## Installation
+
+```tsx
+import {
+  Progress,
+  ProgressLabel,
+  ProgressTrack,
+  ProgressIndicator,
+  ProgressValue,
+} from "@craftdotui/baseui/components/progress";
+```
+
+## Usage
+
+```tsx
+<Progress value={60}>
+  <ProgressLabel>Loading...</ProgressLabel>
+  <ProgressTrack>
+    <ProgressIndicator />
+  </ProgressTrack>
+  <ProgressValue />
+</Progress>
+```
+
+## Components
+
+### Progress (Root)
+
+<ParamField path="value" type="number">
+  Current progress value (0-100).
+</ParamField>
+
+<ParamField path="max" type="number" default="100">
+  Maximum value.
+</ParamField>
+
+### ProgressLabel
+
+Label describing the progress operation.
+
+### ProgressTrack
+
+The background track.
+
+### ProgressIndicator
+
+The filled portion showing progress.
+
+### ProgressValue
+
+Displays the current value as text.
+
+## Examples
+
+### Basic Progress
+
+```tsx
+<Progress value={75}>
+  <ProgressTrack>
+    <ProgressIndicator />
+  </ProgressTrack>
+</Progress>
+```
+
+### With Label and Value
+
+```tsx
+<Progress value={60}>
+  <ProgressLabel>Uploading file...</ProgressLabel>
+  <ProgressTrack>
+    <ProgressIndicator />
+  </ProgressTrack>
+  <ProgressValue />
+</Progress>
+```
+
+### Indeterminate State
+
+```tsx
+<Progress>
+  <ProgressLabel>Loading...</ProgressLabel>
+  <ProgressTrack>
+    <ProgressIndicator className="animate-pulse" />
+  </ProgressTrack>
+</Progress>
+```
+
+### Controlled Progress
+
+```tsx
+const [progress, setProgress] = useState(0);
+
+useEffect(() => {
+  const timer = setInterval(() => {
+    setProgress((prev) => (prev >= 100 ? 0 : prev + 10));
+  }, 500);
+  return () => clearInterval(timer);
+}, []);
+
+<Progress value={progress}>
+  <ProgressTrack>
+    <ProgressIndicator />
+  </ProgressTrack>
+  <ProgressValue />
+</Progress>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA support
+- Proper role="progressbar" attribute
+- aria-valuenow, aria-valuemin, aria-valuemax
+- Screen reader announcements for value changes

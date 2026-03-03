@@ -1,0 +1,105 @@
+---
+title: Context Menu
+description: A context menu component triggered by right-click, built on @base-ui/react.
+---
+
+The Context Menu component displays a menu when the user right-clicks (or long-presses) on an element.
+
+## Installation
+
+```tsx
+import { ContextMenu } from "@craftdotui/baseui/components/context-menu";
+```
+
+## Usage
+
+<Note>
+  This component is built on @base-ui/react's ContextMenu primitive. It shares the same structure as Menu but is triggered by right-click instead of a button.
+</Note>
+
+```tsx
+import {
+  MenuRoot as ContextMenuRoot,
+  MenuItem as ContextMenuItem,
+  // ... other menu components
+} from "@craftdotui/baseui/components/menu";
+
+<ContextMenuRoot>
+  <ContextMenuTrigger>
+    <div className="border p-8 text-center">
+      Right click here
+    </div>
+  </ContextMenuTrigger>
+  
+  <ContextMenuPortal>
+    <ContextMenuPositioner>
+      <ContextMenuPopup>
+        <ContextMenuItem>Copy</ContextMenuItem>
+        <ContextMenuItem>Paste</ContextMenuItem>
+        <ContextMenuItem>Delete</ContextMenuItem>
+      </ContextMenuPopup>
+    </ContextMenuPositioner>
+  </ContextMenuPortal>
+</ContextMenuRoot>
+```
+
+## Features
+
+- Right-click activation
+- Touch long-press support
+- Keyboard accessible
+- Same features as Menu component
+- Supports items, groups, checkboxes, radio buttons, and submenus
+
+## Examples
+
+### Basic Context Menu
+
+```tsx
+<ContextMenuRoot>
+  <ContextMenuTrigger>
+    <div className="h-32 w-64 rounded border flex items-center justify-center">
+      Right click me
+    </div>
+  </ContextMenuTrigger>
+  
+  <ContextMenuPortal>
+    <ContextMenuPositioner>
+      <ContextMenuPopup>
+        <ContextMenuItem>Edit</ContextMenuItem>
+        <ContextMenuItem>Duplicate</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem>Delete</ContextMenuItem>
+      </ContextMenuPopup>
+    </ContextMenuPositioner>
+  </ContextMenuPortal>
+</ContextMenuRoot>
+```
+
+### On Image
+
+```tsx
+<ContextMenuRoot>
+  <ContextMenuTrigger>
+    <img src="/image.jpg" alt="Photo" />
+  </ContextMenuTrigger>
+  
+  <ContextMenuPortal>
+    <ContextMenuPositioner>
+      <ContextMenuPopup>
+        <ContextMenuItem>Save Image</ContextMenuItem>
+        <ContextMenuItem>Copy Image</ContextMenuItem>
+        <ContextMenuItem>Open in New Tab</ContextMenuItem>
+      </ContextMenuPopup>
+    </ContextMenuPositioner>
+  </ContextMenuPortal>
+</ContextMenuRoot>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for accessibility
+- Keyboard shortcut (Shift+F10 or context menu key)
+- Focus management
+- Screen reader support
+- ARIA menu pattern

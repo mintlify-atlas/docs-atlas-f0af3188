@@ -1,0 +1,142 @@
+---
+title: Popover
+description: A floating popover component with positioning and animations, built on @base-ui/react.
+---
+
+The Popover component displays floating content anchored to a trigger element.
+
+## Installation
+
+```tsx
+import {
+  PopoverRoot,
+  PopoverTrigger,
+  PopoverPortal,
+  PopoverPositioner,
+  PopoverPopup,
+  PopoverArrow,
+  PopoverTitle,
+  PopoverDescription,
+  PopoverClose,
+} from "@craftdotui/baseui/components/popover";
+```
+
+## Usage
+
+```tsx
+<PopoverRoot>
+  <PopoverTrigger>
+    <Button>Open Popover</Button>
+  </PopoverTrigger>
+  
+  <PopoverPortal>
+    <PopoverPositioner>
+      <PopoverPopup>
+        <PopoverArrow />
+        <PopoverTitle>Popover Title</PopoverTitle>
+        <PopoverDescription>
+          This is a popover description.
+        </PopoverDescription>
+      </PopoverPopup>
+    </PopoverPositioner>
+  </PopoverPortal>
+</PopoverRoot>
+```
+
+## Components
+
+### PopoverRoot
+
+<ParamField path="open" type="boolean">
+  Controlled open state.
+</ParamField>
+
+<ParamField path="defaultOpen" type="boolean">
+  Default open state.
+</ParamField>
+
+<ParamField path="onOpenChange" type="function">
+  Callback when state changes.
+</ParamField>
+
+### PopoverPositioner
+
+<ParamField path="side" type="string" default="bottom">
+  Preferred side. Options: `top`, `right`, `bottom`, `left`
+</ParamField>
+
+<ParamField path="align" type="string" default="center">
+  Alignment. Options: `start`, `center`, `end`
+</ParamField>
+
+<ParamField path="sideOffset" type="number" default="8">
+  Distance from the trigger.
+</ParamField>
+
+### PopoverPopup
+
+The popover content container with border and shadow.
+
+### PopoverArrow
+
+Optional arrow pointing to the trigger.
+
+### PopoverTitle
+
+Title for the popover content.
+
+### PopoverDescription
+
+Description text.
+
+### PopoverClose
+
+Closes the popover when clicked.
+
+## Examples
+
+### With Arrow
+
+```tsx
+<PopoverRoot>
+  <PopoverTrigger>Open</PopoverTrigger>
+  <PopoverPortal>
+    <PopoverPositioner>
+      <PopoverPopup>
+        <PopoverArrow />
+        <PopoverTitle>Title</PopoverTitle>
+        <PopoverDescription>Description</PopoverDescription>
+      </PopoverPopup>
+    </PopoverPositioner>
+  </PopoverPortal>
+</PopoverRoot>
+```
+
+### Different Sides
+
+```tsx
+<PopoverPositioner side="top">...</PopoverPositioner>
+<PopoverPositioner side="right">...</PopoverPositioner>
+<PopoverPositioner side="bottom">...</PopoverPositioner>
+<PopoverPositioner side="left">...</PopoverPositioner>
+```
+
+### With Close Button
+
+```tsx
+<PopoverPopup>
+  <PopoverTitle>Title</PopoverTitle>
+  <PopoverDescription>Description</PopoverDescription>
+  <PopoverClose>
+    <Button size="sm">Close</Button>
+  </PopoverClose>
+</PopoverPopup>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA support
+- Keyboard navigation (Escape to close)
+- Focus management
+- Proper ARIA attributes
+- Collision detection for positioning

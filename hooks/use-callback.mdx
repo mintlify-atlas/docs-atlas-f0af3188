@@ -1,0 +1,181 @@
+---
+title: useCallbackRef
+description: A hook that creates a stable callback reference that always calls the latest version of the provided function
+---
+
+# useCallbackRef
+
+The `useCallbackRef` hook creates a stable callback reference that doesn't change between renders but always calls the latest version of the provided callback function. This is useful for avoiding unnecessary re-renders while ensuring your callbacks always have access to the latest props and state.
+
+## Installation
+
+```bash
+npm install @craft-ui/hooks
+```
+
+## Import
+
+```tsx
+import { useCallbackRef } from "@craft-ui/hooks";
+```
+
+## Usage
+
+```tsx
+import { useCallbackRef } from "@craft-ui/hooks";
+import { useEffect } from "react";
+
+function Component() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    console.log("Current count:", count);
+  };
+
+  // Create a stable callback reference
+  const stableCallback = useCallbackRef(handleClick);
+
+  useEffect(() => {
+    // This effect won't re-run when count changes
+    // but the callback will always log the latest count
+    const interval = setInterval(stableCallback, 1000);
+    return () => clearInterval(interval);
+  }, [stableCallback]); // stableCallback never changes
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="callback" type="T | undefined">
+  The callback function to create a stable reference for. Can be any function type.
+</ParamField>
+
+## Returns
+
+<ResponseField name="stableCallback" type="T">
+  A memoized callback function that maintains the same reference across renders but always calls the latest version of the provided callback.
+</ResponseField>
+
+## Type Definition
+
+```typescript
+function useCallbackRef<T extends (...args: never[]) => unknown>(
+  callback: T | undefined
+): T;
+```
+
+## Examples
+
+### Event Listeners
+
+```tsx
+import { useCallbackRef } from "@craft-ui/hooks";
+import { useEffect } from "react";
+
+function ScrollTracker() {
+  const [scrollY, setScrollY] = useState(0);
+
+  const handleScroll = () => {
+    setScrollY(window.scrollY);
+    // Access latest state or props here
+  };
+
+  const stableScrollHandler = useCallbackRef(handleScroll);
+
+  useEffect(() => {
+    window.addEventListener("scroll", stableScrollHandler);
+    return () => window.removeEventListener("scroll", stableScrollHandler);
+  }, [stableScrollHandler]);
+
+  return <div>Scroll Y: {scrollY}</div>;
+}
+```
+
+### With Timers
+
+```tsx
+import { useCallbackRef } from "@craft-ui/hooks";
+
+function Timer() {
+  const [seconds, setSeconds] = useState(0);
+  const [message, setMessage] = useState("Hello");
+
+  const logMessage = () => {
+    console.log(`${message} - ${seconds} seconds elapsed`);
+  };
+
+  const stableLogger = useCallbackRef(logMessage);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSeconds(s => s + 1);
+      stableLogger(); // Always logs the latest message and seconds
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [stableLogger]);
+
+  return (
+    <input
+      value={message}
+      onChange={(e) => setMessage(e.target.value)}
+    />
+  );
+}
+```
+
+### Callback Props
+
+```tsx
+import { useCallbackRef } from "@craft-ui/hooks";
+
+function Parent() {
+  const [data, setData] = useState([]);
+
+  const handleUpdate = (newItem) => {
+    setData([...data, newItem]);
+  };
+
+  // Child component won't re-render when data changes
+  const stableUpdate = useCallbackRef(handleUpdate);
+
+  return <Child onUpdate={stableUpdate} />;
+}
+
+const Child = memo(({ onUpdate }) => {
+  return <button onClick={() => onUpdate({ id: Date.now() })}>Add Item</button>;
+});
+```
+
+## Common Patterns
+
+### Avoiding Effect Dependencies
+
+Use `useCallbackRef` when you need a callback in an effect dependency array but don't want the effect to re-run when the callback changes:
+
+```tsx
+const handler = useCallbackRef(props.onChange);
+
+useEffect(() => {
+  // Effect only runs once, but handler always calls latest props.onChange
+  someAPI.subscribe(handler);
+  return () => someAPI.unsubscribe(handler);
+}, [handler]);
+```
+
+### Performance Optimization
+
+Combine with `React.memo` to prevent unnecessary child re-renders:
+
+```tsx
+const stableCallback = useCallbackRef(expensiveCallback);
+
+// MemoizedChild won't re-render when parent state changes
+<MemoizedChild onAction={stableCallback} />
+```

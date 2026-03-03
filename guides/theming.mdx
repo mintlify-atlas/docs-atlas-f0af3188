@@ -1,0 +1,278 @@
+---
+title: Theming and Styling
+description: Learn how to customize the look and feel of Craft UI components using Tailwind CSS, CSS variables, and theme configuration.
+---
+
+Craft UI is built with Tailwind CSS and uses a comprehensive theming system based on CSS variables. This approach provides flexibility and makes it easy to customize colors, spacing, typography, and more.
+
+## Overview
+
+The theming system consists of three layers:
+
+1. **CSS Variables** - Semantic color tokens defined in your global stylesheet
+2. **Tailwind Configuration** - Extended with custom design tokens
+3. **Component Classes** - Applied using Tailwind utilities
+
+## CSS Variables
+
+Craft UI uses CSS variables (custom properties) to define semantic color tokens that automatically adapt to light and dark modes.
+
+### Color System
+
+All colors are defined using the OKLCH color space for perceptually uniform color manipulation:
+
+```css title="globals.css"
+:root {
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0 0 0);
+  --primary: oklch(0 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.94 0 0);
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.44 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.63 0.19 23.03);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.92 0 0);
+  --input: oklch(0.94 0 0);
+  --ring: oklch(0 0 0);
+}
+```
+
+### Available Color Tokens
+
+Craft UI provides the following semantic color tokens:
+
+- `background` / `foreground` - Base colors for your application
+- `primary` / `primary-foreground` - Primary brand colors
+- `secondary` / `secondary-foreground` - Secondary accent colors
+- `muted` / `muted-foreground` - Muted backgrounds and text
+- `accent` / `accent-foreground` - Accent highlights
+- `destructive` / `destructive-foreground` - Error and danger states
+- `border` - Border colors
+- `input` - Input field backgrounds
+- `ring` - Focus ring colors
+- `card` / `card-foreground` - Card backgrounds
+- `popover` / `popover-foreground` - Popover backgrounds
+
+## Dark Mode
+
+Dark mode is implemented using a `.dark` class that overrides the CSS variables:
+
+```css title="globals.css"
+.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+  --primary: oklch(1 0 0);
+  --primary-foreground: oklch(0 0 0);
+  --secondary: oklch(0.25 0 0);
+  --secondary-foreground: oklch(1 0 0);
+  /* ... */
+}
+```
+
+To enable dark mode, add the `dark` class to your root element:
+
+```tsx
+<html className="dark">
+  <body>{children}</body>
+</html>
+```
+
+<Tip>
+  Use the `@custom-variant dark (&:is(.dark *));` directive in your CSS to create a custom dark mode variant that works with nested dark mode contexts.
+</Tip>
+
+## Customizing Colors
+
+<Steps>
+  <Step title="Modify CSS Variables">
+    Update the color values in your `globals.css` file to match your brand:
+
+    ```css title="globals.css"
+    :root {
+      --primary: oklch(0.45 0.26 262.52); /* Your brand color */
+      --primary-foreground: oklch(1 0 0);
+    }
+    ```
+  </Step>
+
+  <Step title="Update Dark Mode">
+    Don't forget to update dark mode variants:
+
+    ```css title="globals.css"
+    .dark {
+      --primary: oklch(0.65 0.26 262.52); /* Lighter for dark mode */
+      --primary-foreground: oklch(0 0 0);
+    }
+    ```
+  </Step>
+
+  <Step title="Use Tailwind Classes">
+    Components automatically pick up your custom colors:
+
+    ```tsx
+    <Button variant="default">
+      Uses your custom primary color
+    </Button>
+    ```
+  </Step>
+</Steps>
+
+## Typography
+
+Customize fonts using CSS variables:
+
+```css title="globals.css"
+:root {
+  --font-sans: Geist, sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Geist Mono, monospace;
+}
+```
+
+These are automatically mapped to Tailwind's font utilities:
+
+```tsx
+<p className="font-sans">Sans-serif text</p>
+<p className="font-mono">Monospace code</p>
+```
+
+## Border Radius
+
+Adjust the default border radius for all components:
+
+```css title="globals.css"
+:root {
+  --radius: 0.5rem; /* Default: 8px */
+}
+```
+
+The system provides calculated radius variants:
+
+- `--radius-sm`: `calc(var(--radius) - 4px)`
+- `--radius-md`: `calc(var(--radius) - 2px)`
+- `--radius-lg`: `var(--radius)`
+- `--radius-xl`: `calc(var(--radius) + 4px)`
+
+## Shadows
+
+Customize shadow styles for depth and elevation:
+
+```css title="globals.css"
+:root {
+  --shadow-sm: 0px 1px 2px 0px hsl(0 0% 0% / 0.18);
+  --shadow: 0px 1px 2px 0px hsl(0 0% 0% / 0.18);
+  --shadow-md: 0px 2px 4px -1px hsl(0 0% 0% / 0.18);
+  --shadow-lg: 0px 4px 6px -1px hsl(0 0% 0% / 0.18);
+  --shadow-xl: 0px 8px 10px -1px hsl(0 0% 0% / 0.18);
+}
+```
+
+## Spacing
+
+Adjust the base spacing unit:
+
+```css title="globals.css"
+:root {
+  --spacing: 0.25rem; /* 4px base unit */
+}
+```
+
+## Complete Theme Example
+
+Here's a complete example of a custom theme with a purple brand color:
+
+<CodeGroup>
+```css globals.css
+:root {
+  /* Purple Brand Theme */
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0 0);
+  --primary: oklch(0.55 0.25 280); /* Purple */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.85 0.05 280);
+  --secondary-foreground: oklch(0.15 0 0);
+  --accent: oklch(0.75 0.15 280);
+  --accent-foreground: oklch(0.15 0 0);
+  --muted: oklch(0.96 0.01 280);
+  --muted-foreground: oklch(0.45 0 0);
+  --border: oklch(0.90 0.01 280);
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: oklch(0.10 0 0);
+  --foreground: oklch(0.98 0 0);
+  --primary: oklch(0.65 0.25 280);
+  --primary-foreground: oklch(0.10 0 0);
+  --secondary: oklch(0.25 0.05 280);
+  --secondary-foreground: oklch(0.98 0 0);
+  --accent: oklch(0.35 0.15 280);
+  --accent-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.20 0.01 280);
+  --muted-foreground: oklch(0.65 0 0);
+  --border: oklch(0.25 0.01 280);
+}
+```
+
+```tsx App.tsx
+import { Button } from "@craftdotui/baseui/components/button";
+
+export default function App() {
+  return (
+    <div className="p-8 space-y-4">
+      <Button variant="default">Purple Primary</Button>
+      <Button variant="secondary">Purple Secondary</Button>
+      <Button variant="outline">Outlined</Button>
+    </div>
+  );
+}
+```
+</CodeGroup>
+
+## Overriding Component Styles
+
+All components accept a `className` prop that merges with default styles using the `cn()` utility:
+
+```tsx
+import { Button } from "@craftdotui/baseui/components/button";
+
+<Button 
+  variant="default"
+  className="rounded-full px-8"
+>
+  Custom Styled Button
+</Button>
+```
+
+The `cn()` utility is built with `tailwind-merge` and `clsx`, ensuring that Tailwind classes are properly merged and duplicates are resolved.
+
+<Note>
+  Later classes in the `className` prop will override earlier classes, allowing you to customize any aspect of a component's appearance.
+</Note>
+
+## Per-Component Theming
+
+For more granular control, use Tailwind's arbitrary value syntax with CSS variables:
+
+```tsx
+<div className="bg-[oklch(0.5_0.2_280)]">
+  Custom background using OKLCH
+</div>
+```
+
+Or reference your theme variables directly:
+
+```tsx
+<div className="bg-primary text-primary-foreground">
+  Uses theme colors
+</div>
+```
+
+## Next Steps
+
+- [Customization](/guides/customization) - Learn how to extend components with custom variants
+- [Accessibility](/guides/accessibility) - Ensure your themed components remain accessible

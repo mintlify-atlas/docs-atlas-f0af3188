@@ -1,0 +1,276 @@
+---
+title: Dock
+description: A macOS-style dock component with spring animations and interactive tooltips, perfect for navigation bars and action menus.
+---
+
+# Dock
+
+The `Dock` component creates a macOS-style dock with smooth spring animations and interactive item scaling. Each dock item features dynamic tooltips with rotation and translation effects based on mouse movement.
+
+## Installation
+
+```bash
+npm install @craftdotui/components
+```
+
+## Import
+
+```tsx
+import { Dock, DockItem } from "@craftdotui/components";
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic Dock
+import { Dock, DockItem } from "@craftdotui/components";
+import { Home, Search, Bell, User } from "lucide-react";
+
+export default function Example() {
+  return (
+    <Dock>
+      <DockItem icon={<Home />} label="Home" />
+      <DockItem icon={<Search />} label="Search" />
+      <DockItem icon={<Bell />} label="Notifications" />
+      <DockItem icon={<User />} label="Profile" />
+    </Dock>
+  );
+}
+```
+
+```tsx With Click Handlers
+import { Dock, DockItem } from "@craftdotui/components";
+import { Mail, Calendar, Camera, Settings } from "lucide-react";
+
+export default function Example() {
+  return (
+    <Dock>
+      <DockItem 
+        icon={<Mail />} 
+        label="Mail" 
+        onClick={() => console.log("Mail clicked")}
+      />
+      <DockItem 
+        icon={<Calendar />} 
+        label="Calendar" 
+        onClick={() => console.log("Calendar clicked")}
+      />
+      <DockItem 
+        icon={<Camera />} 
+        label="Photos" 
+        onClick={() => console.log("Photos clicked")}
+      />
+      <DockItem 
+        icon={<Settings />} 
+        label="Settings" 
+        onClick={() => console.log("Settings clicked")}
+      />
+    </Dock>
+  );
+}
+```
+
+```tsx Custom Styling
+import { Dock, DockItem } from "@craftdotui/components";
+import { Music, Video, Image, File } from "lucide-react";
+
+export default function Example() {
+  return (
+    <Dock className="bg-white/90 backdrop-blur-lg">
+      <DockItem 
+        icon={<Music className="text-pink-500" />} 
+        label="Music"
+        className="hover:bg-pink-100"
+      />
+      <DockItem 
+        icon={<Video className="text-blue-500" />} 
+        label="Videos"
+        className="hover:bg-blue-100"
+      />
+      <DockItem 
+        icon={<Image className="text-green-500" />} 
+        label="Images"
+        className="hover:bg-green-100"
+      />
+      <DockItem 
+        icon={<File className="text-purple-500" />} 
+        label="Files"
+        className="hover:bg-purple-100"
+      />
+    </Dock>
+  );
+}
+```
+
+</CodeGroup>
+
+## Components
+
+### Dock
+
+The container component that wraps all dock items.
+
+<ParamField path="children" type="React.ReactNode" required>
+  The dock items to display.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes for custom styling.
+</ParamField>
+
+### DockItem
+
+Individual items within the dock.
+
+<ParamField path="icon" type="React.ReactNode" required>
+  The icon to display in the dock item.
+</ParamField>
+
+<ParamField path="label" type="string" required>
+  The label shown in the tooltip on hover.
+</ParamField>
+
+<ParamField path="onClick" type="() => void">
+  Optional click handler function.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes for the dock item.
+</ParamField>
+
+## Animation Details
+
+### Dock Container Animation
+
+```tsx
+initial={{ opacity: 0 }}
+animate={{ opacity: 1 }}
+transition={{ type: "spring", stiffness: 260, damping: 20 }}
+```
+
+### DockItem Spring Configuration
+
+```tsx
+const springConfig = { 
+  stiffness: 200, 
+  damping: 10 
+};
+```
+
+### Hover Effects
+
+- **Scale on Hover**: Items scale to 1.2x with spring physics
+- **Tap Scale**: Items scale to 0.9x on click
+- **Rotation**: Tooltip rotates ±25° based on mouse position
+- **Translation**: Tooltip shifts ±10px horizontally
+
+```tsx
+whileHover={{
+  scale: 1.2,
+  transition: { type: "spring", stiffness: 300, damping: 20 },
+}}
+whileTap={{ scale: 0.9 }}
+```
+
+### Tooltip Animation
+
+```tsx
+initial={{ opacity: 0, y: 10, scale: 0.8 }}
+animate={{ opacity: 1, y: 0, scale: 1 }}
+exit={{ opacity: 0, y: 10, scale: 0.8 }}
+```
+
+<Note>
+  The tooltip dynamically rotates and translates based on horizontal mouse movement within each dock item.
+</Note>
+
+## Examples
+
+### Social Media Dock
+
+```tsx
+import { Dock, DockItem } from "@craftdotui/components";
+import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
+
+export default function SocialDock() {
+  return (
+    <Dock className="fixed bottom-8 left-1/2 -translate-x-1/2">
+      <DockItem 
+        icon={<Facebook className="w-6 h-6 text-blue-600" />} 
+        label="Facebook"
+        onClick={() => window.open("https://facebook.com")}
+      />
+      <DockItem 
+        icon={<Twitter className="w-6 h-6 text-sky-500" />} 
+        label="Twitter"
+        onClick={() => window.open("https://twitter.com")}
+      />
+      <DockItem 
+        icon={<Instagram className="w-6 h-6 text-pink-600" />} 
+        label="Instagram"
+        onClick={() => window.open("https://instagram.com")}
+      />
+      <DockItem 
+        icon={<Linkedin className="w-6 h-6 text-blue-700" />} 
+        label="LinkedIn"
+        onClick={() => window.open("https://linkedin.com")}
+      />
+      <DockItem 
+        icon={<Youtube className="w-6 h-6 text-red-600" />} 
+        label="YouTube"
+        onClick={() => window.open("https://youtube.com")}
+      />
+    </Dock>
+  );
+}
+```
+
+### App Launcher
+
+```tsx
+import { Dock, DockItem } from "@craftdotui/components";
+import { Code, Terminal, Database, Cloud, Package } from "lucide-react";
+
+export default function AppLauncher() {
+  const apps = [
+    { icon: Code, label: "VS Code", action: "code" },
+    { icon: Terminal, label: "Terminal", action: "terminal" },
+    { icon: Database, label: "Database", action: "db" },
+    { icon: Cloud, label: "Cloud", action: "cloud" },
+    { icon: Package, label: "Packages", action: "npm" },
+  ];
+
+  return (
+    <Dock className="gap-6">
+      {apps.map((app) => (
+        <DockItem
+          key={app.action}
+          icon={<app.icon className="w-6 h-6" />}
+          label={app.label}
+          onClick={() => launchApp(app.action)}
+        />
+      ))}
+    </Dock>
+  );
+}
+```
+
+<Tip>
+  Position the dock using fixed positioning (e.g., `fixed bottom-4 left-1/2 -translate-x-1/2`) for a persistent navigation bar.
+</Tip>
+
+## Best Practices
+
+- Keep dock items between 4-8 for optimal usability
+- Use consistent icon sizes (typically 20-24px)
+- Provide clear, concise labels
+- Use semantic icon choices that match their function
+- Consider adding visual separators for grouped actions
+
+## Accessibility
+
+- Fully keyboard accessible
+- ARIA labels inherited from icon components
+- Supports screen readers
+- Respects reduced motion preferences

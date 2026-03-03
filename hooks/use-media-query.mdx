@@ -1,0 +1,343 @@
+---
+title: useMediaQuery
+description: A hook that evaluates CSS media queries and returns whether they match the current viewport
+---
+
+# useMediaQuery
+
+The `useMediaQuery` hook evaluates CSS media queries in React and returns a boolean indicating whether the query matches the current viewport. It automatically updates when the viewport changes.
+
+## Installation
+
+```bash
+npm install @craft-ui/hooks
+```
+
+## Import
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+```
+
+## Usage
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+
+function ResponsiveComponent() {
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
+  return (
+    <div>
+      {isDesktop ? (
+        <div>Desktop Layout</div>
+      ) : (
+        <div>Mobile/Tablet Layout</div>
+      )}
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="query" type="string" required>
+  A CSS media query string to evaluate (e.g., `"(min-width: 768px)"`, `"(prefers-color-scheme: dark)"`).
+</ParamField>
+
+## Returns
+
+<ResponseField name="matches" type="boolean">
+  A boolean value indicating whether the media query currently matches. Updates automatically when the viewport or media conditions change.
+</ResponseField>
+
+## Type Definition
+
+```typescript
+function useMediaQuery(query: string): boolean;
+```
+
+## Examples
+
+### Breakpoint Detection
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+
+function BreakpointExample() {
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
+  return (
+    <div>
+      <p>Current device:</p>
+      {isMobile && <p>Mobile</p>}
+      {isTablet && <p>Tablet</p>}
+      {isDesktop && <p>Desktop</p>}
+    </div>
+  );
+}
+```
+
+### Dark Mode Detection
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+import { useEffect } from "react";
+
+function ThemeDetector() {
+  const prefersDark = useMediaQuery("(prefers-color-scheme: dark)");
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", prefersDark);
+  }, [prefersDark]);
+
+  return (
+    <div>
+      <p>Current theme: {prefersDark ? "Dark" : "Light"}</p>
+    </div>
+  );
+}
+```
+
+### Responsive Grid Layout
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+
+function ResponsiveGrid({ items }) {
+  const isLarge = useMediaQuery("(min-width: 1280px)");
+  const isMedium = useMediaQuery("(min-width: 768px) and (max-width: 1279px)");
+
+  const columns = isLarge ? 4 : isMedium ? 3 : 1;
+
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gap: "1rem",
+      }}
+    >
+      {items.map(item => (
+        <div key={item.id}>{item.content}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+### Orientation Detection
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+
+function OrientationAware() {
+  const isPortrait = useMediaQuery("(orientation: portrait)");
+  const isLandscape = useMediaQuery("(orientation: landscape)");
+
+  return (
+    <div>
+      {isPortrait && <p>Please rotate your device to landscape</p>}
+      {isLandscape && <VideoPlayer />}
+    </div>
+  );
+}
+```
+
+### Reduced Motion Preference
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+
+function AnimatedComponent() {
+  const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+
+  return (
+    <div
+      style={{
+        transition: prefersReducedMotion ? "none" : "all 0.3s ease",
+      }}
+      className="animated-element"
+    >
+      {/* Content */}
+    </div>
+  );
+}
+```
+
+### Hover Capability Detection
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+
+function InteractiveCard() {
+  const canHover = useMediaQuery("(hover: hover) and (pointer: fine)");
+
+  return (
+    <div
+      className="card"
+      style={{
+        cursor: canHover ? "pointer" : "default",
+      }}
+    >
+      {canHover ? (
+        <p>Hover over me for effects</p>
+      ) : (
+        <p>Tap to interact</p>
+      )}
+    </div>
+  );
+}
+```
+
+### Print Styles
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+
+function PrintableDocument() {
+  const isPrint = useMediaQuery("print");
+
+  return (
+    <div>
+      {!isPrint && <Navigation />}
+      <article>
+        <h1>Article Title</h1>
+        <p>Content...</p>
+      </article>
+      {!isPrint && <Footer />}
+    </div>
+  );
+}
+```
+
+### Multiple Breakpoints
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+
+function MultiBreakpoint() {
+  const breakpoints = {
+    xs: useMediaQuery("(max-width: 639px)"),
+    sm: useMediaQuery("(min-width: 640px) and (max-width: 767px)"),
+    md: useMediaQuery("(min-width: 768px) and (max-width: 1023px)"),
+    lg: useMediaQuery("(min-width: 1024px) and (max-width: 1279px)"),
+    xl: useMediaQuery("(min-width: 1280px)"),
+  };
+
+  const getLayout = () => {
+    if (breakpoints.xl) return "xl-layout";
+    if (breakpoints.lg) return "lg-layout";
+    if (breakpoints.md) return "md-layout";
+    if (breakpoints.sm) return "sm-layout";
+    return "xs-layout";
+  };
+
+  return <div className={getLayout()}>{/* Content */}</div>;
+}
+```
+
+### Conditional Feature Loading
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+import { lazy, Suspense } from "react";
+
+const DesktopFeature = lazy(() => import("./DesktopFeature"));
+
+function ConditionalFeature() {
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
+  return (
+    <div>
+      {isDesktop ? (
+        <Suspense fallback={<div>Loading...</div>}>
+          <DesktopFeature />
+        </Suspense>
+      ) : (
+        <MobileAlternative />
+      )}
+    </div>
+  );
+}
+```
+
+## Common Media Queries
+
+### Breakpoints
+```typescript
+const isMobile = useMediaQuery("(max-width: 767px)");
+const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
+const isDesktop = useMediaQuery("(min-width: 1024px)");
+```
+
+### User Preferences
+```typescript
+const prefersDark = useMediaQuery("(prefers-color-scheme: dark)");
+const prefersLight = useMediaQuery("(prefers-color-scheme: light)");
+const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+```
+
+### Device Capabilities
+```typescript
+const canHover = useMediaQuery("(hover: hover)");
+const hasCoarsePointer = useMediaQuery("(pointer: coarse)");
+const hasFinePointer = useMediaQuery("(pointer: fine)");
+```
+
+### Display
+```typescript
+const isRetina = useMediaQuery("(-webkit-min-device-pixel-ratio: 2)");
+const isPortrait = useMediaQuery("(orientation: portrait)");
+const isLandscape = useMediaQuery("(orientation: landscape)");
+```
+
+## Common Patterns
+
+### Creating a Custom Hook
+
+```tsx
+import { useMediaQuery } from "@craft-ui/hooks";
+
+function useBreakpoint() {
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isTablet = useMediaQuery("(min-width: 768px) and (max-width: 1023px)");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
+  return { isMobile, isTablet, isDesktop };
+}
+
+// Usage
+function Component() {
+  const { isMobile, isTablet, isDesktop } = useBreakpoint();
+  // ...
+}
+```
+
+### Combining Multiple Queries
+
+```tsx
+function AdaptiveComponent() {
+  const isSmallScreen = useMediaQuery("(max-width: 767px)");
+  const prefersDark = useMediaQuery("(prefers-color-scheme: dark)");
+
+  const className = `
+    ${isSmallScreen ? "small" : "large"}
+    ${prefersDark ? "dark" : "light"}
+  `;
+
+  return <div className={className}>{/* Content */}</div>;
+}
+```
+
+## Notes
+
+- The hook uses `window.matchMedia()` which is supported in all modern browsers
+- The media query listener is automatically added and cleaned up
+- The hook returns `false` initially during server-side rendering
+- The initial value is set synchronously to match the current viewport
+- Event listeners are properly cleaned up when the component unmounts or query changes
+- Complex media queries are fully supported (combining multiple conditions with `and`, `or`, `not`)
+- For better performance with multiple queries, consider memoizing or creating custom hooks

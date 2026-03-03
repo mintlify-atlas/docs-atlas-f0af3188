@@ -1,0 +1,333 @@
+---
+title: useIsMobile
+description: A hook that detects whether the current device is mobile based on viewport width
+---
+
+# useIsMobile
+
+The `useIsMobile` hook detects whether the current device is mobile by checking if the viewport width is less than 768px. It listens to window resize events and updates automatically.
+
+## Installation
+
+```bash
+npm install @craft-ui/hooks
+```
+
+## Import
+
+```tsx
+import { useIsMobile } from "@craft-ui/hooks";
+```
+
+## Usage
+
+```tsx
+import { useIsMobile } from "@craft-ui/hooks";
+
+function ResponsiveComponent() {
+  const isMobile = useIsMobile();
+
+  return (
+    <div>
+      {isMobile ? (
+        <MobileNavigation />
+      ) : (
+        <DesktopNavigation />
+      )}
+    </div>
+  );
+}
+```
+
+## Returns
+
+<ResponseField name="isMobile" type="boolean">
+  A boolean value indicating whether the viewport width is less than 768px. Returns `false` during server-side rendering and updates after mounting on the client.
+</ResponseField>
+
+## Type Definition
+
+```typescript
+function useIsMobile(): boolean;
+```
+
+## Breakpoint
+
+The hook uses a mobile breakpoint of **768px**:
+- `isMobile = true` when viewport width is **< 768px**
+- `isMobile = false` when viewport width is **>= 768px**
+
+## Examples
+
+### Responsive Navigation
+
+```tsx
+import { useIsMobile } from "@craft-ui/hooks";
+import { useState } from "react";
+
+function Navigation() {
+  const isMobile = useIsMobile();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  if (isMobile) {
+    return (
+      <nav>
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          Menu
+        </button>
+        {isMenuOpen && (
+          <ul>
+            <li>Home</li>
+            <li>About</li>
+            <li>Contact</li>
+          </ul>
+        )}
+      </nav>
+    );
+  }
+
+  return (
+    <nav>
+      <ul style={{ display: "flex", gap: "1rem" }}>
+        <li>Home</li>
+        <li>About</li>
+        <li>Contact</li>
+      </ul>
+    </nav>
+  );
+}
+```
+
+### Conditional Component Rendering
+
+```tsx
+import { useIsMobile } from "@craft-ui/hooks";
+
+function Dashboard() {
+  const isMobile = useIsMobile();
+
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      {isMobile ? (
+        <MobileCharts />
+      ) : (
+        <DesktopCharts />
+      )}
+    </div>
+  );
+}
+```
+
+### Different Layouts
+
+```tsx
+import { useIsMobile } from "@craft-ui/hooks";
+
+function ProductGrid({ products }) {
+  const isMobile = useIsMobile();
+
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+        gap: isMobile ? "1rem" : "2rem",
+      }}
+    >
+      {products.map(product => (
+        <ProductCard key={product.id} product={product} compact={isMobile} />
+      ))}
+    </div>
+  );
+}
+```
+
+### Touch vs Click Events
+
+```tsx
+import { useIsMobile } from "@craft-ui/hooks";
+
+function InteractiveElement() {
+  const isMobile = useIsMobile();
+  const [isActive, setIsActive] = useState(false);
+
+  const handleInteraction = () => {
+    setIsActive(!isActive);
+  };
+
+  return (
+    <div
+      onClick={isMobile ? undefined : handleInteraction}
+      onTouchStart={isMobile ? handleInteraction : undefined}
+      className={isActive ? "active" : ""}
+    >
+      {isMobile ? "Tap me" : "Click me"}
+    </div>
+  );
+}
+```
+
+### Responsive Image Loading
+
+```tsx
+import { useIsMobile } from "@craft-ui/hooks";
+
+function HeroImage() {
+  const isMobile = useIsMobile();
+
+  const imageSrc = isMobile
+    ? "/images/hero-mobile.jpg"
+    : "/images/hero-desktop.jpg";
+
+  return (
+    <img
+      src={imageSrc}
+      alt="Hero"
+      style={{
+        width: "100%",
+        height: isMobile ? "300px" : "600px",
+        objectFit: "cover",
+      }}
+    />
+  );
+}
+```
+
+### Modal Behavior
+
+```tsx
+import { useIsMobile } from "@craft-ui/hooks";
+
+function Modal({ isOpen, onClose, children }) {
+  const isMobile = useIsMobile();
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className="modal-content"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: isMobile ? "100%" : "600px",
+          height: isMobile ? "100vh" : "auto",
+          maxHeight: isMobile ? "none" : "90vh",
+          borderRadius: isMobile ? 0 : "8px",
+        }}
+      >
+        {children}
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+}
+```
+
+### Responsive Table
+
+```tsx
+import { useIsMobile } from "@craft-ui/hooks";
+
+function DataTable({ data }) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    // Card layout for mobile
+    return (
+      <div>
+        {data.map(item => (
+          <div key={item.id} className="data-card">
+            <div><strong>Name:</strong> {item.name}</div>
+            <div><strong>Email:</strong> {item.email}</div>
+            <div><strong>Status:</strong> {item.status}</div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Table layout for desktop
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map(item => (
+          <tr key={item.id}>
+            <td>{item.name}</td>
+            <td>{item.email}</td>
+            <td>{item.status}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+```
+
+## Common Patterns
+
+### Combining with CSS Classes
+
+```tsx
+function Container() {
+  const isMobile = useIsMobile();
+  
+  return (
+    <div className={isMobile ? "container-mobile" : "container-desktop"}>
+      {/* Content */}
+    </div>
+  );
+}
+```
+
+### Conditional Hook Calls
+
+```tsx
+function Component() {
+  const isMobile = useIsMobile();
+  
+  // Use different hooks based on device
+  const orientation = isMobile ? useOrientation() : null;
+  
+  return <div>{/* Content */}</div>;
+}
+```
+
+### Performance Optimization
+
+```tsx
+function OptimizedComponent() {
+  const isMobile = useIsMobile();
+  
+  // Only load heavy component on desktop
+  const HeavyComponent = isMobile ? null : lazy(() => import("./HeavyComponent"));
+  
+  return (
+    <div>
+      {!isMobile && HeavyComponent && (
+        <Suspense fallback={<Spinner />}>
+          <HeavyComponent />
+        </Suspense>
+      )}
+    </div>
+  );
+}
+```
+
+## Notes
+
+- The hook returns `false` during server-side rendering
+- The initial state is `undefined`, which is coerced to `false` by the `!!` operator
+- The hook automatically updates when the window is resized
+- Event listeners are properly cleaned up when the component unmounts
+- The 768px breakpoint is commonly used as the mobile/tablet boundary
+- For more complex responsive logic, consider using `useMediaQuery` hook instead
+- The hook uses `window.matchMedia` for efficient media query matching
+- This hook is ideal for simple mobile/desktop detection; for more granular control, use custom media queries

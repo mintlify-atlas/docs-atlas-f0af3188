@@ -1,0 +1,144 @@
+---
+title: Select
+description: A dropdown select component with search and grouping support, built on @base-ui/react.
+---
+
+The Select component provides a customizable dropdown for selecting from a list of options.
+
+## Installation
+
+```tsx
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectPortal,
+  SelectPositioner,
+  SelectPopup,
+  SelectItem,
+  SelectItemList,
+} from "@craftdotui/baseui/components/select";
+```
+
+## Usage
+
+```tsx
+<Select>
+  <SelectTrigger>
+    <SelectValue placeholder="Select an option" />
+  </SelectTrigger>
+  <SelectPortal>
+    <SelectPositioner>
+      <SelectPopup>
+        <SelectItemList>
+          <SelectItem value="option1">Option 1</SelectItem>
+          <SelectItem value="option2">Option 2</SelectItem>
+          <SelectItem value="option3">Option 3</SelectItem>
+        </SelectItemList>
+      </SelectPopup>
+    </SelectPositioner>
+  </SelectPortal>
+</Select>
+```
+
+## Components
+
+### Select (Root)
+
+<ParamField path="value" type="string">
+  Controlled selected value.
+</ParamField>
+
+<ParamField path="defaultValue" type="string">
+  Default value for uncontrolled usage.
+</ParamField>
+
+<ParamField path="onValueChange" type="function">
+  Callback when selection changes.
+</ParamField>
+
+### SelectTrigger
+
+<ParamField path="size" type="string" default="md">
+  Size of the trigger. Options: `sm`, `md`, `lg`
+</ParamField>
+
+<ParamField path="variant" type="string">
+  Variant style. Options: `unstyled`
+</ParamField>
+
+<ParamField path="hideSelectTriggerIcon" type="boolean">
+  Hide the chevron icon.
+</ParamField>
+
+### SelectItem
+
+<ParamField path="value" type="string" required>
+  Value of the option.
+</ParamField>
+
+<ParamField path="hideIndicator" type="boolean">
+  Hide the check indicator.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable the item.
+</ParamField>
+
+## Examples
+
+### Basic Select
+
+```tsx
+<Select>
+  <SelectTrigger>
+    <SelectValue placeholder="Choose..." />
+  </SelectTrigger>
+  <SelectPortal>
+    <SelectPositioner>
+      <SelectPopup>
+        <SelectItemList>
+          <SelectItem value="apple">Apple</SelectItem>
+          <SelectItem value="banana">Banana</SelectItem>
+          <SelectItem value="orange">Orange</SelectItem>
+        </SelectItemList>
+      </SelectPopup>
+    </SelectPositioner>
+  </SelectPortal>
+</Select>
+```
+
+### With Groups
+
+```tsx
+import { SelectGroup, SelectGroupLabel } from "@craftdotui/baseui/components/select";
+
+<SelectItemList>
+  <SelectGroup>
+    <SelectGroupLabel>Fruits</SelectGroupLabel>
+    <SelectItem value="apple">Apple</SelectItem>
+    <SelectItem value="banana">Banana</SelectItem>
+  </SelectGroup>
+  <SelectGroup>
+    <SelectGroupLabel>Vegetables</SelectGroupLabel>
+    <SelectItem value="carrot">Carrot</SelectItem>
+    <SelectItem value="potato">Potato</SelectItem>
+  </SelectGroup>
+</SelectItemList>
+```
+
+### Sizes
+
+```tsx
+<SelectTrigger size="sm">Small</SelectTrigger>
+<SelectTrigger size="md">Medium</SelectTrigger>
+<SelectTrigger size="lg">Large</SelectTrigger>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA compliance
+- Keyboard navigation (Arrow keys, Enter, Escape)
+- Type-ahead search support
+- Focus management
+- Screen reader announcements

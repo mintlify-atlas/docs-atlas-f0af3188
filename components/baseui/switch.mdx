@@ -1,0 +1,92 @@
+---
+title: Switch
+description: A toggle switch component built on @base-ui/react for on/off states.
+---
+
+The Switch component provides an accessible toggle control for binary states.
+
+## Installation
+
+```tsx
+import { Switch } from "@craftdotui/baseui/components/switch";
+```
+
+## Usage
+
+```tsx
+<Switch />
+```
+
+## Props
+
+<ParamField path="checked" type="boolean">
+  Controlled checked state.
+</ParamField>
+
+<ParamField path="defaultChecked" type="boolean">
+  Default checked state for uncontrolled usage.
+</ParamField>
+
+<ParamField path="onCheckedChange" type="function">
+  Callback when checked state changes: `(checked: boolean) => void`
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disables the switch.
+</ParamField>
+
+<ParamField path="name" type="string">
+  Name attribute for form submission.
+</ParamField>
+
+<ParamField path="value" type="string">
+  Value attribute for form submission.
+</ParamField>
+
+## Examples
+
+### Basic Usage
+
+```tsx
+<Switch />
+```
+
+### With Label
+
+```tsx
+<div className="flex items-center gap-2">
+  <Switch id="airplane-mode" />
+  <label htmlFor="airplane-mode">Airplane Mode</label>
+</div>
+```
+
+### Controlled
+
+```tsx
+const [enabled, setEnabled] = useState(false);
+
+<Switch checked={enabled} onCheckedChange={setEnabled} />
+```
+
+### Disabled
+
+```tsx
+<Switch disabled />
+<Switch disabled checked />
+```
+
+## Styling
+
+The switch consists of:
+- **Root**: The track background that changes color when checked
+- **Thumb**: The circular indicator that slides when toggled
+
+The thumb automatically translates from left to right when checked via the `data-checked` attribute.
+
+## Accessibility
+
+- Built on @base-ui/react Switch primitive
+- Keyboard accessible (Space/Enter to toggle)
+- Focus visible ring with offset
+- Proper ARIA role and attributes
+- Screen reader announces state changes

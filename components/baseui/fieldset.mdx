@@ -1,0 +1,112 @@
+---
+title: Fieldset
+description: A fieldset component for grouping related form fields, built on @base-ui/react.
+---
+
+The Fieldset component groups related form fields together with an optional legend.
+
+## Installation
+
+```tsx
+import { Fieldset, FieldsetLegend } from "@craftdotui/baseui/components/fieldset";
+```
+
+## Usage
+
+```tsx
+<Fieldset>
+  <FieldsetLegend>Personal Information</FieldsetLegend>
+  
+  <Field>
+    <FieldLabel>First Name</FieldLabel>
+    <FieldControl name="firstName" />
+  </Field>
+  
+  <Field>
+    <FieldLabel>Last Name</FieldLabel>
+    <FieldControl name="lastName" />
+  </Field>
+</Fieldset>
+```
+
+## Components
+
+### Fieldset (Root)
+
+<ParamField path="disabled" type="boolean">
+  Disable all fields within the fieldset.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+### FieldsetLegend
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+The title/heading for the fieldset group.
+
+## Examples
+
+### Address Fieldset
+
+```tsx
+<Fieldset>
+  <FieldsetLegend>Shipping Address</FieldsetLegend>
+  
+  <Field>
+    <FieldLabel>Street</FieldLabel>
+    <FieldControl name="street" />
+  </Field>
+  
+  <Field>
+    <FieldLabel>City</FieldLabel>
+    <FieldControl name="city" />
+  </Field>
+  
+  <Field>
+    <FieldLabel>Postal Code</FieldLabel>
+    <FieldControl name="postalCode" />
+  </Field>
+</Fieldset>
+```
+
+### Disabled Fieldset
+
+```tsx
+<Fieldset disabled>
+  <FieldsetLegend>Disabled Section</FieldsetLegend>
+  <Field>
+    <FieldLabel>Field 1</FieldLabel>
+    <FieldControl />
+  </Field>
+</Fieldset>
+```
+
+### Multiple Fieldsets in Form
+
+```tsx
+<Form>
+  <Fieldset>
+    <FieldsetLegend>Account Details</FieldsetLegend>
+    {/* Fields */}
+  </Fieldset>
+  
+  <Fieldset>
+    <FieldsetLegend>Preferences</FieldsetLegend>
+    {/* Fields */}
+  </Fieldset>
+  
+  <Button type="submit">Save</Button>
+</Form>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for accessibility
+- Semantic fieldset element
+- Legend provides group name
+- Disabled state affects all child fields

@@ -1,0 +1,123 @@
+---
+title: Meter
+description: A meter component for displaying measurements within a known range, built on @base-ui/react.
+---
+
+The Meter component displays a scalar measurement within a known range, similar to a gauge.
+
+## Installation
+
+```tsx
+import {
+  Meter,
+  MeterLabel,
+  MeterTrack,
+  MeterIndicator,
+  MeterValue,
+} from "@craftdotui/baseui/components/meter";
+```
+
+## Usage
+
+```tsx
+<Meter value={75}>
+  <MeterLabel>Storage Used</MeterLabel>
+  <MeterTrack>
+    <MeterIndicator />
+  </MeterTrack>
+  <MeterValue />
+</Meter>
+```
+
+## Components
+
+### Meter (Root)
+
+<ParamField path="value" type="number" required>
+  Current value.
+</ParamField>
+
+<ParamField path="min" type="number" default="0">
+  Minimum value.
+</ParamField>
+
+<ParamField path="max" type="number" default="100">
+  Maximum value.
+</ParamField>
+
+<ParamField path="optimum" type="number">
+  Optimal value.
+</ParamField>
+
+<ParamField path="low" type="number">
+  Low threshold.
+</ParamField>
+
+<ParamField path="high" type="number">
+  High threshold.
+</ParamField>
+
+### MeterLabel
+
+Label for the meter.
+
+### MeterTrack
+
+Background track.
+
+### MeterIndicator
+
+Filled portion indicating the value.
+
+### MeterValue
+
+Displays the current value as text.
+
+## Examples
+
+### Storage Meter
+
+```tsx
+<Meter value={67}>
+  <MeterLabel>Disk Usage</MeterLabel>
+  <MeterTrack>
+    <MeterIndicator />
+  </MeterTrack>
+  <MeterValue />
+</Meter>
+```
+
+### Battery Level
+
+```tsx
+<Meter value={battery} min={0} max={100}>
+  <MeterLabel>Battery</MeterLabel>
+  <MeterTrack>
+    <MeterIndicator />
+  </MeterTrack>
+  <MeterValue />
+</Meter>
+```
+
+### With Thresholds
+
+```tsx
+<Meter value={85} min={0} max={100} low={30} high={70} optimum={50}>
+  <MeterLabel>Performance Score</MeterLabel>
+  <MeterTrack>
+    <MeterIndicator />
+  </MeterTrack>
+  <MeterValue />
+</Meter>
+```
+
+<Note>
+  The Meter component differs from Progress - use Meter for measurements (like disk usage), and Progress for task completion.
+</Note>
+
+## Accessibility
+
+- Built on @base-ui/react Meter primitive
+- Proper role="meter" attribute
+- ARIA attributes for value and range
+- Screen reader support for value announcements

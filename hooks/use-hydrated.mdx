@@ -1,0 +1,300 @@
+---
+title: useHydrated
+description: A hook that safely detects when a component has hydrated on the client side, preventing hydration mismatches
+---
+
+# useHydrated
+
+The `useHydrated` hook helps you safely handle client-side only code and prevent hydration mismatches in server-rendered applications. It returns a boolean indicating whether the component has completed hydration.
+
+## Installation
+
+```bash
+npm install @craft-ui/hooks
+```
+
+## Import
+
+```tsx
+import { useHydrated } from "@craft-ui/hooks";
+```
+
+## Usage
+
+```tsx
+import { useHydrated } from "@craft-ui/hooks";
+
+function ClientOnlyComponent() {
+  const isHydrated = useHydrated();
+
+  if (!isHydrated) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <p>Current time: {new Date().toLocaleTimeString()}</p>
+      <p>Window width: {window.innerWidth}px</p>
+    </div>
+  );
+}
+```
+
+## Returns
+
+<ResponseField name="isHydrated" type="boolean">
+  A boolean value that is `false` during server-side rendering and initial render, and `true` after the component has hydrated on the client.
+</ResponseField>
+
+## Type Definition
+
+```typescript
+function useHydrated(): boolean;
+```
+
+## Examples
+
+### Preventing Hydration Mismatches
+
+```tsx
+import { useHydrated } from "@craft-ui/hooks";
+
+function TimeDisplay() {
+  const isHydrated = useHydrated();
+
+  return (
+    <div>
+      {isHydrated ? (
+        <p>Current time: {new Date().toLocaleTimeString()}</p>
+      ) : (
+        <p>Current time: --:--:--</p>
+      )}
+    </div>
+  );
+}
+```
+
+### Browser-Only Features
+
+```tsx
+import { useHydrated } from "@craft-ui/hooks";
+
+function GeolocationComponent() {
+  const isHydrated = useHydrated();
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  useEffect(() => {
+    if (isHydrated && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        }
+      );
+    }
+  }, [isHydrated]);
+
+  if (!isHydrated) {
+    return <div>Initializing...</div>;
+  }
+
+  return (
+    <div>
+      {location ? (
+        <p>Your location: {location.lat}, {location.lng}</p>
+      ) : (
+        <p>Requesting location...</p>
+      )}
+    </div>
+  );
+}
+```
+
+### Local Storage Access
+
+```tsx
+import { useHydrated } from "@craft-ui/hooks";
+import { useState, useEffect } from "react";
+
+function ThemeToggle() {
+  const isHydrated = useHydrated();
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    if (isHydrated) {
+      const savedTheme = localStorage.getItem("theme") || "light";
+      setTheme(savedTheme);
+    }
+  }, [isHydrated]);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
+  // Render a placeholder during SSR to match initial client render
+  if (!isHydrated) {
+    return <button disabled>Loading theme...</button>;
+  }
+
+  return (
+    <button onClick={toggleTheme}>
+      {theme === "light" ? "🌙" : "☀️"}
+    </button>
+  );
+}
+```
+
+### Conditional Client-Side Rendering
+
+```tsx
+import { useHydrated } from "@craft-ui/hooks";
+import dynamic from "next/dynamic";
+
+const HeavyClientComponent = dynamic(() => import("./HeavyClientComponent"), {
+  ssr: false,
+});
+
+function PageWithClientComponent() {
+  const isHydrated = useHydrated();
+
+  return (
+    <div>
+      <h1>My Page</h1>
+      <p>This content is server-rendered</p>
+      {isHydrated && <HeavyClientComponent />}
+    </div>
+  );
+}
+```
+
+### User Agent Detection
+
+```tsx
+import { useHydrated } from "@craft-ui/hooks";
+import { useState, useEffect } from "react";
+
+function BrowserInfo() {
+  const isHydrated = useHydrated();
+  const [browserInfo, setBrowserInfo] = useState<string>("");
+
+  useEffect(() => {
+    if (isHydrated) {
+      setBrowserInfo(navigator.userAgent);
+    }
+  }, [isHydrated]);
+
+  if (!isHydrated) {
+    return <div>Detecting browser...</div>;
+  }
+
+  return (
+    <div>
+      <h3>Browser Information</h3>
+      <p>{browserInfo}</p>
+    </div>
+  );
+}
+```
+
+### Media Query with SSR
+
+```tsx
+import { useHydrated } from "@craft-ui/hooks";
+import { useState, useEffect } from "react";
+
+function ResponsiveComponent() {
+  const isHydrated = useHydrated();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (isHydrated) {
+      const checkMobile = () => setIsMobile(window.innerWidth < 768);
+      checkMobile();
+      window.addEventListener("resize", checkMobile);
+      return () => window.removeEventListener("resize", checkMobile);
+    }
+  }, [isHydrated]);
+
+  // During SSR and initial render, assume desktop
+  if (!isHydrated) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      {isMobile ? <MobileLayout /> : <DesktopLayout />}
+    </div>
+  );
+}
+```
+
+## Common Patterns
+
+### Progressive Enhancement
+
+Start with a basic experience and enhance it after hydration:
+
+```tsx
+function EnhancedComponent() {
+  const isHydrated = useHydrated();
+
+  return (
+    <div>
+      <h1>Content</h1>
+      {/* Always show basic content */}
+      <BasicContent />
+      
+      {/* Add interactive features after hydration */}
+      {isHydrated && <InteractiveFeatures />}
+    </div>
+  );
+}
+```
+
+### Avoiding Flash of Wrong Content
+
+Use a loading placeholder that matches the server-rendered content:
+
+```tsx
+function NoFlashComponent() {
+  const isHydrated = useHydrated();
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    if (isHydrated) {
+      const clientData = getClientOnlyData();
+      setData(clientData);
+    }
+  }, [isHydrated]);
+
+  // Return the same placeholder during SSR and initial client render
+  if (!isHydrated || !data) {
+    return <Skeleton />;
+  }
+
+  return <Content data={data} />;
+}
+```
+
+## Use Cases
+
+- Preventing hydration mismatches when using browser APIs
+- Safely accessing `window`, `document`, `navigator`, etc.
+- Working with localStorage, sessionStorage, or cookies
+- Implementing theme toggles that read from client storage
+- Conditional rendering of client-only libraries
+- Handling time-sensitive or user-specific content
+- Progressive enhancement strategies
+
+## Notes
+
+- The hook returns `false` during server-side rendering (SSR)
+- The hook returns `false` on the initial client render to match the server-rendered HTML
+- The hook returns `true` after the `useEffect` runs, which happens after hydration
+- This pattern prevents React hydration warnings by ensuring the initial client render matches the server render
+- Use this hook when you need to access browser-only APIs or render content that differs between server and client
+- For optimal user experience, consider showing a loading state or skeleton instead of hiding content entirely

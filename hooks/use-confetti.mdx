@@ -1,0 +1,285 @@
+---
+title: useConfetti
+description: A hook that creates beautiful confetti animations with customizable particles, origins, and duration
+---
+
+# useConfetti
+
+The `useConfetti` hook provides a simple way to trigger confetti animations in your React application. It creates a canvas-based particle system with customizable particle count, origin position, and animation duration.
+
+## Installation
+
+```bash
+npm install @craft-ui/hooks
+```
+
+## Import
+
+```tsx
+import { useConfetti } from "@craft-ui/hooks";
+```
+
+## Usage
+
+```tsx
+import { useConfetti } from "@craft-ui/hooks";
+
+function CelebrationButton() {
+  const triggerConfetti = useConfetti();
+
+  return (
+    <button
+      onClick={() => triggerConfetti({ particleCount: 100, origin: "center" })}
+    >
+      Celebrate!
+    </button>
+  );
+}
+```
+
+## Returns
+
+<ResponseField name="triggerConfetti" type="(options?: ConfettiOptions) => void">
+  A function that triggers the confetti animation when called. Accepts an optional configuration object.
+</ResponseField>
+
+## ConfettiOptions
+
+<ParamField path="particleCount" type="number" default={50}>
+  The total number of particles to generate. The particles are split into 75% confetti pieces and 25% sequins.
+</ParamField>
+
+<ParamField path="origin" type="string" default="center">
+  The origin point for the confetti animation. Can be one of:
+  - `"center"` - Center of the screen
+  - `"top"` - Top center
+  - `"bottom"` - Bottom center
+  - `"left"` - Left center
+  - `"right"` - Right center
+  - `"top-left"` - Top left corner
+  - `"top-right"` - Top right corner
+  - `"bottom-left"` - Bottom left corner
+  - `"bottom-right"` - Bottom right corner
+</ParamField>
+
+<ParamField path="duration" type="number" default={3000}>
+  The duration in milliseconds before the canvas is cleaned up (if no particles remain).
+</ParamField>
+
+## Type Definition
+
+```typescript
+interface ConfettiOptions {
+  particleCount?: number;
+  origin?:
+    | "top"
+    | "bottom"
+    | "left"
+    | "right"
+    | "center"
+    | "top-left"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-right";
+  duration?: number;
+}
+
+function useConfetti(): (options?: ConfettiOptions) => void;
+```
+
+## Examples
+
+### Success Message
+
+```tsx
+import { useConfetti } from "@craft-ui/hooks";
+
+function SuccessMessage() {
+  const triggerConfetti = useConfetti();
+
+  const handleSuccess = () => {
+    triggerConfetti({
+      particleCount: 150,
+      origin: "top",
+      duration: 5000,
+    });
+  };
+
+  return (
+    <button onClick={handleSuccess}>
+      Complete Task
+    </button>
+  );
+}
+```
+
+### Multiple Origins
+
+```tsx
+import { useConfetti } from "@craft-ui/hooks";
+
+function PartyMode() {
+  const triggerConfetti = useConfetti();
+
+  const startParty = () => {
+    // Fire from multiple corners
+    triggerConfetti({ particleCount: 50, origin: "top-left" });
+    setTimeout(() => {
+      triggerConfetti({ particleCount: 50, origin: "top-right" });
+    }, 200);
+    setTimeout(() => {
+      triggerConfetti({ particleCount: 50, origin: "bottom-left" });
+    }, 400);
+    setTimeout(() => {
+      triggerConfetti({ particleCount: 50, origin: "bottom-right" });
+    }, 600);
+  };
+
+  return <button onClick={startParty}>Party Time!</button>;
+}
+```
+
+### Form Submission
+
+```tsx
+import { useConfetti } from "@craft-ui/hooks";
+import { useState } from "react";
+
+function ContactForm() {
+  const triggerConfetti = useConfetti();
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Submit form...
+    await submitForm();
+    
+    setSubmitted(true);
+    triggerConfetti({
+      particleCount: 200,
+      origin: "center",
+      duration: 4000,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {submitted ? (
+        <div>Thank you for your submission!</div>
+      ) : (
+        <>
+          <input type="text" placeholder="Name" />
+          <input type="email" placeholder="Email" />
+          <button type="submit">Submit</button>
+        </>
+      )}
+    </form>
+  );
+}
+```
+
+### Achievement Unlock
+
+```tsx
+import { useConfetti } from "@craft-ui/hooks";
+import { useEffect } from "react";
+
+function AchievementNotification({ achievement }) {
+  const triggerConfetti = useConfetti();
+
+  useEffect(() => {
+    if (achievement.isNew) {
+      triggerConfetti({
+        particleCount: 100,
+        origin: "bottom",
+        duration: 3000,
+      });
+    }
+  }, [achievement, triggerConfetti]);
+
+  return (
+    <div className="achievement">
+      <h3>{achievement.title}</h3>
+      <p>{achievement.description}</p>
+    </div>
+  );
+}
+```
+
+### Custom Button Component
+
+```tsx
+import { useConfetti } from "@craft-ui/hooks";
+
+interface ConfettiButtonProps {
+  onClick?: () => void;
+  children: React.ReactNode;
+  confettiOptions?: ConfettiOptions;
+}
+
+function ConfettiButton({ onClick, children, confettiOptions }: ConfettiButtonProps) {
+  const triggerConfetti = useConfetti();
+
+  const handleClick = () => {
+    triggerConfetti(confettiOptions);
+    onClick?.();
+  };
+
+  return (
+    <button onClick={handleClick}>
+      {children}
+    </button>
+  );
+}
+
+// Usage
+function App() {
+  return (
+    <ConfettiButton
+      confettiOptions={{ particleCount: 150, origin: "top" }}
+      onClick={() => console.log("Clicked!")}
+    >
+      Click me!
+    </ConfettiButton>
+  );
+}
+```
+
+## Common Patterns
+
+### Sequential Bursts
+
+Create a sequence of confetti bursts:
+
+```tsx
+const triggerSequence = () => {
+  triggerConfetti({ particleCount: 30, origin: "left" });
+  setTimeout(() => triggerConfetti({ particleCount: 30, origin: "right" }), 300);
+  setTimeout(() => triggerConfetti({ particleCount: 60, origin: "center" }), 600);
+};
+```
+
+### Conditional Confetti
+
+Trigger confetti based on conditions:
+
+```tsx
+const handleScore = (points: number) => {
+  if (points >= 100) {
+    triggerConfetti({ particleCount: 200, origin: "center" });
+  } else if (points >= 50) {
+    triggerConfetti({ particleCount: 100, origin: "top" });
+  }
+};
+```
+
+## Notes
+
+- The hook automatically creates a full-screen canvas overlay when triggered
+- The canvas is positioned with `position: fixed` and `z-index: 9999`
+- The canvas has `pointer-events: none` so it doesn't interfere with user interactions
+- Particles are automatically cleaned up when they fall off the screen
+- The canvas is removed from the DOM when all particles have finished animating
+- Multiple confetti bursts can be active simultaneously
+- The hook automatically handles window resizing
+- All resources are properly cleaned up when the component unmounts

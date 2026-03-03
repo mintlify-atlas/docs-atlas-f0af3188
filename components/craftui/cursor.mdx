@@ -1,0 +1,219 @@
+---
+title: Cursor
+description: A custom cursor component that replaces the default cursor with custom content when hovering over specific areas.
+---
+
+# Cursor
+
+The `Cursor` component creates an interactive custom cursor that follows the mouse movement within a defined area. It hides the default cursor and displays custom content (text, icons, or React components) that tracks mouse position in real-time.
+
+## Installation
+
+```bash
+npm install @craftdotui/components
+```
+
+## Import
+
+```tsx
+import Cursor from "@craftdotui/components";
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic Text Cursor
+import Cursor from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <Cursor cursor="View">
+      <div className="w-full h-64 bg-gray-100 rounded-lg">
+        <p className="p-8">Hover over this area</p>
+      </div>
+    </Cursor>
+  );
+}
+```
+
+```tsx Custom Component Cursor
+import Cursor from "@craftdotui/components";
+import { Play } from "lucide-react";
+
+export default function Example() {
+  return (
+    <Cursor 
+      cursor={
+        <div className="bg-white rounded-full p-4 shadow-lg">
+          <Play className="w-6 h-6" />
+        </div>
+      }
+    >
+      <div className="w-full h-96 bg-gradient-to-r from-blue-500 to-purple-600">
+        <h2 className="text-white text-2xl p-8">Play Video</h2>
+      </div>
+    </Cursor>
+  );
+}
+```
+
+```tsx Image Gallery
+import Cursor from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <Cursor 
+      cursor="Drag"
+      className="overflow-hidden"
+    >
+      <div className="flex gap-4 p-4">
+        <img src="/image1.jpg" alt="" className="w-64 h-64 object-cover" />
+        <img src="/image2.jpg" alt="" className="w-64 h-64 object-cover" />
+        <img src="/image3.jpg" alt="" className="w-64 h-64 object-cover" />
+      </div>
+    </Cursor>
+  );
+}
+```
+
+</CodeGroup>
+
+## Props
+
+<ParamField path="children" type="React.ReactNode" required>
+  The content area where the custom cursor will be active.
+</ParamField>
+
+<ParamField path="cursor" type="string | React.ReactNode" required>
+  The custom cursor content. Can be a string for simple text or a React component for complex cursors.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes to apply to the container element.
+</ParamField>
+
+## Interaction Details
+
+### Cursor Positioning
+
+The cursor uses precise calculations to track mouse position:
+
+```tsx
+const rect = containerRef.current?.getBoundingClientRect();
+setCursorPosition({
+  x: e.clientX - rect.left,
+  y: e.clientY - rect.top,
+});
+```
+
+### Transform Origin
+
+The cursor is centered on the mouse position using:
+
+```css
+transform: translate(-50%, -50%);
+transform-origin: left center;
+```
+
+<Note>
+  The default cursor is automatically hidden when hovering over the component area using `cursor: none`.
+</Note>
+
+## Examples
+
+### Call-to-Action Card
+
+```tsx
+import Cursor from "@craftdotui/components";
+import { ArrowRight } from "lucide-react";
+
+export default function CTACard() {
+  return (
+    <Cursor 
+      cursor={
+        <div className="bg-black text-white px-4 py-2 rounded-full flex items-center gap-2">
+          <span>Click me</span>
+          <ArrowRight className="w-4 h-4" />
+        </div>
+      }
+    >
+      <div className="w-full h-96 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+        <h2 className="text-white text-4xl font-bold">Explore More</h2>
+      </div>
+    </Cursor>
+  );
+}
+```
+
+### Product Showcase
+
+```tsx
+import Cursor from "@craftdotui/components";
+import { ZoomIn } from "lucide-react";
+
+export default function ProductShowcase() {
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      {products.map((product) => (
+        <Cursor 
+          key={product.id}
+          cursor={
+            <div className="bg-white p-3 rounded-full shadow-xl">
+              <ZoomIn className="w-5 h-5" />
+            </div>
+          }
+        >
+          <img 
+            src={product.image} 
+            alt={product.name}
+            className="w-full h-64 object-cover rounded-lg"
+          />
+        </Cursor>
+      ))}
+    </div>
+  );
+}
+```
+
+### Interactive Text
+
+```tsx
+import Cursor from "@craftdotui/components";
+
+export default function InteractiveText() {
+  return (
+    <Cursor 
+      cursor={
+        <span className="text-2xl font-bold text-pink-500">👆</span>
+      }
+      className="p-12"
+    >
+      <p className="text-6xl font-bold leading-relaxed">
+        Hover over this text to see the magic
+      </p>
+    </Cursor>
+  );
+}
+```
+
+<Tip>
+  Use `whitespace-nowrap` class on the cursor content to prevent text wrapping for multi-word labels.
+</Tip>
+
+## Use Cases
+
+- **Video players**: Show play/pause controls on hover
+- **Image galleries**: Display zoom or drag indicators
+- **Product cards**: Indicate clickable areas
+- **Interactive presentations**: Guide user attention
+- **Creative portfolios**: Add unique brand interactions
+
+## Accessibility
+
+<Warning>
+  Custom cursors can impact accessibility. Ensure:
+  - The cursor content is visible against all backgrounds
+  - Touch devices fallback gracefully (no cursor events)
+  - Keyboard navigation alternatives are provided
+</Warning>

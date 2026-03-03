@@ -1,0 +1,111 @@
+---
+title: Menubar
+description: A menubar component for application-level menus, built on @base-ui/react.
+---
+
+The Menubar component provides a horizontal menu bar typically used for application-level navigation and commands.
+
+## Installation
+
+```tsx
+import { Menubar } from "@craftdotui/baseui/components/menubar";
+```
+
+## Usage
+
+<Note>
+  This component is built on @base-ui/react's Menubar primitive. It provides a horizontal container for multiple dropdown menus.
+</Note>
+
+```tsx
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>File</MenubarTrigger>
+    <MenubarPortal>
+      <MenubarPositioner>
+        <MenubarPopup>
+          <MenubarItem>New</MenubarItem>
+          <MenubarItem>Open</MenubarItem>
+          <MenubarItem>Save</MenubarItem>
+        </MenubarPopup>
+      </MenubarPositioner>
+    </MenubarPortal>
+  </MenubarMenu>
+  
+  <MenubarMenu>
+    <MenubarTrigger>Edit</MenubarTrigger>
+    <MenubarPortal>
+      <MenubarPositioner>
+        <MenubarPopup>
+          <MenubarItem>Cut</MenubarItem>
+          <MenubarItem>Copy</MenubarItem>
+          <MenubarItem>Paste</MenubarItem>
+        </MenubarPopup>
+      </MenubarPositioner>
+    </MenubarPortal>
+  </MenubarMenu>
+</Menubar>
+```
+
+## Features
+
+- Horizontal menu layout
+- Multiple dropdown menus
+- Keyboard navigation between menus
+- Supports all Menu features (items, groups, checkboxes, etc.)
+- Application-level menu pattern
+
+## Examples
+
+### Application Menubar
+
+```tsx
+<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>File</MenubarTrigger>
+    <MenubarPortal>
+      <MenubarPositioner>
+        <MenubarPopup>
+          <MenubarItem>New File</MenubarItem>
+          <MenubarItem>Open</MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem>Save</MenubarItem>
+          <MenubarItem>Save As</MenubarItem>
+        </MenubarPopup>
+      </MenubarPositioner>
+    </MenubarPortal>
+  </MenubarMenu>
+  
+  <MenubarMenu>
+    <MenubarTrigger>Edit</MenubarTrigger>
+    <MenubarPortal>
+      <MenubarPositioner>
+        <MenubarPopup>
+          <MenubarItem>Undo</MenubarItem>
+          <MenubarItem>Redo</MenubarItem>
+        </MenubarPopup>
+      </MenubarPositioner>
+    </MenubarPortal>
+  </MenubarMenu>
+  
+  <MenubarMenu>
+    <MenubarTrigger>View</MenubarTrigger>
+    <MenubarPortal>
+      <MenubarPositioner>
+        <MenubarPopup>
+          <MenubarCheckboxItem>Sidebar</MenubarCheckboxItem>
+          <MenubarCheckboxItem>Toolbar</MenubarCheckboxItem>
+        </MenubarPopup>
+      </MenubarPositioner>
+    </MenubarPortal>
+  </MenubarMenu>
+</Menubar>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA compliance
+- Keyboard navigation (Arrow keys between menus)
+- ARIA menubar pattern
+- Focus management
+- Screen reader support

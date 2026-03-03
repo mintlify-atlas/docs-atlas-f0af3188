@@ -1,0 +1,457 @@
+---
+title: useOptimistic
+description: A hook for managing optimistic UI updates with add, update, and delete operations on data collections
+---
+
+# useOptimistic
+
+The `useOptimistic` hook provides a wrapper around React's `useOptimistic` hook with built-in support for common CRUD operations (add, update, delete) on arrays of data. It's perfect for implementing optimistic UI updates before server confirmation.
+
+## Installation
+
+```bash
+npm install @craft-ui/hooks
+```
+
+## Import
+
+```tsx
+import { useOptimistic } from "@craft-ui/hooks";
+```
+
+## Usage
+
+```tsx
+import { useOptimistic } from "@craft-ui/hooks";
+
+interface Todo {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
+function TodoList({ initialTodos }: { initialTodos: Todo[] }) {
+  const [optimisticTodos, updateOptimisticTodos] = useOptimistic(initialTodos);
+
+  const addTodo = async (text: string) => {
+    const newTodo = { id: crypto.randomUUID(), text, completed: false };
+    
+    // Update UI immediately
+    updateOptimisticTodos({ action: "add", item: newTodo });
+    
+    // Send to server
+    await fetch("/api/todos", {
+      method: "POST",
+      body: JSON.stringify(newTodo),
+    });
+  };
+
+  return (
+    <ul>
+      {optimisticTodos.map(todo => (
+        <li key={todo.id}>{todo.text}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="data" type="TData[]" required>
+  An array of data items. Each item must have an `id` property of type `string`.
+</ParamField>
+
+## Returns
+
+The hook returns a tuple:
+
+<ResponseField name="[0]" type="TData[]">
+  The optimistic data array that reflects both the actual data and any pending optimistic updates.
+</ResponseField>
+
+<ResponseField name="[1]" type="(update: OptimisticUpdate<TData>) => void">
+  A function to trigger optimistic updates. Accepts an object with `action` ("add" | "update" | "delete") and `item` (the data item).
+</ResponseField>
+
+## Type Definition
+
+```typescript
+interface OptimisticUpdate<TData> {
+  action: "add" | "delete" | "update";
+  item: TData;
+}
+
+function useOptimistic<TData extends { id: string }>(
+  data: TData[]
+): readonly [
+  TData[],
+  (update: OptimisticUpdate<TData>) => void
+];
+```
+
+## Examples
+
+### Todo List with CRUD Operations
+
+```tsx
+import { useOptimistic } from "@craft-ui/hooks";
+import { useState } from "react";
+
+interface Todo {
+  id: string;
+  text: string;
+  completed: boolean;
+}
+
+function TodoApp({ initialTodos }: { initialTodos: Todo[] }) {
+  const [optimisticTodos, updateOptimistic] = useOptimistic(initialTodos);
+  const [input, setInput] = useState("");
+
+  const addTodo = async () => {
+    const newTodo: Todo = {
+      id: crypto.randomUUID(),
+      text: input,
+      completed: false,
+    };
+
+    updateOptimistic({ action: "add", item: newTodo });
+    setInput("");
+
+    await fetch("/api/todos", {
+      method: "POST",
+      body: JSON.stringify(newTodo),
+    });
+  };
+
+  const toggleTodo = async (todo: Todo) => {
+    const updated = { ...todo, completed: !todo.completed };
+    updateOptimistic({ action: "update", item: updated });
+
+    await fetch(`/api/todos/${todo.id}`, {
+      method: "PATCH",
+      body: JSON.stringify(updated),
+    });
+  };
+
+  const deleteTodo = async (todo: Todo) => {
+    updateOptimistic({ action: "delete", item: todo });
+
+    await fetch(`/api/todos/${todo.id}`, {
+      method: "DELETE",
+    });
+  };
+
+  return (
+    <div>
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyPress={(e) => e.key === "Enter" && addTodo()}
+      />
+      <button onClick={addTodo}>Add</button>
+      <ul>
+        {optimisticTodos.map((todo) => (
+          <li key={todo.id}>
+            <input
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() => toggleTodo(todo)}
+            />
+            <span
+              style={{
+                textDecoration: todo.completed ? "line-through" : "none",
+              }}
+            >
+              {todo.text}
+            </span>
+            <button onClick={() => deleteTodo(todo)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+### Shopping Cart
+
+```tsx
+import { useOptimistic } from "@craft-ui/hooks";
+
+interface CartItem {
+  id: string;
+  productId: string;
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+function ShoppingCart({ initialItems }: { initialItems: CartItem[] }) {
+  const [optimisticCart, updateCart] = useOptimistic(initialItems);
+
+  const addToCart = async (product: { id: string; name: string; price: number }) => {
+    const item: CartItem = {
+      id: crypto.randomUUID(),
+      productId: product.id,
+      name: product.name,
+      quantity: 1,
+      price: product.price,
+    };
+
+    updateCart({ action: "add", item });
+
+    await fetch("/api/cart", {
+      method: "POST",
+      body: JSON.stringify(item),
+    });
+  };
+
+  const updateQuantity = async (item: CartItem, quantity: number) => {
+    const updated = { ...item, quantity };
+    updateCart({ action: "update", item: updated });
+
+    await fetch(`/api/cart/${item.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ quantity }),
+    });
+  };
+
+  const removeFromCart = async (item: CartItem) => {
+    updateCart({ action: "delete", item });
+    await fetch(`/api/cart/${item.id}`, { method: "DELETE" });
+  };
+
+  const total = optimisticCart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  return (
+    <div>
+      <h2>Cart ({optimisticCart.length} items)</h2>
+      {optimisticCart.map((item) => (
+        <div key={item.id}>
+          <span>{item.name}</span>
+          <input
+            type="number"
+            value={item.quantity}
+            onChange={(e) => updateQuantity(item, Number(e.target.value))}
+            min={1}
+          />
+          <span>${item.price * item.quantity}</span>
+          <button onClick={() => removeFromCart(item)}>Remove</button>
+        </div>
+      ))}
+      <div>Total: ${total}</div>
+    </div>
+  );
+}
+```
+
+### Comment System
+
+```tsx
+import { useOptimistic } from "@craft-ui/hooks";
+import { useState } from "react";
+
+interface Comment {
+  id: string;
+  author: string;
+  text: string;
+  likes: number;
+  createdAt: string;
+}
+
+function CommentSection({ initialComments }: { initialComments: Comment[] }) {
+  const [optimisticComments, updateComments] = useOptimistic(initialComments);
+  const [newComment, setNewComment] = useState("");
+
+  const addComment = async () => {
+    const comment: Comment = {
+      id: crypto.randomUUID(),
+      author: "Current User",
+      text: newComment,
+      likes: 0,
+      createdAt: new Date().toISOString(),
+    };
+
+    updateComments({ action: "add", item: comment });
+    setNewComment("");
+
+    await fetch("/api/comments", {
+      method: "POST",
+      body: JSON.stringify(comment),
+    });
+  };
+
+  const likeComment = async (comment: Comment) => {
+    const updated = { ...comment, likes: comment.likes + 1 };
+    updateComments({ action: "update", item: updated });
+
+    await fetch(`/api/comments/${comment.id}/like`, { method: "POST" });
+  };
+
+  const deleteComment = async (comment: Comment) => {
+    updateComments({ action: "delete", item: comment });
+    await fetch(`/api/comments/${comment.id}`, { method: "DELETE" });
+  };
+
+  return (
+    <div>
+      <div>
+        <textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="Write a comment..."
+        />
+        <button onClick={addComment}>Post Comment</button>
+      </div>
+      <div>
+        {optimisticComments.map((comment) => (
+          <div key={comment.id}>
+            <strong>{comment.author}</strong>
+            <p>{comment.text}</p>
+            <button onClick={() => likeComment(comment)}>
+              Like ({comment.likes})
+            </button>
+            <button onClick={() => deleteComment(comment)}>Delete</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+### File Upload Manager
+
+```tsx
+import { useOptimistic } from "@craft-ui/hooks";
+
+interface FileItem {
+  id: string;
+  name: string;
+  size: number;
+  status: "uploading" | "completed" | "failed";
+  progress: number;
+}
+
+function FileUploader() {
+  const [optimisticFiles, updateFiles] = useOptimistic<FileItem>([]);
+
+  const uploadFile = async (file: File) => {
+    const fileItem: FileItem = {
+      id: crypto.randomUUID(),
+      name: file.name,
+      size: file.size,
+      status: "uploading",
+      progress: 0,
+    };
+
+    updateFiles({ action: "add", item: fileItem });
+
+    try {
+      // Simulate upload with progress
+      for (let i = 0; i <= 100; i += 10) {
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        updateFiles({
+          action: "update",
+          item: { ...fileItem, progress: i },
+        });
+      }
+
+      updateFiles({
+        action: "update",
+        item: { ...fileItem, status: "completed", progress: 100 },
+      });
+    } catch (error) {
+      updateFiles({
+        action: "update",
+        item: { ...fileItem, status: "failed" },
+      });
+    }
+  };
+
+  const removeFile = async (file: FileItem) => {
+    updateFiles({ action: "delete", item: file });
+  };
+
+  return (
+    <div>
+      <input
+        type="file"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) uploadFile(file);
+        }}
+      />
+      <ul>
+        {optimisticFiles.map((file) => (
+          <li key={file.id}>
+            <span>{file.name}</span>
+            <span>{file.status}</span>
+            {file.status === "uploading" && (
+              <progress value={file.progress} max={100} />
+            )}
+            <button onClick={() => removeFile(file)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+## Common Patterns
+
+### Error Handling with Rollback
+
+```tsx
+const addItem = async (item: Item) => {
+  // Store original state for rollback
+  const original = [...optimisticData];
+  
+  // Optimistic update
+  updateOptimistic({ action: "add", item });
+  
+  try {
+    await fetch("/api/items", {
+      method: "POST",
+      body: JSON.stringify(item),
+    });
+  } catch (error) {
+    // Rollback on error
+    // You'd need to implement this by managing state separately
+    console.error("Failed to add item", error);
+  }
+};
+```
+
+### Batch Updates
+
+```tsx
+const deleteMultiple = async (items: Item[]) => {
+  // Optimistically remove all items
+  items.forEach(item => {
+    updateOptimistic({ action: "delete", item });
+  });
+  
+  // Send batch delete request
+  await fetch("/api/items/batch-delete", {
+    method: "POST",
+    body: JSON.stringify({ ids: items.map(i => i.id) }),
+  });
+};
+```
+
+## Notes
+
+- All data items must have an `id` property of type `string`
+- The hook uses React's experimental `useOptimistic` hook under the hood
+- Optimistic updates are immediately reflected in the UI
+- The actual data prop should be updated when the server confirms the operation
+- The hook automatically handles add, update, and delete operations
+- For updates, items are matched by their `id` property
+- This hook requires React 18 or later with experimental features enabled
+- Consider implementing error handling and rollback strategies for failed operations

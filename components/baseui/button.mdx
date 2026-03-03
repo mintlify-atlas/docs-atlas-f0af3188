@@ -1,0 +1,125 @@
+---
+title: Button
+description: A clickable button component with multiple variants and sizes, built on @base-ui/react for accessibility.
+---
+
+The Button component is a versatile, accessible button that supports multiple visual styles, sizes, and a loading state.
+
+## Installation
+
+```tsx
+import { Button } from "@craftdotui/baseui/components/button";
+```
+
+## Usage
+
+<CodeGroup>
+```tsx Basic
+<Button>Click me</Button>
+```
+
+```tsx With Variant
+<Button variant="destructive">Delete</Button>
+```
+
+```tsx Loading State
+<Button loading>Processing...</Button>
+```
+</CodeGroup>
+
+## Props
+
+<ParamField path="variant" type="string" default="default">
+  Visual style of the button.
+  
+  Options: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`
+</ParamField>
+
+<ParamField path="size" type="string" default="md">
+  Size of the button.
+  
+  Options: `xs`, `sm`, `md`, `lg`, `xl`, `icon-xs`, `icon-sm`, `icon`, `icon-lg`, `icon-xl`
+</ParamField>
+
+<ParamField path="loading" type="boolean" default="false">
+  When true, displays a loading spinner and disables the button.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disables the button and prevents interaction.
+</ParamField>
+
+<ParamField path="render" type="function">
+  Custom render function from @base-ui/react's useRender hook for polymorphic rendering.
+</ParamField>
+
+## Variants
+
+The Button component uses class-variance-authority (CVA) for variant management:
+
+- **default**: Primary button with filled background
+- **secondary**: Secondary style with muted appearance
+- **destructive**: Red/destructive actions
+- **outline**: Border with transparent background
+- **ghost**: Minimal style with no border
+- **link**: Text-only with underline on hover
+
+## Sizes
+
+Regular sizes: `xs` (h-7), `sm` (h-8), `md` (h-8.5), `lg` (h-9), `xl` (h-9.5)
+
+Icon sizes: `icon-xs` through `icon-xl` for square icon-only buttons
+
+## Examples
+
+### Variants
+
+```tsx
+<Button variant="default">Default</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="destructive">Destructive</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="link">Link</Button>
+```
+
+### Sizes
+
+```tsx
+<Button size="xs">Extra Small</Button>
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
+<Button size="xl">Extra Large</Button>
+```
+
+### With Icons
+
+```tsx
+import { Download } from "lucide-react";
+
+<Button>
+  <Download />
+  Download
+</Button>
+
+<Button size="icon">
+  <Download />
+</Button>
+```
+
+### Loading State
+
+```tsx
+<Button loading>Saving...</Button>
+```
+
+## Accessibility
+
+Built on @base-ui/react for full accessibility support:
+
+- Semantic `<button>` element by default
+- Keyboard navigation support
+- Focus visible ring on keyboard focus
+- `aria-busy` attribute when loading
+- Proper disabled state handling

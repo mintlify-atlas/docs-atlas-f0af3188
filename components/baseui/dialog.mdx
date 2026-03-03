@@ -1,0 +1,165 @@
+---
+title: Dialog
+description: A modal dialog component with backdrop and animations, built on @base-ui/react.
+---
+
+The Dialog component displays content in a modal overlay, with backdrop dimming and smooth animations.
+
+## Installation
+
+```tsx
+import {
+  Dialog,
+  DialogTrigger,
+  DialogPortal,
+  DialogBackdrop,
+  DialogViewport,
+  DialogPopup,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+  DialogFooter,
+} from "@craftdotui/baseui/components/dialog";
+```
+
+## Usage
+
+```tsx
+<Dialog>
+  <DialogTrigger>Open Dialog</DialogTrigger>
+  
+  <DialogPortal>
+    <DialogBackdrop />
+    <DialogViewport>
+      <DialogPopup>
+        <DialogTitle>Dialog Title</DialogTitle>
+        <DialogDescription>
+          This is the dialog description.
+        </DialogDescription>
+        
+        <DialogFooter>
+          <DialogClose>Close</DialogClose>
+        </DialogFooter>
+      </DialogPopup>
+    </DialogViewport>
+  </DialogPortal>
+</Dialog>
+```
+
+## Components
+
+### Dialog (Root)
+
+<ParamField path="open" type="boolean">
+  Controlled open state.
+</ParamField>
+
+<ParamField path="defaultOpen" type="boolean">
+  Default open state for uncontrolled usage.
+</ParamField>
+
+<ParamField path="onOpenChange" type="function">
+  Callback when open state changes.
+</ParamField>
+
+### DialogTrigger
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+The trigger element that opens the dialog when clicked.
+
+### DialogBackdrop
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+The backdrop overlay with blur effect.
+
+### DialogPopup
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+The dialog content container with border, shadow, and animations.
+
+### DialogTitle
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+Required for accessibility - provides the dialog's accessible name.
+
+### DialogDescription
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+Provides the dialog's accessible description.
+
+### DialogClose
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+Closes the dialog when clicked.
+
+### DialogFooter
+
+Helper component for footer layout.
+
+## Examples
+
+### Confirmation Dialog
+
+```tsx
+<Dialog>
+  <DialogTrigger>
+    <Button>Delete Account</Button>
+  </DialogTrigger>
+  
+  <DialogPortal>
+    <DialogBackdrop />
+    <DialogViewport>
+      <DialogPopup>
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogDescription>
+          This action cannot be undone. This will permanently delete your account.
+        </DialogDescription>
+        
+        <DialogFooter>
+          <DialogClose>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button variant="destructive">Delete</Button>
+        </DialogFooter>
+      </DialogPopup>
+    </DialogViewport>
+  </DialogPortal>
+</Dialog>
+```
+
+### Controlled Dialog
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Dialog open={open} onOpenChange={setOpen}>
+  {/* ... */}
+</Dialog>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA compliance
+- Traps focus within the dialog
+- Closes on Escape key
+- Returns focus to trigger on close
+- Requires DialogTitle for accessible name
+- Backdrop prevents interaction with background

@@ -1,0 +1,128 @@
+---
+title: Alert Dialog
+description: A modal alert dialog for important messages requiring user attention, built on @base-ui/react.
+---
+
+The Alert Dialog component displays critical information that requires user acknowledgment or action.
+
+## Installation
+
+```tsx
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogPortal,
+  AlertDialogBackdrop,
+  AlertDialogViewport,
+  AlertDialogPopup,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogClose,
+} from "@craftdotui/baseui/components/alert-dialog";
+```
+
+## Usage
+
+```tsx
+<AlertDialog>
+  <AlertDialogTrigger>Delete</AlertDialogTrigger>
+  
+  <AlertDialogPopup>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    
+    <AlertDialogFooter>
+      <AlertDialogClose>Cancel</AlertDialogClose>
+      <Button variant="destructive">Confirm</Button>
+    </AlertDialogFooter>
+  </AlertDialogPopup>
+</AlertDialog>
+```
+
+## Components
+
+### AlertDialog (Root)
+
+<ParamField path="open" type="boolean">
+  Controlled open state.
+</ParamField>
+
+<ParamField path="defaultOpen" type="boolean">
+  Default open state.
+</ParamField>
+
+<ParamField path="onOpenChange" type="function">
+  Callback when state changes.
+</ParamField>
+
+### AlertDialogTrigger
+
+Opens the alert dialog when clicked.
+
+### AlertDialogPopup
+
+The alert dialog content container. Automatically includes backdrop and viewport.
+
+### AlertDialogHeader
+
+Helper component for header layout with title and description.
+
+### AlertDialogFooter
+
+Helper component for footer layout with action buttons.
+
+### AlertDialogTitle
+
+Required for accessibility - provides the alert's title.
+
+### AlertDialogDescription
+
+Provides additional context about the alert.
+
+### AlertDialogClose
+
+Closes the alert dialog when clicked.
+
+## Examples
+
+### Destructive Action
+
+```tsx
+<AlertDialog>
+  <AlertDialogTrigger>
+    <Button variant="destructive">Delete Account</Button>
+  </AlertDialogTrigger>
+  
+  <AlertDialogPopup>
+    <AlertDialogHeader>
+      <AlertDialogTitle>Delete Account</AlertDialogTitle>
+      <AlertDialogDescription>
+        This will permanently delete your account and all associated data.
+        This action cannot be undone.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    
+    <AlertDialogFooter>
+      <AlertDialogClose>
+        <Button variant="outline">Cancel</Button>
+      </AlertDialogClose>
+      <Button variant="destructive">Yes, delete my account</Button>
+    </AlertDialogFooter>
+  </AlertDialogPopup>
+</AlertDialog>
+```
+
+## Accessibility
+
+- Built on @base-ui/react AlertDialog primitive
+- Focus trap keeps focus within alert
+- Cannot be dismissed by clicking backdrop
+- Escape key closes the alert
+- Requires AlertDialogTitle for accessible name
+- Returns focus to trigger on close

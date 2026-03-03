@@ -1,0 +1,266 @@
+---
+title: useClickOutside
+description: A hook that detects clicks outside of a specified element and triggers a callback handler
+---
+
+# useClickOutside
+
+The `useClickOutside` hook detects when a user clicks or touches outside of a specified element and executes a callback function. This is commonly used for closing dropdowns, modals, and other overlay components.
+
+## Installation
+
+```bash
+npm install @craft-ui/hooks
+```
+
+## Import
+
+```tsx
+import { useClickOutside } from "@craft-ui/hooks";
+```
+
+## Usage
+
+```tsx
+import { useClickOutside } from "@craft-ui/hooks";
+import { useRef, useState } from "react";
+
+function Dropdown() {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(dropdownRef, () => {
+    setIsOpen(false);
+  });
+
+  return (
+    <div>
+      <button onClick={() => setIsOpen(!isOpen)}>Toggle Menu</button>
+      {isOpen && (
+        <div ref={dropdownRef} className="dropdown">
+          <ul>
+            <li>Option 1</li>
+            <li>Option 2</li>
+            <li>Option 3</li>
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="ref" type="RefObject<T>" required>
+  A React ref object pointing to the element to detect outside clicks for. The hook will ignore clicks on this element and its descendants.
+</ParamField>
+
+<ParamField path="handler" type="(event: MouseEvent | TouchEvent) => void" required>
+  A callback function that will be called when a click or touch event occurs outside the referenced element.
+</ParamField>
+
+## Type Definition
+
+```typescript
+function useClickOutside<T extends HTMLElement = HTMLElement>(
+  ref: RefObject<T>,
+  handler: (event: MouseEvent | TouchEvent) => void
+): void;
+```
+
+## Examples
+
+### Modal Dialog
+
+```tsx
+import { useClickOutside } from "@craft-ui/hooks";
+import { useRef } from "react";
+
+function Modal({ isOpen, onClose, children }) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(modalRef, () => {
+    if (isOpen) {
+      onClose();
+    }
+  });
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div ref={modalRef} className="modal-content">
+        {children}
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+}
+```
+
+### Context Menu
+
+```tsx
+import { useClickOutside } from "@craft-ui/hooks";
+import { useRef, useState } from "react";
+
+function ContextMenu() {
+  const [menuPosition, setMenuPosition] = useState<{ x: number; y: number } | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(menuRef, () => {
+    setMenuPosition(null);
+  });
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMenuPosition({ x: e.clientX, y: e.clientY });
+  };
+
+  return (
+    <div onContextMenu={handleContextMenu}>
+      <p>Right-click anywhere</p>
+      {menuPosition && (
+        <div
+          ref={menuRef}
+          style={{
+            position: "fixed",
+            top: menuPosition.y,
+            left: menuPosition.x,
+          }}
+          className="context-menu"
+        >
+          <ul>
+            <li>Copy</li>
+            <li>Paste</li>
+            <li>Delete</li>
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Popover Component
+
+```tsx
+import { useClickOutside } from "@craft-ui/hooks";
+import { useRef, useState } from "react";
+
+function Popover({ trigger, content }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(popoverRef, () => {
+    setIsVisible(false);
+  });
+
+  return (
+    <div className="popover-container">
+      <div onClick={() => setIsVisible(!isVisible)}>
+        {trigger}
+      </div>
+      {isVisible && (
+        <div ref={popoverRef} className="popover-content">
+          {content}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+### Search with Suggestions
+
+```tsx
+import { useClickOutside } from "@craft-ui/hooks";
+import { useRef, useState } from "react";
+
+function SearchWithSuggestions() {
+  const [query, setQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(suggestionsRef, () => {
+    setShowSuggestions(false);
+  });
+
+  const suggestions = [
+    "React",
+    "TypeScript",
+    "JavaScript",
+    "Next.js",
+  ].filter(item => item.toLowerCase().includes(query.toLowerCase()));
+
+  return (
+    <div className="search-container">
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setShowSuggestions(true);
+        }}
+        onFocus={() => setShowSuggestions(true)}
+        placeholder="Search..."
+      />
+      {showSuggestions && query && (
+        <div ref={suggestionsRef} className="suggestions">
+          {suggestions.map((suggestion, i) => (
+            <div key={i} onClick={() => {
+              setQuery(suggestion);
+              setShowSuggestions(false);
+            }}>
+              {suggestion}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## Common Patterns
+
+### Conditional Handler
+
+Only close when a specific condition is met:
+
+```tsx
+useClickOutside(ref, () => {
+  if (isDirty) {
+    // Show confirmation dialog
+    if (confirm("Discard changes?")) {
+      onClose();
+    }
+  } else {
+    onClose();
+  }
+});
+```
+
+### Multiple Refs
+
+Handle clicks outside multiple elements:
+
+```tsx
+const containerRef = useRef(null);
+const sidebarRef = useRef(null);
+
+useClickOutside(containerRef, (event) => {
+  // Check if click is also outside sidebar
+  if (!sidebarRef.current?.contains(event.target as Node)) {
+    handleClose();
+  }
+});
+```
+
+## Notes
+
+- The hook listens to both `mousedown` and `touchstart` events for better mobile support
+- Clicks on the referenced element and all its descendants are ignored
+- The event listeners are automatically cleaned up when the component unmounts
+- Make sure the ref is attached to a DOM element, not a React component

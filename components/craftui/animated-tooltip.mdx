@@ -1,0 +1,182 @@
+---
+title: Animated Tooltip
+description: An interactive tooltip component with spring-based animations that responds to mouse movement with dynamic rotation and translation effects.
+---
+
+# Animated Tooltip
+
+The `AnimatedTooltip` component provides an elegant, physics-based tooltip that appears on hover with smooth spring animations. It features dynamic rotation and translation effects based on mouse position, creating an engaging micro-interaction powered by Framer Motion.
+
+## Installation
+
+```bash
+npm install @craftdotui/components
+```
+
+## Import
+
+```tsx
+import { AnimatedTooltip } from "@craftdotui/components";
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic Usage
+import { AnimatedTooltip } from "@craftdotui/components";
+import { Heart } from "lucide-react";
+
+export default function Example() {
+  return (
+    <AnimatedTooltip label="Favorite">
+      <Heart className="w-5 h-5" />
+    </AnimatedTooltip>
+  );
+}
+```
+
+```tsx With Click Handler
+import { AnimatedTooltip } from "@craftdotui/components";
+import { Bell } from "lucide-react";
+
+export default function Example() {
+  return (
+    <AnimatedTooltip 
+      label="Notifications" 
+      onClick={() => console.log("Clicked!")}
+    >
+      <Bell className="w-5 h-5" />
+    </AnimatedTooltip>
+  );
+}
+```
+
+```tsx Custom Delay
+import { AnimatedTooltip } from "@craftdotui/components";
+import { Settings } from "lucide-react";
+
+export default function Example() {
+  return (
+    <AnimatedTooltip 
+      label="Settings" 
+      delay={500}
+      className="bg-blue-500 text-white"
+    >
+      <Settings className="w-5 h-5" />
+    </AnimatedTooltip>
+  );
+}
+```
+
+</CodeGroup>
+
+## Props
+
+<ParamField path="children" type="React.ReactNode" required>
+  The content to display inside the tooltip trigger (typically an icon).
+</ParamField>
+
+<ParamField path="label" type="string" required>
+  The text to display in the tooltip when hovering.
+</ParamField>
+
+<ParamField path="onClick" type="() => void">
+  Optional click handler function.
+</ParamField>
+
+<ParamField path="className" type="string">
+  Additional CSS classes to apply to the trigger element.
+</ParamField>
+
+<ParamField path="delay" type="number" default="100">
+  Delay in milliseconds before showing the tooltip on hover.
+</ParamField>
+
+## Animation Details
+
+The component uses Framer Motion with sophisticated spring physics:
+
+### Spring Configuration
+
+```tsx
+const springConfig = { 
+  stiffness: 200, 
+  damping: 10 
+};
+```
+
+### Motion Values
+
+- **Rotation**: Maps mouse position from -25° to 25° based on horizontal movement
+- **Translation**: Subtle horizontal shift (-10px to 10px) following cursor
+- **Scale**: Hover trigger scales to 1.2x, tap scales to 0.9x
+
+### Tooltip Animations
+
+```tsx
+initial={{ opacity: 0, y: 10, scale: 0.75 }}
+animate={{ opacity: 1, y: 0, scale: 1.2 }}
+exit={{ opacity: 0, y: 10, scale: 0.75 }}
+```
+
+<Note>
+  The tooltip automatically positions itself above the trigger and resets when the mouse leaves.
+</Note>
+
+## Examples
+
+### Icon Grid
+
+```tsx
+import { AnimatedTooltip } from "@craftdotui/components";
+import { Heart, Star, Bookmark, Share2 } from "lucide-react";
+
+export default function IconGrid() {
+  return (
+    <div className="flex gap-4">
+      <AnimatedTooltip label="Like">
+        <Heart className="w-5 h-5" />
+      </AnimatedTooltip>
+      <AnimatedTooltip label="Star">
+        <Star className="w-5 h-5" />
+      </AnimatedTooltip>
+      <AnimatedTooltip label="Bookmark">
+        <Bookmark className="w-5 h-5" />
+      </AnimatedTooltip>
+      <AnimatedTooltip label="Share">
+        <Share2 className="w-5 h-5" />
+      </AnimatedTooltip>
+    </div>
+  );
+}
+```
+
+### Custom Styled
+
+```tsx
+import { AnimatedTooltip } from "@craftdotui/components";
+import { Zap } from "lucide-react";
+
+export default function CustomStyled() {
+  return (
+    <AnimatedTooltip 
+      label="Upgrade to Pro" 
+      className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0"
+    >
+      <Zap className="w-5 h-5" />
+    </AnimatedTooltip>
+  );
+}
+```
+
+<Tip>
+  For best results, use with icon components that are sized between 16px and 24px.
+</Tip>
+
+## Accessibility
+
+- Uses semantic HTML with proper ARIA attributes
+- Keyboard accessible with tap interactions
+- Respects user motion preferences
+- Automatic cleanup of timers on unmount

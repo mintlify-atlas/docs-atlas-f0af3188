@@ -1,0 +1,129 @@
+---
+title: Scroll Area
+description: A customizable scrollable container with styled scrollbars, built on @base-ui/react.
+---
+
+The ScrollArea component provides a scrollable container with customizable, accessible scrollbars.
+
+## Installation
+
+```tsx
+import { ScrollArea } from "@craftdotui/baseui/components/scroll-area";
+```
+
+## Usage
+
+```tsx
+<ScrollArea className="h-72 w-48">
+  <div className="p-4">
+    {/* Long content */}
+  </div>
+</ScrollArea>
+```
+
+## Components
+
+For simple usage, use the composed `ScrollArea` component. For advanced customization, use the individual components:
+
+```tsx
+import {
+  ScrollAreaRoot,
+  ScrollAreaViewport,
+  ScrollAreaContent,
+  ScrollAreaScrollbar,
+  ScrollAreaThumb,
+  ScrollAreaCorner,
+} from "@craftdotui/baseui/components/scroll-area";
+```
+
+## Props
+
+### ScrollArea (Composed)
+
+<ParamField path="className" type="string">
+  Additional CSS classes.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  Content to make scrollable.
+</ParamField>
+
+### ScrollAreaScrollbar
+
+<ParamField path="orientation" type="string" default="vertical">
+  Scrollbar orientation. Options: `vertical`, `horizontal`
+</ParamField>
+
+## Examples
+
+### Basic Scroll Area
+
+```tsx
+<ScrollArea className="h-96 w-full rounded-md border p-4">
+  <div className="space-y-4">
+    {Array.from({ length: 50 }).map((_, i) => (
+      <div key={i}>Item {i + 1}</div>
+    ))}
+  </div>
+</ScrollArea>
+```
+
+### Horizontal Scrolling
+
+```tsx
+<ScrollArea className="w-96 whitespace-nowrap rounded-md border p-4">
+  <div className="flex gap-4">
+    {Array.from({ length: 50 }).map((_, i) => (
+      <div key={i} className="shrink-0">
+        Item {i + 1}
+      </div>
+    ))}
+  </div>
+</ScrollArea>
+```
+
+### Custom Scrollbar
+
+```tsx
+import {
+  ScrollAreaRoot,
+  ScrollAreaViewport,
+  ScrollAreaContent,
+  ScrollAreaScrollbar,
+  ScrollAreaThumb,
+} from "@craftdotui/baseui/components/scroll-area";
+
+<ScrollAreaRoot className="h-96 w-full">
+  <ScrollAreaViewport>
+    <ScrollAreaContent>
+      {/* Content */}
+    </ScrollAreaContent>
+  </ScrollAreaViewport>
+  
+  <ScrollAreaScrollbar>
+    <ScrollAreaThumb className="bg-primary" />
+  </ScrollAreaScrollbar>
+</ScrollAreaRoot>
+```
+
+### Chat Messages
+
+```tsx
+<ScrollArea className="h-96 w-full rounded-lg border">
+  <div className="p-4 space-y-4">
+    {messages.map((message) => (
+      <div key={message.id} className="rounded bg-muted p-2">
+        {message.text}
+      </div>
+    ))}
+  </div>
+</ScrollArea>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for accessibility
+- Keyboard scrolling support
+- Focus visible on viewport
+- Screen reader compatible
+- Auto-hiding scrollbars with hover/scroll visibility

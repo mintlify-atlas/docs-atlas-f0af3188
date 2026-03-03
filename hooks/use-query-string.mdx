@@ -1,0 +1,388 @@
+---
+title: useQueryString
+description: A hook that provides utilities for creating and manipulating URL query strings
+---
+
+# useQueryString
+
+The `useQueryString` hook provides a convenient way to create and manipulate URL query strings. It takes the current `URLSearchParams` and returns a function to generate new query strings with updated parameters.
+
+## Installation
+
+```bash
+npm install @craft-ui/hooks
+```
+
+## Import
+
+```tsx
+import { useQueryString } from "@craft-ui/hooks";
+```
+
+## Usage
+
+```tsx
+import { useQueryString } from "@craft-ui/hooks";
+import { useSearchParams, useRouter } from "next/navigation";
+
+function SearchFilters() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { createQueryString } = useQueryString(searchParams);
+
+  const updateFilter = (key: string, value: string) => {
+    const newQueryString = createQueryString({ [key]: value });
+    router.push(`?${newQueryString}`);
+  };
+
+  return (
+    <div>
+      <button onClick={() => updateFilter("category", "electronics")}>
+        Electronics
+      </button>
+      <button onClick={() => updateFilter("sort", "price")}>
+        Sort by Price
+      </button>
+    </div>
+  );
+}
+```
+
+## Parameters
+
+<ParamField path="searchParams" type="URLSearchParams" required>
+  The current URL search parameters, typically obtained from Next.js `useSearchParams()` or browser's `window.location.search`.
+</ParamField>
+
+## Returns
+
+<ResponseField name="createQueryString" type="(params: QueryParams) => string">
+  A memoized function that accepts an object of query parameters and returns a new query string. Parameters with `null` values are removed from the query string.
+</ResponseField>
+
+## QueryParams Type
+
+```typescript
+type QueryParams = Record<string, string | number | null>;
+```
+
+- `string` or `number` values are added/updated in the query string
+- `null` values remove the parameter from the query string
+
+## Type Definition
+
+```typescript
+type QueryParams = Record<string, string | number | null>;
+
+function useQueryString(searchParams: URLSearchParams): {
+  createQueryString: (params: QueryParams) => string;
+};
+```
+
+## Examples
+
+### Product Filtering
+
+```tsx
+import { useQueryString } from "@craft-ui/hooks";
+import { useSearchParams, useRouter } from "next/navigation";
+
+function ProductFilters() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { createQueryString } = useQueryString(searchParams);
+
+  const setFilter = (filters: Record<string, string | null>) => {
+    router.push(`/products?${createQueryString(filters)}`);
+  };
+
+  return (
+    <div>
+      <select
+        onChange={(e) => setFilter({ category: e.target.value || null })}
+        value={searchParams.get("category") || ""}
+      >
+        <option value="">All Categories</option>
+        <option value="electronics">Electronics</option>
+        <option value="clothing">Clothing</option>
+        <option value="books">Books</option>
+      </select>
+
+      <select
+        onChange={(e) => setFilter({ sort: e.target.value || null })}
+        value={searchParams.get("sort") || ""}
+      >
+        <option value="">Default Sort</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rating">Highest Rated</option>
+      </select>
+
+      <button onClick={() => setFilter({ category: null, sort: null })}>
+        Clear Filters
+      </button>
+    </div>
+  );
+}
+```
+
+### Pagination
+
+```tsx
+import { useQueryString } from "@craft-ui/hooks";
+import { useSearchParams, useRouter } from "next/navigation";
+
+function Pagination({ totalPages }: { totalPages: number }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { createQueryString } = useQueryString(searchParams);
+  const currentPage = Number(searchParams.get("page")) || 1;
+
+  const goToPage = (page: number) => {
+    router.push(`?${createQueryString({ page })}`);
+  };
+
+  return (
+    <div>
+      <button
+        onClick={() => goToPage(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        Previous
+      </button>
+      <span>Page {currentPage} of {totalPages}</span>
+      <button
+        onClick={() => goToPage(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        Next
+      </button>
+    </div>
+  );
+}
+```
+
+### Search with Filters
+
+```tsx
+import { useQueryString } from "@craft-ui/hooks";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useState } from "react";
+
+function SearchBar() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { createQueryString } = useQueryString(searchParams);
+  const [query, setQuery] = useState(searchParams.get("q") || "");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push(`/search?${createQueryString({ q: query, page: 1 })}`);
+  };
+
+  const clearSearch = () => {
+    setQuery("");
+    router.push(`/search?${createQueryString({ q: null, page: null })}`);
+  };
+
+  return (
+    <form onSubmit={handleSearch}>
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search..."
+      />
+      <button type="submit">Search</button>
+      {query && <button type="button" onClick={clearSearch}>Clear</button>}
+    </form>
+  );
+}
+```
+
+### Multi-Select Filters
+
+```tsx
+import { useQueryString } from "@craft-ui/hooks";
+import { useSearchParams, useRouter } from "next/navigation";
+
+function TagFilters({ availableTags }: { availableTags: string[] }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { createQueryString } = useQueryString(searchParams);
+  
+  const selectedTags = searchParams.get("tags")?.split(",").filter(Boolean) || [];
+
+  const toggleTag = (tag: string) => {
+    const newTags = selectedTags.includes(tag)
+      ? selectedTags.filter((t) => t !== tag)
+      : [...selectedTags, tag];
+
+    router.push(
+      `?${createQueryString({
+        tags: newTags.length > 0 ? newTags.join(",") : null,
+      })}`
+    );
+  };
+
+  return (
+    <div>
+      {availableTags.map((tag) => (
+        <button
+          key={tag}
+          onClick={() => toggleTag(tag)}
+          style={{
+            fontWeight: selectedTags.includes(tag) ? "bold" : "normal",
+          }}
+        >
+          {tag}
+        </button>
+      ))}
+    </div>
+  );
+}
+```
+
+### Date Range Filter
+
+```tsx
+import { useQueryString } from "@craft-ui/hooks";
+import { useSearchParams, useRouter } from "next/navigation";
+
+function DateRangeFilter() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { createQueryString } = useQueryString(searchParams);
+
+  const startDate = searchParams.get("startDate") || "";
+  const endDate = searchParams.get("endDate") || "";
+
+  const updateDateRange = (start: string, end: string) => {
+    router.push(
+      `?${createQueryString({
+        startDate: start || null,
+        endDate: end || null,
+      })}`
+    );
+  };
+
+  return (
+    <div>
+      <input
+        type="date"
+        value={startDate}
+        onChange={(e) => updateDateRange(e.target.value, endDate)}
+      />
+      <input
+        type="date"
+        value={endDate}
+        onChange={(e) => updateDateRange(startDate, e.target.value)}
+      />
+      <button onClick={() => updateDateRange("", "")}>
+        Clear Dates
+      </button>
+    </div>
+  );
+}
+```
+
+### Tab Navigation
+
+```tsx
+import { useQueryString } from "@craft-ui/hooks";
+import { useSearchParams, useRouter } from "next/navigation";
+
+function TabNavigation() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { createQueryString } = useQueryString(searchParams);
+  const activeTab = searchParams.get("tab") || "overview";
+
+  const tabs = ["overview", "details", "reviews", "specifications"];
+
+  return (
+    <div>
+      {tabs.map((tab) => (
+        <button
+          key={tab}
+          onClick={() => router.push(`?${createQueryString({ tab })}`)
+          }
+          style={{
+            fontWeight: activeTab === tab ? "bold" : "normal",
+          }}
+        >
+          {tab.charAt(0).toUpperCase() + tab.slice(1)}
+        </button>
+      ))}
+    </div>
+  );
+}
+```
+
+## Common Patterns
+
+### Preserving Existing Parameters
+
+The hook automatically preserves existing parameters:
+
+```tsx
+// Current URL: /products?category=electronics&page=2
+const newQuery = createQueryString({ sort: "price" });
+// Result: "category=electronics&page=2&sort=price"
+```
+
+### Removing Parameters
+
+Use `null` to remove parameters:
+
+```tsx
+const newQuery = createQueryString({ filter: null });
+// Removes the 'filter' parameter from the query string
+```
+
+### Multiple Updates
+
+Update multiple parameters at once:
+
+```tsx
+const newQuery = createQueryString({
+  category: "books",
+  sort: "rating",
+  page: 1,
+});
+```
+
+### Reset All Filters
+
+```tsx
+const resetFilters = () => {
+  const newQuery = createQueryString({
+    category: null,
+    sort: null,
+    page: null,
+    search: null,
+  });
+  router.push(`?${newQuery}`);
+};
+```
+
+## Use Cases
+
+- Building search and filter interfaces
+- Implementing pagination
+- Managing tab navigation with URL state
+- Creating shareable URLs with filter states
+- Handling sort options
+- Multi-select filters
+- Date range selectors
+- Any scenario requiring URL query parameter manipulation
+
+## Notes
+
+- The hook is designed to work with Next.js App Router's `useSearchParams`
+- The `createQueryString` function is memoized and only recreates when `searchParams` changes
+- Numeric values are automatically converted to strings in the query string
+- Setting a parameter to `null` removes it from the query string
+- The hook preserves all existing parameters unless explicitly overridden or set to `null`
+- The returned query string does not include the leading `?` character
+- This hook does not modify the URL directly; you need to use it with a router or navigation method

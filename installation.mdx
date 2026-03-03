@@ -1,0 +1,313 @@
+---
+title: Installation
+description: Learn how to install and configure Craft UI in your React or Next.js project
+---
+
+# Installation
+
+Get started with Craft UI by installing the necessary packages and configuring your project.
+
+## Prerequisites
+
+Before installing Craft UI, make sure you have the following:
+
+- **Node.js** 18.0 or later
+- **React** 19.0 or later
+- **React DOM** 19.0 or later
+
+## Understanding the monorepo structure
+
+Craft UI is organized as a monorepo with workspace packages. The project contains:
+
+- `@craftdotui/baseui` - Base UI components
+- `@craftdotui/craftui` - Craft UI animated components  
+- `@craftdotui/hooks` - Utility hooks
+- `@craftdotui/lib` - Shared utilities
+
+<Note>
+Craft UI uses a registry-based installation system. Instead of installing packages via npm, you copy components directly into your project. This gives you full control over the code and makes customization easier.
+</Note>
+
+## Installation methods
+
+<Tabs>
+  <Tab title="CLI (Recommended)">
+    The easiest way to add Craft UI components to your project is using the CLI:
+
+    <CodeGroup>
+    ```bash npm
+    npx craftui-cli add button
+    ```
+
+    ```bash yarn
+    yarn dlx craftui-cli add button
+    ```
+
+    ```bash pnpm
+    pnpm dlx craftui-cli add button
+    ```
+
+    ```bash bun
+    bunx craftui-cli add button
+    ```
+    </CodeGroup>
+
+    This will:
+    1. Copy the component code into your project
+    2. Install required dependencies
+    3. Set up necessary configuration
+  </Tab>
+
+  <Tab title="Manual">
+    You can also manually copy component code from the [GitHub repository](https://github.com/yogendrarana/craftui):
+
+    1. Browse to the component you want in the repository
+    2. Copy the component code
+    3. Create a new file in your project (e.g., `components/ui/button.tsx`)
+    4. Paste the code and install dependencies
+  </Tab>
+</Tabs>
+
+## Required dependencies
+
+Craft UI components require the following peer dependencies:
+
+### Core dependencies
+
+<CodeGroup>
+```bash npm
+npm install react@^19.0.0 react-dom@^19.0.0
+```
+
+```bash yarn
+yarn add react@^19.0.0 react-dom@^19.0.0
+```
+
+```bash pnpm
+pnpm add react@^19.0.0 react-dom@^19.0.0
+```
+
+```bash bun
+bun add react@^19.0.0 react-dom@^19.0.0
+```
+</CodeGroup>
+
+### Styling dependencies
+
+Install Tailwind CSS v4 and related packages:
+
+<CodeGroup>
+```bash npm
+npm install tailwindcss@^4.0.0 @tailwindcss/postcss tailwindcss-animate
+```
+
+```bash yarn
+yarn add tailwindcss@^4.0.0 @tailwindcss/postcss tailwindcss-animate
+```
+
+```bash pnpm
+pnpm add tailwindcss@^4.0.0 @tailwindcss/postcss tailwindcss-animate
+```
+
+```bash bun
+bun add tailwindcss@^4.0.0 @tailwindcss/postcss tailwindcss-animate
+```
+</CodeGroup>
+
+### Component dependencies
+
+Base UI components require:
+
+<CodeGroup>
+```bash npm
+npm install @base-ui/react class-variance-authority motion lucide-react
+```
+
+```bash yarn
+yarn add @base-ui/react class-variance-authority motion lucide-react
+```
+
+```bash pnpm
+pnpm add @base-ui/react class-variance-authority motion lucide-react
+```
+
+```bash bun
+bun add @base-ui/react class-variance-authority motion lucide-react
+```
+</CodeGroup>
+
+Craft UI animated components also require:
+
+<CodeGroup>
+```bash npm
+npm install gsap canvas-confetti
+```
+
+```bash yarn
+yarn add gsap canvas-confetti
+```
+
+```bash pnpm
+pnpm add gsap canvas-confetti
+```
+
+```bash bun
+bun add gsap canvas-confetti
+```
+</CodeGroup>
+
+## Configure Tailwind CSS
+
+<Steps>
+  <Step title="Create your CSS file">
+    Create a `globals.css` file (or similar) with the following content:
+
+    ```css globals.css
+    @import "tailwindcss";
+
+    @layer base {
+      * {
+        @apply border-border;
+      }
+      body {
+        @apply bg-background;
+        color: var(--foreground);
+      }
+    }
+
+    :root {
+      --background: oklch(0.99 0 0);
+      --foreground: oklch(0 0 0);
+      --card: oklch(1 0 0);
+      --card-foreground: oklch(0 0 0);
+      --primary: oklch(0 0 0);
+      --primary-foreground: oklch(1 0 0);
+      --secondary: oklch(0.94 0 0);
+      --secondary-foreground: oklch(0 0 0);
+      --muted: oklch(0.97 0 0);
+      --muted-foreground: oklch(0.44 0 0);
+      --accent: oklch(0.94 0 0);
+      --accent-foreground: oklch(0 0 0);
+      --destructive: oklch(0.63 0.19 23.03);
+      --destructive-foreground: oklch(1 0 0);
+      --border: oklch(0.92 0 0);
+      --input: oklch(0.94 0 0);
+      --ring: oklch(0 0 0);
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      --background: oklch(0 0 0);
+      --foreground: oklch(1 0 0);
+      --card: oklch(0.14 0 0);
+      --card-foreground: oklch(1 0 0);
+      --primary: oklch(1 0 0);
+      --primary-foreground: oklch(0 0 0);
+      --secondary: oklch(0.25 0 0);
+      --secondary-foreground: oklch(1 0 0);
+      --muted: oklch(0.23 0 0);
+      --muted-foreground: oklch(0.72 0 0);
+      --accent: oklch(0.32 0 0);
+      --accent-foreground: oklch(1 0 0);
+      --destructive: oklch(0.69 0.2 23.91);
+      --destructive-foreground: oklch(0 0 0);
+      --border: oklch(0.26 0 0);
+      --input: oklch(0.32 0 0);
+      --ring: oklch(0.72 0 0);
+    }
+    ```
+  </Step>
+
+  <Step title="Import the CSS file">
+    Import your CSS file in your root layout or `_app.tsx`:
+
+    ```tsx app/layout.tsx
+    import './globals.css'
+
+    export default function RootLayout({ children }) {
+      return (
+        <html lang="en">
+          <body>{children}</body>
+        </html>
+      )
+    }
+    ```
+  </Step>
+
+  <Step title="Configure PostCSS">
+    Create a `postcss.config.js` file:
+
+    ```js postcss.config.js
+    export default {
+      plugins: {
+        '@tailwindcss/postcss': {},
+      },
+    }
+    ```
+  </Step>
+</Steps>
+
+## Set up utilities
+
+Create a utility file for the `cn` helper function:
+
+```ts lib/utils.ts
+import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+```
+
+Install the required packages:
+
+<CodeGroup>
+```bash npm
+npm install clsx tailwind-merge
+```
+
+```bash yarn
+yarn add clsx tailwind-merge
+```
+
+```bash pnpm
+pnpm add clsx tailwind-merge
+```
+
+```bash bun
+bun add clsx tailwind-merge
+```
+</CodeGroup>
+
+## TypeScript configuration
+
+Make sure your `tsconfig.json` includes path aliases:
+
+```json tsconfig.json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+## Next steps
+
+You're all set! Now you can:
+
+<CardGroup cols={2}>
+  <Card title="Quickstart guide" icon="rocket" href="/quickstart">
+    Build your first component
+  </Card>
+  <Card title="Browse components" icon="grid" href="/components/baseui/button">
+    Explore all available components
+  </Card>
+</CardGroup>
+
+<Warning>
+Make sure you're using React 19+ as Craft UI components rely on the latest React features.
+</Warning>

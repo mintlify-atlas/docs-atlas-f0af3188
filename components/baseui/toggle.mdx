@@ -1,0 +1,123 @@
+---
+title: Toggle
+description: A toggle button component with variants and sizes, built on @base-ui/react.
+---
+
+The Toggle component provides a button that can be pressed/unpressed to toggle between two states.
+
+## Installation
+
+```tsx
+import { Toggle } from "@craftdotui/baseui/components/toggle";
+```
+
+## Usage
+
+```tsx
+<Toggle>Toggle me</Toggle>
+```
+
+## Props
+
+<ParamField path="pressed" type="boolean">
+  Controlled pressed state.
+</ParamField>
+
+<ParamField path="defaultPressed" type="boolean">
+  Default pressed state.
+</ParamField>
+
+<ParamField path="onPressedChange" type="function">
+  Callback when state changes: `(pressed: boolean) => void`
+</ParamField>
+
+<ParamField path="variant" type="string" default="default">
+  Visual variant.
+  
+  Options: `default`, `outline`
+</ParamField>
+
+<ParamField path="size" type="string" default="md">
+  Size of the toggle.
+  
+  Options: `sm`, `md`, `lg`, `icon`
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable the toggle.
+</ParamField>
+
+## Variants
+
+- **default**: Transparent border
+- **outline**: Visible border
+
+## Sizes
+
+- `sm`: h-8, text-sm
+- `md`: h-9 (default)
+- `lg`: h-10
+- `icon`: size-9 (square)
+
+## Examples
+
+### Basic Toggle
+
+```tsx
+<Toggle>Bold</Toggle>
+```
+
+### With Icons
+
+```tsx
+import { Bold } from "lucide-react";
+
+<Toggle size="icon">
+  <Bold />
+</Toggle>
+```
+
+### Variants
+
+```tsx
+<Toggle variant="default">Default</Toggle>
+<Toggle variant="outline">Outline</Toggle>
+```
+
+### Sizes
+
+```tsx
+<Toggle size="sm">Small</Toggle>
+<Toggle size="md">Medium</Toggle>
+<Toggle size="lg">Large</Toggle>
+```
+
+### Controlled
+
+```tsx
+const [pressed, setPressed] = useState(false);
+
+<Toggle pressed={pressed} onPressedChange={setPressed}>
+  {pressed ? 'On' : 'Off'}
+</Toggle>
+```
+
+### Toggle Group (Text Formatting)
+
+```tsx
+import { Bold, Italic, Underline } from "lucide-react";
+
+<div className="flex gap-1">
+  <Toggle size="icon"><Bold /></Toggle>
+  <Toggle size="icon"><Italic /></Toggle>
+  <Toggle size="icon"><Underline /></Toggle>
+</div>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for ARIA support
+- Keyboard accessible
+- Proper aria-pressed state
+- Focus visible ring
+- Disabled state prevents interaction

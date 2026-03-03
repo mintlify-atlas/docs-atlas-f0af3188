@@ -1,0 +1,141 @@
+---
+title: Toggle Group
+description: A group of toggle buttons for single or multiple selection, built on @base-ui/react.
+---
+
+The ToggleGroup component provides a set of toggle buttons that can work in single or multiple selection mode.
+
+## Installation
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@craftdotui/baseui/components/toggle-group";
+```
+
+## Usage
+
+```tsx
+<ToggleGroup>
+  <ToggleGroupItem value="left">Left</ToggleGroupItem>
+  <ToggleGroupItem value="center">Center</ToggleGroupItem>
+  <ToggleGroupItem value="right">Right</ToggleGroupItem>
+</ToggleGroup>
+```
+
+## Components
+
+### ToggleGroup
+
+<ParamField path="value" type="string | string[]">
+  Controlled selected value(s).
+</ParamField>
+
+<ParamField path="defaultValue" type="string | string[]">
+  Default selected value(s).
+</ParamField>
+
+<ParamField path="onValueChange" type="function">
+  Callback when selection changes.
+</ParamField>
+
+<ParamField path="type" type="string" default="single">
+  Selection type. Options: `single`, `multiple`
+</ParamField>
+
+<ParamField path="orientation" type="string" default="horizontal">
+  Orientation. Options: `horizontal`, `vertical`
+</ParamField>
+
+<ParamField path="variant" type="string" default="default">
+  Visual variant. Options: `default`, `outline`
+</ParamField>
+
+<ParamField path="size" type="string" default="md">
+  Size for all items. Options: `sm`, `md`, `lg`, `icon`
+</ParamField>
+
+### ToggleGroupItem
+
+<ParamField path="value" type="string" required>
+  Value of this toggle.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  Disable this item.
+</ParamField>
+
+## Examples
+
+### Text Alignment
+
+```tsx
+import { AlignLeft, AlignCenter, AlignRight } from "lucide-react";
+
+<ToggleGroup type="single">
+  <ToggleGroupItem value="left" size="icon">
+    <AlignLeft />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="center" size="icon">
+    <AlignCenter />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="right" size="icon">
+    <AlignRight />
+  </ToggleGroupItem>
+</ToggleGroup>
+```
+
+### Text Formatting (Multiple)
+
+```tsx
+import { Bold, Italic, Underline } from "lucide-react";
+
+<ToggleGroup type="multiple">
+  <ToggleGroupItem value="bold" size="icon">
+    <Bold />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="italic" size="icon">
+    <Italic />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="underline" size="icon">
+    <Underline />
+  </ToggleGroupItem>
+</ToggleGroup>
+```
+
+### Outline Variant
+
+```tsx
+<ToggleGroup variant="outline">
+  <ToggleGroupItem value="option1">Option 1</ToggleGroupItem>
+  <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
+  <ToggleGroupItem value="option3">Option 3</ToggleGroupItem>
+</ToggleGroup>
+```
+
+### Vertical Orientation
+
+```tsx
+<ToggleGroup orientation="vertical">
+  <ToggleGroupItem value="option1">Option 1</ToggleGroupItem>
+  <ToggleGroupItem value="option2">Option 2</ToggleGroupItem>
+</ToggleGroup>
+```
+
+### Controlled
+
+```tsx
+const [value, setValue] = useState('center');
+
+<ToggleGroup value={value} onValueChange={setValue}>
+  <ToggleGroupItem value="left">Left</ToggleGroupItem>
+  <ToggleGroupItem value="center">Center</ToggleGroupItem>
+  <ToggleGroupItem value="right">Right</ToggleGroupItem>
+</ToggleGroup>
+```
+
+## Accessibility
+
+- Built on @base-ui/react for accessibility
+- Keyboard navigation (Arrow keys)
+- Proper ARIA roles and attributes
+- Focus management
+- Single or multiple selection modes

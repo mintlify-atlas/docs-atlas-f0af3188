@@ -1,0 +1,269 @@
+---
+title: Magnetic
+description: A wrapper component that creates a magnetic pull effect using GSAP, making elements smoothly follow the cursor with elastic easing.
+---
+
+# Magnetic
+
+The `Magnetic` component wraps any element and applies a smooth magnetic effect that makes the content subtly follow the cursor when hovering. Powered by GSAP's elastic easing, it creates a playful, physics-based interaction.
+
+## Installation
+
+```bash
+npm install @craftdotui/components gsap
+```
+
+<Note>
+  This component requires GSAP as a peer dependency.
+</Note>
+
+## Import
+
+```tsx
+import Magnetic from "@craftdotui/components";
+```
+
+## Usage
+
+<CodeGroup>
+
+```tsx Basic Button
+import Magnetic from "@craftdotui/components";
+
+export default function Example() {
+  return (
+    <Magnetic>
+      <button className="px-6 py-3 bg-black text-white rounded-lg">
+        Hover me
+      </button>
+    </Magnetic>
+  );
+}
+```
+
+```tsx With Icon
+import Magnetic from "@craftdotui/components";
+import { Play } from "lucide-react";
+
+export default function Example() {
+  return (
+    <Magnetic>
+      <div className="w-20 h-20 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center cursor-pointer">
+        <Play className="w-8 h-8 text-white" />
+      </div>
+    </Magnetic>
+  );
+}
+```
+
+```tsx Multiple Elements
+import Magnetic from "@craftdotui/components";
+import { Heart, Star, Bookmark } from "lucide-react";
+
+export default function Example() {
+  return (
+    <div className="flex gap-4">
+      <Magnetic>
+        <button className="p-4 bg-red-500 text-white rounded-full">
+          <Heart className="w-6 h-6" />
+        </button>
+      </Magnetic>
+      <Magnetic>
+        <button className="p-4 bg-yellow-500 text-white rounded-full">
+          <Star className="w-6 h-6" />
+        </button>
+      </Magnetic>
+      <Magnetic>
+        <button className="p-4 bg-blue-500 text-white rounded-full">
+          <Bookmark className="w-6 h-6" />
+        </button>
+      </Magnetic>
+    </div>
+  );
+}
+```
+
+</CodeGroup>
+
+## Props
+
+<ParamField path="children" type="React.ReactNode" required>
+  The element to apply the magnetic effect to. Must be a single child element.
+</ParamField>
+
+## Animation Details
+
+### GSAP QuickTo Configuration
+
+The component uses GSAP's `quickTo` method for high-performance animations:
+
+```tsx
+const xTo = gsap.quickTo(ref.current, "x", {
+  duration: 1,
+  ease: "elastic.out(1, 0.3)",
+});
+
+const yTo = gsap.quickTo(ref.current, "y", {
+  duration: 1,
+  ease: "elastic.out(1, 0.3)",
+});
+```
+
+### Elastic Easing
+
+- **Ease**: `elastic.out(1, 0.3)` creates a bouncy, spring-like motion
+- **Duration**: 1 second for smooth transitions
+- **Amplitude**: 1 (controls oscillation strength)
+- **Period**: 0.3 (controls oscillation frequency)
+
+### Position Calculation
+
+The magnetic offset is calculated from the element's center:
+
+```tsx
+const x = clientX - (rect.left + rect.width / 2);
+const y = clientY - (rect.top + rect.height / 2);
+```
+
+<Tip>
+  The element automatically returns to its original position with elastic easing when the cursor leaves.
+</Tip>
+
+## Examples
+
+### Call-to-Action Button
+
+```tsx
+import Magnetic from "@craftdotui/components";
+import { ArrowRight } from "lucide-react";
+
+export default function CTAButton() {
+  return (
+    <Magnetic>
+      <button className="group px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow">
+        <span className="flex items-center gap-2">
+          Get Started
+          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+        </span>
+      </button>
+    </Magnetic>
+  );
+}
+```
+
+### Floating Action Buttons
+
+```tsx
+import Magnetic from "@craftdotui/components";
+import { Plus, Edit, Trash2, Share } from "lucide-react";
+
+export default function FloatingActions() {
+  const actions = [
+    { icon: Plus, color: "bg-green-500", label: "Add" },
+    { icon: Edit, color: "bg-blue-500", label: "Edit" },
+    { icon: Trash2, color: "bg-red-500", label: "Delete" },
+    { icon: Share, color: "bg-purple-500", label: "Share" },
+  ];
+
+  return (
+    <div className="flex gap-6">
+      {actions.map((action) => (
+        <Magnetic key={action.label}>
+          <button 
+            className={`p-5 ${action.color} text-white rounded-full shadow-xl hover:shadow-2xl transition-shadow`}
+            aria-label={action.label}
+          >
+            <action.icon className="w-6 h-6" />
+          </button>
+        </Magnetic>
+      ))}
+    </div>
+  );
+}
+```
+
+### Card Hover Effect
+
+```tsx
+import Magnetic from "@craftdotui/components";
+
+export default function ProductCard() {
+  return (
+    <Magnetic>
+      <div className="w-72 p-6 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-shadow cursor-pointer">
+        <img 
+          src="/product.jpg" 
+          alt="Product" 
+          className="w-full h-48 object-cover rounded-lg mb-4"
+        />
+        <h3 className="text-xl font-bold mb-2">Premium Product</h3>
+        <p className="text-gray-600 mb-4">Amazing features and benefits</p>
+        <div className="flex justify-between items-center">
+          <span className="text-2xl font-bold">$99</span>
+          <button className="px-4 py-2 bg-black text-white rounded-lg">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </Magnetic>
+  );
+}
+```
+
+### Logo with Magnetic Effect
+
+```tsx
+import Magnetic from "@craftdotui/components";
+import Link from "next/link";
+
+export default function Logo() {
+  return (
+    <Link href="/">
+      <Magnetic>
+        <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent cursor-pointer">
+          YourBrand
+        </div>
+      </Magnetic>
+    </Link>
+  );
+}
+```
+
+<Note>
+  The wrapper div uses `display: inline-block` to maintain the natural size of the child element.
+</Note>
+
+## Best Practices
+
+### Performance
+
+- GSAP's `quickTo` provides optimized performance for real-time animations
+- Event listeners are properly cleaned up on unmount
+- Use sparingly on the same page (3-6 magnetic elements maximum)
+
+### Visual Design
+
+- Works best with buttons, cards, and interactive elements
+- Combine with subtle shadows for depth perception
+- Ensure sufficient spacing between magnetic elements
+- Use with elements that have clear hover states
+
+### Accessibility
+
+<Warning>
+  Magnetic effects can be disorienting for some users. Consider:
+  - Adding a user preference toggle for reduced motion
+  - Keeping the magnetic pull subtle (current implementation is well-balanced)
+  - Ensuring touch device fallbacks work properly
+</Warning>
+
+## Use Cases
+
+- Hero section CTAs
+- Navigation buttons
+- Social media links
+- Product cards
+- Interactive logos
+- Feature highlights
+- Portfolio items
+- Download buttons
